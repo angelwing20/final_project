@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>@yield('page_title') - I Mum Mum</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
+</head>
+
+<body>
+    @include('admin/layout/side-bar')
+
+    <div class="main">
+        @include('admin/layout/top-bar')
+
+        @yield('content')
+    </div>
+</body>
+
+</html>
