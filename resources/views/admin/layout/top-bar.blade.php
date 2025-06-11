@@ -12,11 +12,8 @@
         <div class="d-flex ms-auto">
             <div class="dropdown">
                 <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    @auth
-                        <img src="{{ Auth::user()->avatar ?? asset('default-avatar-dark.png') }}" alt="User Avatar" style="width: 32px; height: 32px; border-radius: 50%;">
-                    @else
-                        <img src="{{ asset('default-avatar-dark.png') }}" alt="Default Avatar" style="width: 32px; height: 32px; border-radius: 50%;">
-                    @endauth
+                    <img src="images/default-avatar-dark.png" class="user-image"
+                    onerror="this.onerror=null; this.src='images/default-avatar-dark.png'">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                     @auth
