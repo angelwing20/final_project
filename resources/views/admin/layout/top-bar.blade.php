@@ -12,11 +12,19 @@
         <div class="d-flex ms-auto">
             <div class="dropdown">
                 <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="default-avatar-dark.png" alt="User Avatar" style="width: 32px; height: 32px; border-radius: 50%;">
+                    @auth
+                        <img src="{{ Auth::user()->avatar ?? asset('default-avatar-dark.png') }}" alt="User Avatar" style="width: 32px; height: 32px; border-radius: 50%;">
+                    @else
+                        <img src="{{ asset('default-avatar-dark.png') }}" alt="Default Avatar" style="width: 32px; height: 32px; border-radius: 50%;">
+                    @endauth
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                    <li><a class="dropdown-item" href="#">账户设置</a></li>
-                    <li><a class="dropdown-item" href="#">退出</a></li>
+                    @auth
+                        <li><a class="dropdown-item" href="#">账户设置</a></li>
+                        <li><a class="dropdown-item" href="{{ route('logout') }}">退出</a></li>
+                    @else
+                        <li><a class="dropdown-item" href="{{ route('login') }}">登录</a></li>
+                    @endauth
                 </ul>
             </div>
         </div>
