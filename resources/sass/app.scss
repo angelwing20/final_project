@@ -1,0 +1,16 @@
+// 自己的 SCSS 文件（变量要在最前或最早使用前）
+@use "variables";
+@use "admin";
+
+// Bootstrap
+@use "bootstrap/scss/bootstrap";
+
+// FortAwesome
+@use "@fortawesome/fontawesome-free/scss/fontawesome";
+@use "@fortawesome/fontawesome-free/scss/solid";
+@use "@fortawesome/fontawesome-free/scss/regular";
+@use "@fortawesome/fontawesome-free/scss/brands";
+
+// Select2（这些是普通 CSS 文件，不能用 @use，保持 @import）
+@import "select2/dist/css/select2.min.css";
+@import "select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css";
