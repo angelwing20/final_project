@@ -1,0 +1,30 @@
+/* 样式部分：深褐色风格导航栏 */
+.custom-navbar {
+    background-color: #5C4033; /* 褐色背景 */
+    font-family: 'Roboto', sans-serif;
+}
+.navbar-brand {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+.navbar-brand:hover {
+    color: #ffcc7b;
+}
+.nav-link {
+    color: #FFFFFF !important;
+}
+.nav-link:hover {
+    background-color: #ffcc7b;
+    color: #5C4033 !important;
+}
+.dropdown-menu {
+    background-color: #5C4033;
+}
+.dropdown-item {
+    color: #FFFFFF;
+}
+.dropdown-item:hover {
+    background-color: #ffcc7b;
+    color: #5C4033;
+}
