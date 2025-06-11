@@ -11,8 +11,8 @@
         <!-- 用户资料区域：在手机时靠右 -->
         <div class="d-flex ms-auto">
             <div class="dropdown">
-                <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    用户
+                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="default-avatar-dark.png" alt="User Avatar" style="width: 32px; height: 32px; border-radius: 50%;">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                     <li><a class="dropdown-item" href="#">账户设置</a></li>
