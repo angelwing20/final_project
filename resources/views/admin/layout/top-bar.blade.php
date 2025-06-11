@@ -22,8 +22,6 @@
                     @auth
                         <li><a class="dropdown-item" href="#">账户设置</a></li>
                         <li><a class="dropdown-item" href="{{ route('logout') }}">退出</a></li>
-                    @else
-                        <li><a class="dropdown-item" href="{{ route('login') }}">登录</a></li>
                     @endauth
                 </ul>
             </div>
