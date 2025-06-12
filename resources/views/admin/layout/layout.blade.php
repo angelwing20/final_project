@@ -7,7 +7,7 @@
 
     <title>@yield('page_title') - I Mum Mum</title>
 
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
 </head>
 
 <body>
@@ -18,6 +18,8 @@
 
         @yield('content')
     </div>
+
+    <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
 
     @yield('script')
 </body>
