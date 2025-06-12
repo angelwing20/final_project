@@ -11,7 +11,7 @@
         <!-- 用户头像 dropdown -->
         <div class="dropdown ms-auto">
             <a href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="{{ asset('img/default-avatar-light.png') }}" class="user-image" onerror="this.onerror=null; this.src='img/default-avatar-dark.png'">
+                <img src="{{ asset('img/default-avatar-dark.png') }}" class="user-image" onerror="this.onerror=null; this.src='img/default-avatar-dark.png'">
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                 <li><a class="dropdown-item" href="#">账户设置</a></li>
