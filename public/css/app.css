@@ -46,6 +46,104 @@
      object-fit: cover;
 }
 
+/* Your sidebar CSS from the <style> tag */
+.scrollable-area {
+  flex: 1;
+  overflow: scroll;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollable-area::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  height: 100vh;
+  background: linear-gradient(45deg, #EADDC3, #fcda95);
+  color: #5C4033;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+  transition: left 0.3s ease-in-out;
+}
+.sidebar .logo-container {
+  padding: 24px;
+  text-align: center;
+  border-bottom: 3px solid #5C4033;
+}
+.sidebar .logo-container .logo-image {
+  max-width: 100%;
+  height: auto;
+}
+.sidebar .sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sidebar .sidebar-nav .sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 15px 24px;
+  border-left: 4px solid transparent;
+  color: #5C4033;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  transition: border-left 0.2s;
+}
+.sidebar .sidebar-nav .sidebar-link:hover, .sidebar .sidebar-nav .sidebar-link.active {
+  background-color: #ddbc85;
+  border-left: 4px solid #b08968;
+  color: #3e2c23;
+}
+.sidebar .sidebar-nav .sidebar-section-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sidebar .sidebar-nav .sidebar-section-group .sidebar-main-item {
+  display: flex;
+}
+.sidebar .sidebar-nav .sidebar-section-group .sidebar-main-item .sidebar-link {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+.sidebar .sidebar-nav .sidebar-section-group .sidebar-main-item .sidebar-link .sidebar-link-title {
+  display: flex;
+  align-items: center;
+}
+.sidebar .sidebar-nav .sidebar-section-group .sidebar-sub-item {
+  display: none;
+}
+.sidebar .sidebar-nav .sidebar-section-group.active .sidebar-sub-item {
+  display: grid;
+}
+.sidebar.sidebar-open {
+  left: 0;
+}
+
+@media (max-width: 992px) {
+  .sidebar {
+    left: -250px;
+    width: 250px;
+  }
+  .scrollable-area {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  .sidebar-link {
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+}
 /*!
  * Bootstrap  v5.3.6 (https://getbootstrap.com/)
  * Copyright 2011-2025 The Bootstrap Authors
