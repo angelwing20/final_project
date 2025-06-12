@@ -13,8 +13,8 @@
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
   color: #FFFFFF;
+  text-align: center;
 }
-
 .navbar-brand:hover {
   color: #EADDC3;
 }
@@ -22,7 +22,6 @@
 .nav-link {
   color: #FFFFFF !important;
 }
-
 .nav-link:hover {
   background-color: #EADDC3;
   color: #5C4033 !important;
@@ -31,14 +30,20 @@
 .dropdown-menu {
   background-color: #5C4033;
 }
-
-.dropdown-item {
-  color: #FFFFFF;
+.dropdown-menu .dropdown-item {
+  color: #000000;
 }
-
-.dropdown-item:hover {
+.dropdown-menu .dropdown-item:hover {
   background-color: #EADDC3;
   color: #5C4033;
+}
+
+.user-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 /*!
