@@ -25,3 +25,25 @@
 </body>
 
 </html>
+
+<script>
+    function toggleSidebar() {
+        if ($("#sidebar").hasClass("sidebar-open")) {
+            $("#sidebar").removeClass("sidebar-open");
+            $("body").css("overflow-y", "auto");
+        } else {
+            $("#sidebar").addClass("sidebar-open");
+            $("body").css("overflow-y", "hidden");
+        }
+    }
+
+    function toggleSidebarSectionGroup(e) {
+        var sectionGroup = $(e).closest('.sidebar-section-group');
+
+        if (sectionGroup.hasClass('active')) {
+            sectionGroup.removeClass('active');
+        } else {
+            sectionGroup.addClass('active');
+        }
+    }
+</script>

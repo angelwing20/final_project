@@ -14,26 +14,26 @@
             </a>
 
             <div class="sidebar-section-group">
-                <div class="sidebar-main-item">
+                <div class="sidebar-main-item" onclick="toggleSidebarSectionGroup(this)" role="button">
                     <a href="#" class="sidebar-link">
                         <div class="sidebar-link-icon">
                             <i class="fas fa-carrot"></i>
                         </div>
                         <div class="sidebar-link-title">
-                            Ingredients   
-                        </div>    
-                        <i class="fas fa-angle-down ms-auto"></i>
+                            Ingredients
+                        </div>
+                        <i class="fas fa-angle-down rotate-icon ms-auto"></i>
                     </a>
                 </div>
 
                 <div class="sidebar-sub-item">
-                    <a href="#" class="sidebar-link">
+                    <a href="#1" class="sidebar-link">
                         <i class="far fa-circle"></i> Vegetables
                     </a>
                 </div>
-                
+
                 <div class="sidebar-sub-item">
-                    <a href="#" class="sidebar-link">
+                    <a href="#2" class="sidebar-link">
                         <i class="far fa-dot-circle" style="color: lightgreen;"></i> Fruits
                     </a>
                 </div>
@@ -55,7 +55,9 @@
                 Categories
             </a>
 
-            
+
         </nav>
     </div>
+
+    <i class="fa-solid fa-angle-left close-sidebar-btn" onclick="toggleSidebar()" role="button"></i>
 </div>
