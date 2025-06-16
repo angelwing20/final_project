@@ -14,3 +14,8 @@
 // Select2
 @import "~select2/dist/css/select2.min.css";
 @import "~select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css";
+
+.body{
+    max-width: 100vw;
+    min-height: 100vh;
+}

@@ -8,38 +8,13 @@
     <div class="scrollable-area">
         <nav class="sidebar-nav">
 
-            <a href="#" class="sidebar-link ">
+            <a href="{{ route('admin.dashboard') }}"
+                class="sidebar-link {{ Request::routeIs('admin.dashboard') ? 'active' : '' }}">
                 <i class="fas fa-chart-line"></i>
                 Dashboard
             </a>
 
-            <div class="sidebar-section-group">
-                <div class="sidebar-main-item" onclick="toggleSidebarSectionGroup(this)" role="button">
-                    <a href="#" class="sidebar-link">
-                        <div class="sidebar-link-icon">
-                            <i class="fas fa-carrot"></i>
-                        </div>
-                        <div class="sidebar-link-title">
-                            Ingredients
-                        </div>
-                        <i class="fas fa-angle-down rotate-icon ms-auto"></i>
-                    </a>
-                </div>
-
-                <div class="sidebar-sub-item">
-                    <a href="#1" class="sidebar-link">
-                        <i class="far fa-circle"></i> Vegetables
-                    </a>
-                </div>
-
-                <div class="sidebar-sub-item">
-                    <a href="#2" class="sidebar-link">
-                        <i class="far fa-dot-circle" style="color: lightgreen;"></i> Fruits
-                    </a>
-                </div>
-            </div>
-
-            <a href="#" class="sidebar-link">
+            <a href="#" class="sidebar-link {{ Request::routeIs('admin.inventory') ? 'active' : '' }}">
                 <i class="fas fa-boxes-stacked"></i>
                 Inventory
             </a>
@@ -49,13 +24,37 @@
                 Suppliers
             </a>
 
+            <a href="#" class="sidebar-link">
+                <i class="fas fa-layer-group"></i>
+                Product
+            </a>
+
             <!-- Category Group -->
             <a href="#" class="sidebar-link">
                 <i class="fas fa-layer-group"></i>
-                Categories
+                Product Category
             </a>
 
+            <div class="sidebar-section-group {{ Request::routeIs('admin.staff.*') ? 'active' : '' }}">
+                <div class="sidebar-main-item" onclick="toggleSidebarSectionGroup(this)" role="button">
+                    <a href="#" class="sidebar-link">
+                        <div class="sidebar-link-icon">
+                            <i class="fa-solid fa-gear"></i>
+                        </div>
+                        <div class="sidebar-link-title">
+                            Setting
+                        </div>
+                        <i class="fas fa-angle-down rotate-icon ms-auto"></i>
+                    </a>
+                </div>
 
+                <div class="sidebar-sub-item">
+                    <a href="{{ route('admin.staff.index') }}"
+                        class="sidebar-link {{ Request::routeIs('admin.staff.index') ? 'active' : '' }}">
+                        <i class="fa-solid fa-users"></i> Staff
+                    </a>
+                </div>
+            </div>
         </nav>
     </div>
 
