@@ -183,6 +183,98 @@
     display: flex;
   }
 }
+.register-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background: linear-gradient(to bottom, #f5e9d7, #fff8ed);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+.register-page .register-container {
+  max-width: 450px;
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  padding: 35px;
+}
+.register-page .register-title {
+  color: #5C4033;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 25px;
+}
+.register-page .form-label {
+  font-weight: 600;
+  color: #5C4033;
+}
+.register-page .btn-register {
+  background-color: #5C4033;
+  border: none;
+}
+.register-page .btn-register:hover {
+  background-color: #3e2b20;
+}
+.register-page .login-link {
+  color: #5C4033;
+}
+.register-page .login-link:hover {
+  text-decoration: underline;
+}
+.register-page .logo {
+  display: block;
+  margin: 0 auto 20px auto;
+  max-width: 150px;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background: linear-gradient(to bottom, #f5e9d7, #fff8ed);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+.login-page .login-container {
+  max-width: 450px;
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  padding: 35px;
+}
+.login-page .login-title {
+  color: #5C4033;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 25px;
+}
+.login-page .form-label {
+  font-weight: 600;
+  color: #5C4033;
+}
+.login-page .btn-login {
+  background-color: #5C4033;
+  border: none;
+}
+.login-page .btn-login:hover {
+  background-color: #3e2b20;
+}
+.login-page .register-link {
+  color: #5C4033;
+}
+.login-page .register-link:hover {
+  text-decoration: underline;
+}
+.login-page .logo {
+  display: block;
+  margin: 0 auto 20px auto;
+  max-width: 150px;
+}
+
 /*!
  * Bootstrap  v5.3.6 (https://getbootstrap.com/)
  * Copyright 2011-2025 The Bootstrap Authors

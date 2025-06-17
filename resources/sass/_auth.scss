@@ -1,0 +1,108 @@
+.register-page {
+    min-height: 100vh; // Make sure it fills the full viewport height
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem; // Optional: ensures spacing on very small screens
+    background: linear-gradient(to bottom, #f5e9d7, #fff8ed);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    .register-container {
+        max-width: 450px;
+        width: 100%; // Ensures responsiveness
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        padding: 35px;
+    }
+
+    .register-title {
+        color: #5C4033;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #5C4033;
+    }
+
+    .btn-register {
+        background-color: #5C4033;
+        border: none;
+
+        &:hover {
+            background-color: #3e2b20;
+        }
+    }
+
+    .login-link {
+        color: #5C4033;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .logo {
+        display: block;
+        margin: 0 auto 20px auto;
+        max-width: 150px;
+    }
+}
+
+
+.login-page {
+  min-height: 100vh; // Ensures full screen height
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem; // Adds space on small screens
+  background: linear-gradient(to bottom, #f5e9d7, #fff8ed);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  .login-container {
+    max-width: 450px;
+    width: 100%; // Makes it responsive
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 35px;
+  }
+
+  .login-title {
+    color: #5C4033;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 25px;
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: #5C4033;
+  }
+
+  .btn-login {
+    background-color: #5C4033;
+    border: none;
+
+    &:hover {
+      background-color: #3e2b20;
+    }
+  }
+
+  .register-link {
+    color: #5C4033;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .logo {
+    display: block;
+    margin: 0 auto 20px auto;
+    max-width: 150px;
+  }
+}
