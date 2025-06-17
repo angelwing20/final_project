@@ -1,12 +1,62 @@
-<nav id="sidebar">
+<div class="sidebar" id="sidebar">
+    <!-- Logo Section -->
     <div class="logo-container">
-        <img class="logo-image" src="" alt="">
+        <img src="{{ asset('img/i_mum_mum_logo.png') }}" alt="Logo" class="logo-image">
     </div>
-    <div class="scrollable-area" data-simplebar>
-        <div class="sidebar-nav">
-            <a class="sidebar-link" href="">
 
+    <!-- Scrollable Nav Area -->
+    <div class="scrollable-area">
+        <nav class="sidebar-nav">
+
+            <a href="{{ route('admin.dashboard') }}"
+                class="sidebar-link {{ Request::routeIs('admin.dashboard') ? 'active' : '' }}">
+                <i class="fas fa-chart-line"></i>
+                Dashboard
             </a>
-        </div>
+
+            <a href="#" class="sidebar-link {{ Request::routeIs('admin.inventory') ? 'active' : '' }}">
+                <i class="fas fa-boxes-stacked"></i>
+                Inventory
+            </a>
+
+            <a href="#" class="sidebar-link">
+                <i class="fas fa-truck"></i>
+                Suppliers
+            </a>
+
+            <a href="#" class="sidebar-link">
+                <i class="fas fa-layer-group"></i>
+                Product
+            </a>
+
+            <!-- Category Group -->
+            <a href="#" class="sidebar-link">
+                <i class="fas fa-layer-group"></i>
+                Product Category
+            </a>
+
+            <div class="sidebar-section-group {{ Request::routeIs('admin.staff.*') ? 'active' : '' }}">
+                <div class="sidebar-main-item" onclick="toggleSidebarSectionGroup(this)" role="button">
+                    <a href="#" class="sidebar-link">
+                        <div class="sidebar-link-icon">
+                            <i class="fa-solid fa-gear"></i>
+                        </div>
+                        <div class="sidebar-link-title">
+                            Setting
+                        </div>
+                        <i class="fas fa-angle-down rotate-icon ms-auto"></i>
+                    </a>
+                </div>
+
+                <div class="sidebar-sub-item">
+                    <a href="{{ route('admin.staff.index') }}"
+                        class="sidebar-link {{ Request::routeIs('admin.staff.index') ? 'active' : '' }}">
+                        <i class="fa-solid fa-users"></i> Staff
+                    </a>
+                </div>
+            </div>
+        </nav>
     </div>
-</nav>
+
+    <i class="fa-solid fa-angle-left close-sidebar-btn" onclick="toggleSidebar()" role="button"></i>
+</div>

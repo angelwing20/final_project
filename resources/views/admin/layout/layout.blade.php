@@ -7,10 +7,14 @@
 
     <title>@yield('page_title') - I Mum Mum</title>
 
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/i_mum_mum_white_background_logo.png') }}">
+    <link rel="apple-touch-icon" sizes="128x128" href="{{ asset('img/i_mum_mum_white_background_logo.png') }}">
+    <link rel="shortcut icon" href="{{ asset('img/i_mum_mum_white_background_logo.png') }}">
+
     <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
 </head>
 
-<body>
+<body class="body">
     @include('admin/layout/side-bar')
 
     <div class="main">
@@ -25,3 +29,25 @@
 </body>
 
 </html>
+
+<script>
+    function toggleSidebar() {
+        if ($("#sidebar").hasClass("sidebar-open")) {
+            $("#sidebar").removeClass("sidebar-open");
+            $("body").css("overflow-y", "auto");
+        } else {
+            $("#sidebar").addClass("sidebar-open");
+            $("body").css("overflow-y", "hidden");
+        }
+    }
+
+    function toggleSidebarSectionGroup(e) {
+        var sectionGroup = $(e).closest('.sidebar-section-group');
+
+        if (sectionGroup.hasClass('active')) {
+            sectionGroup.removeClass('active');
+        } else {
+            sectionGroup.addClass('active');
+        }
+    }
+</script>
