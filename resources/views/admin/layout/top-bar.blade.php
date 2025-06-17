@@ -6,7 +6,7 @@
         </button>
 
         <!-- 品牌 -->
-        <a class="navbar-brand me-auto" href="#">I Mum Mum 板面专卖店</a>
+        <a class="navbar-brand me-auto" href="#">I Mum Mum 板面专卖店</a> 
 
         <!-- 用户头像 dropdown -->
         <div class="dropdown ms-auto">
