@@ -16,17 +16,17 @@
         </div>
         <ul class="dropdown-menu">
             <li>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="{{ route('admin.profile') }}">
                     <div class="d-flex align-items-center gap-2">
                         <i class="fa-solid fa-user-gear"></i> Account Profile
                     </div>
                 </a>
             </li>
             <li>
-                <form id="logout-form" action="" method="POST">
+                <form id="logout-form" action="{{ route('admin.logout') }}" method="POST">
                     @csrf
                 </form>
-                <a class="dropdown-item" href="#" onclick="$('logout-form').submit();">
+                <a class="dropdown-item" href="#" onclick="$('#logout-form').submit();">
                     <div class="d-flex align-items-center gap-2">
                         <i class="fa-solid fa-right-from-bracket"></i> Logout
                     </div>

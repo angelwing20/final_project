@@ -53,6 +53,17 @@ public function login(Request $request)
         'email' => 'Invalid email or password.',
     ]);
 }
+    public function logout(Request $request)
+{
+    Auth::logout(); // Logs out the user
+    $request->session()->invalidate(); // Invalidate the session
+    $request->session()->regenerateToken(); // Regenerate CSRF token
 
-
+    return redirect()->route('admin.login'); // Redirect to admin login page
+}
+       public function accountProfile()
+{
+    $user = Auth::user(); // Get the logged-in user's data
+    return view('public.profile', compact('user')); // Pass it to the Blade view
+}
 }

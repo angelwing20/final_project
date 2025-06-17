@@ -6,16 +6,19 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
 Route::name("admin.")->prefix("admin")->group(function () {
-    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-    Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
+    Route::get('register', [AuthController::class, 'showRegisterForm'])->name('register');
+    Route::post('register', [AuthController::class, 'register'])->name('register.submit');
 
-    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+    Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [AuthController::class, 'login'])->name('login.submit');
 
-    Route::get('/dashboard', [AuthController::class, 'dashboard'])
+     Route::get('/account-profile', [AuthController::class, 'accountProfile'])->name('profile');
+
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('dashboard', [AuthController::class, 'dashboard'])
     ->middleware('auth')
     ->name('dashboard');
-     Route::get('/dashboard', [DashboardAdminController::class, 'index'])->middleware('auth')->name('dashboard');
+     Route::get('dashboard', [DashboardAdminController::class, 'index'])->middleware('auth')->name('dashboard');
 
     Route::name("staff.")->prefix("staff")->group(function () {
         Route::get("/", [StaffAdminController::class, "index"])->name("index");
