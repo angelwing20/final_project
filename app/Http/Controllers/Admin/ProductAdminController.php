@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class ProductAdminController extends Controller
 {
     public function index()
     {
         return view('admin.product.index'); // 记得view文件也跟着放到 resources/views/admin/product/index.blade.php
     }
 
-      public function store(Request $request)
+    public function store(Request $request)
     {
         // 验证数据
         $validated = $request->validate([
@@ -30,11 +30,6 @@ class ProductController extends Controller
 
         // 目前我们先测试用 dd 查看接收到的数据
         dd($validated);
-    }
-    
-    public function search(Request $request)
-    {
-        dd($request->input('search'));
     }
 
     public function show($id)
