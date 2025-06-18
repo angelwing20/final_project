@@ -9,23 +9,28 @@
         <nav class="sidebar-nav">
 
             <a href="{{ route('admin.dashboard') }}" class="sidebar-link {{ Request::routeIs('admin.dashboard') ? 'active' : '' }}">
-                <i class="fas fa-chart-line"></i> Dashboard
+                <i class="fas fa-chart-line"></i> 
+                Dashboard
             </a>
 
-            <a href="#" class="sidebar-link {{ Request::routeIs('admin.inventory') ? 'active' : '' }}">
-                <i class="fas fa-boxes-stacked"></i> Inventory
+              <a href="{{ route('admin.inventory.index') }}" class="sidebar-link {{ Request::routeIs('admin.inventory.*') ? 'active' : '' }}">
+                <i class="fas fa-boxes-stacked"></i> 
+                Inventory
             </a>
 
-            <a href="#" class="sidebar-link">
-                <i class="fas fa-truck"></i> Suppliers
+            <a href="{{ route('admin.suppliers.index') }}" class="sidebar-link {{ Request::routeIs('admin.suppliers .*') ? 'active' : '' }}">
+                <i class="fas fa-truck"></i> 
+                Suppliers
             </a>
 
             <a href="{{ route('admin.product.index') }}" class="sidebar-link {{ Request::routeIs('admin.product.*') ? 'active' : '' }}">
-                <i class="fas fa-layer-group"></i> Product
+                <i class="fas fa-layer-group"></i> 
+                Product
             </a>
 
-            <a href="#" class="sidebar-link">
-                <i class="fas fa-layer-group"></i> Product Category
+            <a href="{{ route('admin.category.category') }}" class="sidebar-link {{ Request::routeIs('admin.category.*') ? 'active' : '' }}">
+                <i class="fas fa-layer-group"></i> 
+                Product Category
             </a>
 
             <!-- Category Group -->
