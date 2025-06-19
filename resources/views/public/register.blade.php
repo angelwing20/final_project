@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Admin Register | I Mum Mum</title>
     <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
 </head>
+
 <body class="register-page">
 
     <div class="register-container">
@@ -24,17 +26,19 @@
         @endif
 
         {{-- Registration Form --}}
-        <form action="{{ route('admin.register.submit') }}" method="POST">
+        <form action="{{ route('register.submit') }}" method="POST">
             @csrf
 
             <div class="mb-3">
                 <label for="name" class="form-label">Full Name</label>
-                <input type="text" name="name" class="form-control" id="name" required value="{{ old('name') }}">
+                <input type="text" name="name" class="form-control" id="name" required
+                    value="{{ old('name') }}">
             </div>
 
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
-                <input type="email" name="email" class="form-control" id="email" required value="{{ old('email') }}">
+                <input type="email" name="email" class="form-control" id="email" required
+                    value="{{ old('email') }}">
             </div>
 
             <div class="mb-3">
@@ -44,16 +48,18 @@
 
             <div class="mb-3">
                 <label for="password_confirmation" class="form-label">Confirm Password</label>
-                <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" required>
+                <input type="password" name="password_confirmation" class="form-control" id="password_confirmation"
+                    required>
             </div>
 
             <button type="submit" class="btn btn-register text-white w-100">Register</button>
 
             <div class="text-center mt-3">
-                <a href="{{ route('admin.login') }}" class="login-link">Already have an account? Login here</a>
+                <a href="{{ route('login.index') }}" class="login-link">Already have an account? Login here</a>
             </div>
         </form>
     </div>
 
 </body>
+
 </html>

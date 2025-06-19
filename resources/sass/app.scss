@@ -15,7 +15,14 @@
 @import "~select2/dist/css/select2.min.css";
 @import "~select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css";
 
+// Notifier.js
+@import "~notifier-js/css/notifier.css";
+
 .body{
     max-width: 100vw;
     min-height: 100vh;
+}
+
+.notifier-container {
+    z-index: 1082;
 }

@@ -20,7 +20,9 @@
     <div class="main">
         @include('admin/layout/top-bar')
 
-        @yield('content')
+        <div class="content">
+            @yield('content')
+        </div>
     </div>
 
     <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
@@ -31,6 +33,12 @@
 </html>
 
 <script>
+    @if (session('success'))
+        notifier.show('Success!', '{{ session('success') }}', 'success', '', 4000);
+    @elseif (session('error'))
+        notifier.show('Failed!', '{{ session('error') }}', 'danger', '', 4000);
+    @endif
+
     function toggleSidebar() {
         if ($("#sidebar").hasClass("sidebar-open")) {
             $("#sidebar").removeClass("sidebar-open");
@@ -49,5 +57,23 @@
         } else {
             sectionGroup.addClass('active');
         }
+    }
+
+    function deleteConfirmation(e) {
+        e.preventDefault();
+
+        var form = $(e).closest('form');
+
+        Swal.fire({
+            title: 'Are you sure you want to delete?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
     }
 </script>

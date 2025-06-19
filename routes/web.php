@@ -2,62 +2,75 @@
 
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\ProductAdminController;
-use App\Http\Controllers\Admin\CategoryAdminController;
+use App\Http\Controllers\Admin\ProductCategoryAdminController;
 use App\Http\Controllers\Admin\InventoryAdminController;
+use App\Http\Controllers\Admin\InventoryCategoryAdminController;
+use App\Http\Controllers\Admin\ProfileAdminController;
 use App\Http\Controllers\Admin\SupplierAdminController;
 use App\Http\Controllers\Admin\StaffAdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
-Route::name("admin.")->prefix("admin")->group(function () {
-    Route::get('register', [AuthController::class, 'showRegisterForm'])->name('register');
-    Route::post('register', [AuthController::class, 'register'])->name('register.submit');
+Route::middleware("guest")->group(function () {
+    Route::name("register.")->group(function () {
+        Route::get('/register', [AuthController::class, 'registerPage'])->name('index');
+        Route::post('/register', [AuthController::class, 'register'])->name('submit');
+    });
 
-    Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::post('login', [AuthController::class, 'login'])->name('login.submit');
+    Route::name("login.")->group(function () {
+        Route::get('/', [AuthController::class, 'loginPage'])->name('index');
+        Route::post('/', [AuthController::class, 'login'])->name('submit');
+    });
+});
 
-    Route::get('/account-profile', [AuthController::class, 'accountProfile'])->name('profile');
-
+Route::middleware("auth")->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('dashboard', [AuthController::class, 'dashboard'])
-        ->middleware('auth')
-        ->name('dashboard');
-    Route::get('dashboard', [DashboardAdminController::class, 'index'])->middleware('auth')->name('dashboard');
+});
+
+Route::name("admin.")->prefix("admin")->group(function () {
+    Route::get('/', [DashboardAdminController::class, 'index'])->name('dashboard');
+
+    Route::name("account.")->prefix("account")->group(function () {
+        Route::get('/', [ProfileAdminController::class, 'index'])->name('index');
+        Route::post('update', [ProfileAdminController::class, 'update'])->name('update');
+    });
+
+    Route::name("supplier.")->prefix("supplier")->group(function () {
+        Route::get('/', [SupplierAdminController::class, 'index'])->name('index');
+        Route::post('/', [SupplierAdminController::class, 'store'])->name('store');
+        Route::get('{id}', [SupplierAdminController::class, 'show'])->name('show');
+        Route::patch('{id}', [SupplierAdminController::class, 'update'])->name('update');
+        Route::delete('{id}', [SupplierAdminController::class, 'destroy'])->name('destroy');
+    });
 
     Route::name("product.")->prefix("product")->group(function () {
         Route::get('/', [ProductAdminController::class, 'index'])->name('index');
         Route::post('/', [ProductAdminController::class, 'store'])->name('store');
-        Route::get('/search', [ProductAdminController::class, 'search'])->name('search');  // ✅ 重点补上这条
-        Route::get('/{id}', [ProductAdminController::class, 'show'])->name('show');
-        Route::patch('/{id}', [ProductAdminController::class, 'update'])->name('update');
-        Route::delete('/{id}', [ProductAdminController::class, 'destroy'])->name('destroy');
+        Route::get('{id}', [ProductAdminController::class, 'show'])->name('show');
+        Route::patch('{id}', [ProductAdminController::class, 'update'])->name('update');
+        Route::delete('{id}', [ProductAdminController::class, 'destroy'])->name('destroy');
     });
 
-      // Category Routes
- 
-    Route::prefix('category')->name('category.')->group(function () {
-        Route::get('/', [CategoryAdminController::class, 'category'])->name('category');
-        Route::post('/store', [CategoryAdminController::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [CategoryAdminController::class, 'edit'])->name('edit');
-        Route::post('/{id}/update', [CategoryAdminController::class, 'update'])->name('update');
-        Route::delete('/{id}', [CategoryAdminController::class, 'destroy'])->name('destroy');
+    Route::name('product_category.')->prefix('product-category')->group(function () {
+        Route::get('/', [ProductCategoryAdminController::class, 'index'])->name('index');
+        Route::post('store', [ProductCategoryAdminController::class, 'store'])->name('store');
+        Route::get('{id}', [ProductCategoryAdminController::class, 'show'])->name('show');
+        Route::post('{id}/update', [ProductCategoryAdminController::class, 'update'])->name('update');
+        Route::delete('{id}', [ProductCategoryAdminController::class, 'destroy'])->name('destroy');
     });
 
-     // Inventory Routes
-    Route::prefix("inventory")->name("inventory.")->group(function () {
+    Route::name("inventory.")->prefix("inventory")->group(function () {
         Route::get('/', [InventoryAdminController::class, 'index'])->name('index');
-        Route::post('/store', [InventoryAdminController::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [InventoryAdminController::class, 'edit'])->name('edit');
-        Route::post('/{id}/update', [InventoryAdminController::class, 'update'])->name('update');
-        Route::delete('/{id}', [InventoryAdminController::class, 'destroy'])->name('destroy');
+        Route::post('store', [InventoryAdminController::class, 'store'])->name('store');
+        Route::post('{id}/update', [InventoryAdminController::class, 'update'])->name('update');
+        Route::delete('{id}', [InventoryAdminController::class, 'destroy'])->name('destroy');
     });
 
-    Route::prefix("suppliers")->name("suppliers.")->group(function () {
-        Route::get('/', [SupplierAdminController::class, 'index'])->name('index');
-        Route::post('/store', [SupplierAdminController::class, 'store'])->name('store');
-        Route::get('/{id}/edit', [SupplierAdminController::class, 'edit'])->name('edit');
-        Route::post('/{id}/update', [SupplierAdminController::class, 'update'])->name('update');
-        Route::delete('/{id}', [SupplierAdminController::class, 'destroy'])->name('destroy');
+    Route::name("inventory_category.")->prefix("inventory-category")->group(function () {
+        Route::get('/', [InventoryCategoryAdminController::class, 'index'])->name('index');
+        Route::post('store', [InventoryCategoryAdminController::class, 'store'])->name('store');
+        Route::post('{id}/update', [InventoryCategoryAdminController::class, 'update'])->name('update');
+        Route::delete('{id}', [InventoryCategoryAdminController::class, 'destroy'])->name('destroy');
     });
 
     Route::name("staff.")->prefix("staff")->group(function () {

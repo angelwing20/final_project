@@ -3,47 +3,42 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\Admin\SupplierAdminService;
 use Illuminate\Http\Request;
 
 class SupplierAdminController extends Controller
 {
-    // 显示供应商列表
+    private $_supplierAdminService;
+
+    public function __construct(SupplierAdminService $supplierAdminService)
+    {
+        $this->_supplierAdminService = $supplierAdminService;
+    }
+
     public function index()
     {
-        // 模拟数据，等你有数据库时可以替换掉
-        $suppliers = [
-           
-        ];
-
-        return view('admin.suppliers.index', compact('suppliers'));
+        return view('admin.supplier.index');
     }
 
-    // 显示新增供应商表单
-    public function create()
-    {
-        return view('admin.supplier.create');
-    }
-
-    // 处理新增供应商提交
     public function store(Request $request)
     {
-        // 暂时模拟存储逻辑
-        // 实际上你可以在这里插入数据库
-        return redirect()->route('admin.supplier.index')->with('success', 'Supplier created successfully (模拟)');
+        $data = $request->only([
+            'name',
+            'email',
+            'phone',
+            'address',
+        ]);
+
+        $result = $this->_supplierAdminService->createSupplier($data);
+
+        if ($result == null) {
+            $errorMessage = implode("<br>", $this->_supplierAdminService->_errorMessage);
+            return back()->with('error', $errorMessage)->withInput();
+        }
+
+        return redirect()->route('admin.supplier.show', $result->id)->with('success', 'Supplier added successfully');
     }
 
-    // 显示编辑供应商页面
-    public function edit($id)
-    {
-        // 模拟数据
-        $supplier = [
-            
-        ];
-
-        return view('admin.supplier.edit', compact('supplier'));
-    }
-
-    // 处理更新供应商
     public function update(Request $request, $id)
     {
         // 暂时模拟更新逻辑
@@ -53,7 +48,7 @@ class SupplierAdminController extends Controller
     // 删除供应商
     public function destroy($id)
     {
-        // 暂时模拟删除逻辑
+
         return redirect()->route('admin.supplier.index')->with('success', 'Supplier deleted successfully (模拟)');
     }
 }

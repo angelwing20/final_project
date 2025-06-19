@@ -1,39 +1,48 @@
 <div class="sidebar" id="sidebar">
-    <!-- Logo Section -->
+
     <div class="logo-container">
         <img src="{{ asset('img/i_mum_mum_logo.png') }}" alt="Logo" class="logo-image">
     </div>
 
-    <!-- Scrollable Nav Area -->
     <div class="scrollable-area">
         <nav class="sidebar-nav">
 
-            <a href="{{ route('admin.dashboard') }}" class="sidebar-link {{ Request::routeIs('admin.dashboard') ? 'active' : '' }}">
-                <i class="fas fa-chart-line"></i> 
+            <a href="{{ route('admin.dashboard') }}"
+                class="sidebar-link {{ Request::routeIs('admin.dashboard') ? 'active' : '' }}">
+                <i class="fas fa-chart-line"></i>
                 Dashboard
             </a>
 
-              <a href="{{ route('admin.inventory.index') }}" class="sidebar-link {{ Request::routeIs('admin.inventory.*') ? 'active' : '' }}">
-                <i class="fas fa-boxes-stacked"></i> 
+            <a href="{{ route('admin.inventory.index') }}"
+                class="sidebar-link {{ Request::routeIs('admin.inventory.*') ? 'active' : '' }}">
+                <i class="fas fa-boxes-stacked"></i>
                 Inventory
             </a>
 
-            <a href="{{ route('admin.suppliers.index') }}" class="sidebar-link {{ Request::routeIs('admin.suppliers .*') ? 'active' : '' }}">
-                <i class="fas fa-truck"></i> 
-                Suppliers
+            <a href="{{ route('admin.inventory_category.index') }}"
+                class="sidebar-link {{ Request::routeIs('admin.inventory_category.*') ? 'active' : '' }}">
+                <i class="fas fa-boxes-stacked"></i>
+                Inventory Category
             </a>
 
-            <a href="{{ route('admin.product.index') }}" class="sidebar-link {{ Request::routeIs('admin.product.*') ? 'active' : '' }}">
-                <i class="fas fa-layer-group"></i> 
+            <a href="{{ route('admin.supplier.index') }}"
+                class="sidebar-link {{ Request::routeIs('admin.supplier.*') ? 'active' : '' }}">
+                <i class="fas fa-truck"></i>
+                Supplier
+            </a>
+
+            <a href="{{ route('admin.product.index') }}"
+                class="sidebar-link {{ Request::routeIs('admin.product.*') ? 'active' : '' }}">
+                <i class="fas fa-layer-group"></i>
                 Product
             </a>
 
-            <a href="{{ route('admin.category.category') }}" class="sidebar-link {{ Request::routeIs('admin.category.*') ? 'active' : '' }}">
-                <i class="fas fa-layer-group"></i> 
+            <a href="{{ route('admin.product_category.index') }}"
+                class="sidebar-link {{ Request::routeIs('admin.product_category.*') ? 'active' : '' }}">
+                <i class="fas fa-layer-group"></i>
                 Product Category
             </a>
 
-            <!-- Category Group -->
             <div class="sidebar-section-group {{ Request::routeIs('admin.staff.*') ? 'active' : '' }}">
                 <div class="sidebar-main-item" onclick="toggleSidebarSectionGroup(this)" role="button">
                     <a href="#" class="sidebar-link">
@@ -46,7 +55,8 @@
                 </div>
 
                 <div class="sidebar-sub-item">
-                    <a href="{{ route('admin.staff.index') }}" class="sidebar-link {{ Request::routeIs('admin.staff.index') ? 'active' : '' }}">
+                    <a href="{{ route('admin.staff.index') }}"
+                        class="sidebar-link {{ Request::routeIs('admin.staff.index') ? 'active' : '' }}">
                         <i class="fa-solid fa-users"></i> Staff
                     </a>
                 </div>

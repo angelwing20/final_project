@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Admin Login</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
 </head>
+
 <body class="login-page">
 
     <div class="login-container">
@@ -12,13 +14,13 @@
 
         <h2 class="login-title">Admin Login</h2>
 
-        @if($errors->any())
+        @if ($errors->any())
             <div class="alert alert-danger">
                 {{ $errors->first() }}
             </div>
         @endif
 
-        <form method="POST" action="{{ route('admin.login.submit') }}">
+        <form method="POST" action="{{ route('login.submit') }}">
             @csrf
 
             <div class="mb-3">
@@ -35,10 +37,11 @@
 
             <p class="mt-3 text-center">
                 Don't have an account?
-                <a href="{{ route('admin.register') }}" class="register-link">Register here</a>
+                <a href="{{ route('register.index') }}" class="register-link">Register here</a>
             </p>
         </form>
     </div>
 
 </body>
+
 </html>

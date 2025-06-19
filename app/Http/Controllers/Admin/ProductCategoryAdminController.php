@@ -5,19 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class CategoryAdminController extends Controller
+class ProductCategoryAdminController extends Controller
 {
-    public function category()
+    public function index()
     {
-        return view('admin.category.category');
+        return view('admin.product_category.index');
     }
 
     public function store(Request $request)
-    {
-        //
-    }
-
-    public function edit($id)
     {
         //
     }

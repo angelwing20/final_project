@@ -8,5 +8,13 @@ import 'bootstrap';
 import $ from 'jquery';
 window.$ = window.jQuery = $;
 
+import 'jquery-validation';
+
 import SimpleBar from "simplebar";
 window.SimpleBar = SimpleBar;
+
+import notifier from "notifier-js";
+window.notifier = notifier;
+
+import Swal from "sweetalert2";
+window.Swal = Swal;
