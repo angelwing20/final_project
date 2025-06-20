@@ -10,43 +10,98 @@
         </div>
         <div class="col-12 col-md-auto">
             <div class="d-flex gap-2 align-items-center float-end">
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSupplierModal">
-                    Add Supplier
+                <a href="{{ route('admin.supplier.index') }}" class="btn btn-secondary">
+                    <i class="fa-solid fa-arrow-left"></i> Back
+                </a>
+                <form action="{{ route('admin.supplier.destroy', ['id' => $supplier->id]) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger" onclick="deleteConfirmation(event)">
+                        <i class="fa-solid fa-trash"></i> Delete
+                    </button>
+                </form>
+                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editSupplierModal">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit
                 </button>
             </div>
         </div>
     </div>
 
-    <div class="d-flex mb-4">
-        <input type="text" name="search" class="form-control me-2" placeholder="Search supplier...">
+    <div class="card card-shadow border-0 bg-white">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="fw-bold">
+                        Name:
+                    </div>
+                    <div>
+                        {{ $supplier->name }}
+                    </div>
+                </div>
 
-        <button class="btn btn-secondary">
-            <i class="fa-solid fa-filter"></i>
-        </button>
+                <div class="col-12">
+                    <hr class="text-muted">
+                </div>
+
+                <div class="col-12">
+                    <div class="fw-bold">
+                        Email:
+                    </div>
+                    <div>
+                        {{ $supplier->email ?? '-' }}
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <hr class="text-muted">
+                </div>
+
+                <div class="col-12">
+                    <div class="fw-bold">
+                        Phone Number:
+                    </div>
+                    <div>
+                        {{ $supplier->phone ?? '-' }}
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <hr class="text-muted">
+                </div>
+
+                <div class="col-12">
+                    <div class="fw-bold">
+                        Address:
+                    </div>
+                    <div>
+                        {{ $supplier->address ?? '-' }}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    {{-- livewire --}}
-
-
-    <!-- Modal for Add Supplier -->
-    <div class="modal fade" id="addSupplierModal" tabindex="-1">
+    <!-- Modal for Edit Supplier -->
+    <div class="modal fade" id="editSupplierModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fw-bold">Add Supplier</h5>
+                    <h5 class="modal-title fw-bold">Edit Supplier</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
-                    <form id="form" action="{{ route('admin.supplier.store') }}" method="POST">
+                    <form id="form" action="{{ route('admin.supplier.update', ['id' => $supplier->id]) }}"
+                        method="POST">
                         @csrf
+                        @method('PATCH')
 
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group mb-3">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" class="form-control" name="name" id="name"
-                                        value="{{ old('name') }}" placeholder="Name" required>
+                                        value="{{ $supplier->name }}" placeholder="Name" required>
                                 </div>
                             </div>
 
@@ -54,22 +109,22 @@
                                 <div class="form-group mb-3">
                                     <label for="email" class="form-label">Email</label>
                                     <input type="email" class="form-control" name="email" id="email"
-                                        value="{{ old('email') }}" placeholder="Email">
+                                        value="{{ $supplier->email }}" placeholder="Email">
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="phone" class="form-label">Phone</label>
+                                    <label for="phone" class="form-label">Phone Number</label>
                                     <input type="text" class="form-control" name="phone" id="phone"
-                                        value="{{ old('phone') }}" placeholder="Phone">
+                                        value="{{ $supplier->phone }}" placeholder="Phone number">
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
                                     <label for="address" class="form-label">Address</label>
-                                    <textarea class="form-control" name="address" id="address" placeholder="Address" rows="3">{{ old('address') }}</textarea>
+                                    <textarea class="form-control" name="address" id="address" placeholder="Address" rows="3">{{ $supplier->address }}</textarea>
                                 </div>
                             </div>
 

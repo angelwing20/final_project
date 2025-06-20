@@ -62,14 +62,16 @@
     function deleteConfirmation(e) {
         e.preventDefault();
 
-        var form = $(e).closest('form');
+        const form = e.target.closest('form');
 
         Swal.fire({
             title: 'Are you sure you want to delete?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No'
+            confirmButtonText: 'Confirm',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#fca7af',
+            cancelButtonColor: '#6c757d'
         }).then((result) => {
             if (result.isConfirmed) {
                 form.submit();

@@ -39,16 +39,46 @@ class SupplierAdminController extends Controller
         return redirect()->route('admin.supplier.show', $result->id)->with('success', 'Supplier added successfully');
     }
 
-    public function update(Request $request, $id)
+    public function show($id)
     {
-        // 暂时模拟更新逻辑
-        return redirect()->route('admin.supplier.index')->with('success', 'Supplier updated successfully (模拟)');
+        $supplier = $this->_supplierAdminService->getById($id);
+
+        if ($supplier == null) {
+            $errorMessage = implode("<br>", $this->_supplierAdminService->_errorMessage);
+            return back()->with('error', $errorMessage);
+        }
+
+        return view('admin.supplier.show', compact('supplier'));
     }
 
-    // 删除供应商
+    public function update(Request $request, $id)
+    {
+        $data = $request->only([
+            'name',
+            'email',
+            'phone',
+            'address',
+        ]);
+
+        $result = $this->_supplierAdminService->update($id, $data);
+
+        if ($result == null) {
+            $errorMessage = implode("<br>", $this->_supplierAdminService->_errorMessage);
+            return back()->with('error', $errorMessage)->withInput();
+        }
+
+        return back()->with('success', 'Supplier detail updated successfully');
+    }
+
     public function destroy($id)
     {
+        $supplier = $this->_supplierAdminService->deleteById($id);
 
-        return redirect()->route('admin.supplier.index')->with('success', 'Supplier deleted successfully (模拟)');
+        if ($supplier == null) {
+            $errorMessage = implode("<br>", $this->_supplierAdminService->_errorMessage);
+            return back()->with('error', $errorMessage);
+        }
+
+        return redirect()->route('admin.supplier.index')->with('success', 'Supplier deleted successfully');
     }
 }

@@ -187,11 +187,38 @@
     }
 }
 
-img{
-    width: 200px;
-    height: 200px;
-    border-radius: 10px;
-    object-fit: cover;
+.default-image-wrapper{
+    display: flex;
+    justify-content: center;
+
+    img{
+        width: 200px;
+        height: 200px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+}
+
+.card-shadow{
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.card-hover:hover {
+    background: linear-gradient(270deg,#eaddc3,#ffffff ) !important;
+}
+
+.search-group{
+    position:relative;
+
+    i{
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        margin-left: 16px;
+        color: #6c757d;
+        pointer-events: none;
+    }
 }
 
 @media (max-width: 992px) {

@@ -43,7 +43,7 @@
 
                         <div class="row">
                             <div class="col-12">
-                                <div class="d-flex justify-content-center mb-3">
+                                <div class="default-image-wrapper mb-3">
                                     <img id="image-display" src="{{ asset('img/default-image.png') }}"
                                         data-initial-image="{{ asset('img/default-image.png') }}"
                                         onerror="this.onerror=null; this.src='{{ asset('img/default-image.png') }}'">

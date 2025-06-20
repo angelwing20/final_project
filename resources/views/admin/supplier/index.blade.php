@@ -11,22 +11,14 @@
         <div class="col-12 col-md-auto">
             <div class="d-flex gap-2 align-items-center float-end">
                 <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSupplierModal">
-                    Add Supplier
+                    <i class="fa-solid fa-plus"></i> Add
                 </button>
             </div>
         </div>
     </div>
 
-    <div class="d-flex mb-4">
-        <input type="text" name="search" class="form-control me-2" placeholder="Search supplier...">
-
-        <button class="btn btn-secondary">
-            <i class="fa-solid fa-filter"></i>
-        </button>
-    </div>
-
     {{-- livewire --}}
-
+    @livewire('admin.supplier-list')
 
     <!-- Modal for Add Supplier -->
     <div class="modal fade" id="addSupplierModal" tabindex="-1">
@@ -60,9 +52,9 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="phone" class="form-label">Phone</label>
+                                    <label for="phone" class="form-label">Phone Number</label>
                                     <input type="text" class="form-control" name="phone" id="phone"
-                                        value="{{ old('phone') }}" placeholder="Phone">
+                                        value="{{ old('phone') }}" placeholder="Phone number">
                                 </div>
                             </div>
 

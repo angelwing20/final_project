@@ -48,13 +48,64 @@ class SupplierAdminService extends Service
         }
     }
 
-    public function updateSupplier($id, $data)
+    public function getById($id)
     {
-        return $this->_supplierRepository->update($id, $data);
+        try {
+            $supplier = $this->_supplierRepository->getById($id);
+
+            return $supplier;
+        } catch (Exception $e) {
+            array_push($this->_errorMessage, "Fail to get supplier.");
+
+            return null;
+        }
     }
 
-    public function deleteSupplier($id)
+    public function update($id, $data)
     {
-        return $this->_supplierRepository->deleteById($id);
+        DB::beginTransaction();
+
+        try {
+            $validator = Validator::make($data, [
+                'name' => 'required|string|max:255',
+                'email' => 'nullable|email|max:255|unique:suppliers,email,' . $id,
+                'phone' => 'nullable|string|max:255',
+                'address' => 'nullable|string|max:16777215',
+            ]);
+
+            if ($validator->fails()) {
+                foreach ($validator->errors()->all() as $error) {
+                    array_push($this->_errorMessage, $error);
+                }
+                return null;
+            }
+
+            $supplier = $this->_supplierRepository->update($id, $data);
+
+            DB::commit();
+            return $supplier;
+        } catch (Exception $e) {
+            array_push($this->_errorMessage, "Fail to update supplier.");
+
+            DB::rollBack();
+            return null;
+        }
+    }
+
+    public function deleteById($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $supplier = $this->_supplierRepository->deleteById($id);
+
+            DB::commit();
+            return $supplier;
+        } catch (Exception $e) {
+            array_push($this->_errorMessage, "Fail to get supplier.");
+
+            DB::rollBack();
+            return null;
+        }
     }
 }

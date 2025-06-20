@@ -264,12 +264,37 @@
   color: #3e2c23;
 }
 
-img {
+.default-image-wrapper {
+  display: flex;
+  justify-content: center;
+}
+.default-image-wrapper img {
   width: 200px;
   height: 200px;
   border-radius: 10px;
   -o-object-fit: cover;
      object-fit: cover;
+}
+
+.card-shadow {
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.card-hover:hover {
+  background: linear-gradient(270deg, #eaddc3, #ffffff) !important;
+}
+
+.search-group {
+  position: relative;
+}
+.search-group i {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  margin-left: 16px;
+  color: #6c757d;
+  pointer-events: none;
 }
 
 @media (max-width: 992px) {
