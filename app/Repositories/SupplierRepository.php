@@ -28,7 +28,7 @@ class SupplierRepository extends Repository
     public function update($id, $data)
     {
         $model = $this->_db->find($id);
-        $model->name = $data['name'];
+        $model->name = $data['name'] ?? $model->name;
         $model->email = array_key_exists('email', $data) ? $data['email'] : $model->email;
         $model->phone = array_key_exists('phone', $data) ? $data['phone'] : $model->email;
         $model->address = array_key_exists('address', $data) ? $data['address'] : $model->email;
