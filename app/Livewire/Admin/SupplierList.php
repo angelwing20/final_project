@@ -32,6 +32,8 @@ class SupplierList extends Component
     public function applyFilter()
     {
         $this->page = 0;
+        $this->noMoreData = false;
+        $this->suppliers = [];
         $this->render();
     }
 
