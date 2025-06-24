@@ -2,29 +2,26 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\ProductCategory;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
-class SupplierList extends Component
+class ProductCategoryList extends Component
 {
-    public $noMoreData = false;
+    public $productCategories;
     public $page = 0;
     public $limitDataPerPage = 30;
-    public $suppliers;
+    public $noMoreData = false;
 
-    public $filter = [
-        'name' => null,
-        'email' => null,
-        'phone' => null,
+    public $filter=[
+        'name'=> null
     ];
 
-    public function loadMore()
-    {
+    public function loadMore(){
         $this->page++;
     }
 
-    public function search($name)
-    {
+    public function search($name){
         $this->filter['name'] = $name;
         $this->applyFilter();
     }
@@ -32,6 +29,8 @@ class SupplierList extends Component
     public function applyFilter()
     {
         $this->page = 0;
+        $this->noMoreData = false;
+        $this->productCategories = [];
         $this->render();
     }
 
@@ -44,26 +43,16 @@ class SupplierList extends Component
     }
 
     public function render()
-    {
-        $query = DB::table('suppliers')
+    {   
+         $query = DB::table('product_categories')
             ->select(
                 'id',
                 'name',
-                'email',
-                'phone',
             )
             ->orderBy('name', 'asc');
 
         if (isset($this->filter['name']) && $this->filter['name'] !== null) {
             $query = $query->where('name', 'like', '%' . $this->filter['name'] . '%');
-        }
-
-        if (isset($this->filter['email']) && $this->filter['email'] !== null) {
-            $query = $query->where('email', 'like', '%' . $this->filter['email'] . '%');
-        }
-
-        if (isset($this->filter['phone']) && $this->filter['phone'] !== null) {
-            $query = $query->where('phone', 'like', '%' . $this->filter['phone'] . '%');
         }
 
         $query = $query
@@ -77,11 +66,12 @@ class SupplierList extends Component
         }
 
         if ($this->page == 0) {
-            $this->suppliers = $query;
+            $this->productCategories = $query;
         } else {
-            $this->suppliers = [...$this->suppliers, ...$query];
+            $this->productCategories = [...$this->productCategories, ...$query];
         }
 
-        return view('livewire.admin.supplier-list');
+        return view('livewire.admin.product-category-list');
     }
+    
 }

@@ -60,8 +60,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="product_category" class="form-label">Product Category</label>
-                                    <select class="form-select" name="product_category" id="product_category"
+                                    <label for="product_category_id" class="form-label">Product Category</label>
+                                    <select class="form-select" name="product_category_id" id="product_category_id"
                                         style="width: 100%" required>
                                     </select>
                                 </div>
@@ -122,6 +122,40 @@
                     $('#remove-btn').addClass('d-none');
                 }
             });
+
+                $('#product_category_id').select2({
+                    theme: 'bootstrap-5',
+                    allowClear: true,
+                    dropdownParent: $(this).find('.modal-content'),
+                    placeholder: 'Select Product Category',
+                    
+                    ajax: {
+                        url: "{{ route('admin.product_category.select_search') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function(params) {
+                            var query = {
+                                search_term: params.term,
+                                page: params.page,
+                            }
+                            console.log(query);
+                            return query;
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data.results, function(item) {
+                                    return {
+                                        text: item.name,
+                                        id: item.id,
+                                    }
+                                }),
+                                pagination: {
+                                    more: data.pagination.more
+                                }
+                            };
+                        },
+                    }
+                });
         })
 
         function uploadImage() {
