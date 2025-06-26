@@ -1,108 +1,54 @@
-.register-page {
-    min-height: 100vh; // Make sure it fills the full viewport height
+.custom-body{
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 2rem; // Optional: ensures spacing on very small screens
+    padding: 32px;
     background: linear-gradient(to bottom, #f5e9d7, #fff8ed);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
-    .register-container {
+    .custom-container{
         max-width: 450px;
-        width: 100%; // Ensures responsiveness
+        width: 100%;
         background: #fff;
         border-radius: 12px;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         padding: 35px;
-    }
 
-    .register-title {
-        color: #5C4033;
-        font-weight: 700;
-        text-align: center;
-        margin-bottom: 25px;
-    }
-
-    .form-label {
-        font-weight: 600;
-        color: #5C4033;
-    }
-
-    .btn-register {
-        background-color: #5C4033;
-        border: none;
-
-        &:hover {
-            background-color: #3e2b20;
+        .logo {
+            display: block;
+            margin: 0 auto 20px auto;
+            max-width: 150px;
         }
-    }
 
-    .login-link {
-        color: #5C4033;
-
-        &:hover {
-            text-decoration: underline;
+        .custom-title{
+            color: #5C4033;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 25px;
         }
-    }
 
-    .logo {
-        display: block;
-        margin: 0 auto 20px auto;
-        max-width: 150px;
+        .form-label {
+            font-weight: 600;
+            color: #5C4033;
+        }
+
+        .btn-custom {
+            @include button-variant($custom-color, $custom-color);
+        }
+
+        .footer-link {
+            color: #5C4033;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
     }
 }
 
-
-.login-page {
-  min-height: 100vh; // Ensures full screen height
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem; // Adds space on small screens
-  background: linear-gradient(to bottom, #f5e9d7, #fff8ed);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
-  .login-container {
-    max-width: 450px;
-    width: 100%; // Makes it responsive
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    padding: 35px;
-  }
-
-  .login-title {
-    color: #5C4033;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 25px;
-  }
-
-  .form-label {
-    font-weight: 600;
-    color: #5C4033;
-  }
-
-  .btn-login {
-    background-color: #5C4033;
-    border: none;
-
-    &:hover {
-      background-color: #3e2b20;
+@media (max-width: 576px) {
+    .custom-body {
+        padding: 16px;
     }
-  }
-
-  .register-link {
-    color: #5C4033;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  .logo {
-    display: block;
-    margin: 0 auto 20px auto;
-    max-width: 150px;
-  }
 }

@@ -12,14 +12,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
 Route::middleware("guest")->group(function () {
-    Route::name("register.")->group(function () {
-        Route::get('/register', [AuthController::class, 'registerPage'])->name('index');
-        Route::post('/register', [AuthController::class, 'register'])->name('submit');
-    });
-
     Route::name("login.")->group(function () {
         Route::get('/', [AuthController::class, 'loginPage'])->name('index');
-        Route::post('/', [AuthController::class, 'login'])->name('submit');
+        Route::post('/', [AuthController::class, 'login'])->name('submit')->middleware('throttle:login');
     });
 });
 
@@ -27,7 +22,7 @@ Route::middleware("auth")->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-Route::name("admin.")->prefix("admin")->group(function () {
+Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
     Route::get('/', [DashboardAdminController::class, 'index'])->name('dashboard');
 
     Route::name("account.")->prefix("account")->group(function () {

@@ -3,34 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+use App\Services\AuthService;
 
 class AuthController extends Controller
 {
-    public function registerPage()
+    private $_authService;
+
+    public function __construct(AuthService $authService)
     {
-        return view('public.register');
-    }
-
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|confirmed|min:6',
-        ]);
-
-        // Create the user
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        // Redirect to login page instead of logging in
-        return redirect()->route('login.index')->with('success', 'Registration successful! Please login.');
+        $this->_authService = $authService;
     }
 
     public function loginPage()
@@ -40,26 +21,29 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+        $data = $request->only([
+            'email',
+            'password',
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->route('admin.dashboard');
+        $result = $this->_authService->login($data);
+
+        if ($result == null) {
+            $errorMessage = implode("<br>", $this->_authService->_errorMessage);
+            return back()->with('error', $errorMessage)->withInput();
         }
 
-        return back()->withErrors([
-            'email' => 'Invalid email or password.',
-        ]);
+        return redirect()->route('admin.dashboard');
     }
 
     public function logout(Request $request)
     {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $result = $this->_authService->logout();
+
+        if ($result == null) {
+            $errorMessage = implode("<br>", $this->_authService->_errorMessage);
+            return back()->with('error', $errorMessage);
+        }
 
         return redirect()->route('login.index');
     }

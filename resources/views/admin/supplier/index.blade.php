@@ -85,14 +85,14 @@
             $('#form').validate({
                 errorElement: 'span',
                 errorClass: 'invalid-feedback',
-                errorPlacement: function(error, errorInput) {
-                    errorInput.closest('.form-group').append(error);
+                errorPlacement: function(error, element) {
+                    element.closest('.form-group').append(error);
                 },
-                highlight: function(errorInput, errorClass, validClass) {
-                    $(errorInput).addClass('is-invalid');
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
                 },
-                unhighlight: function(errorInput, errorClass, validClass) {
-                    $(errorInput).removeClass('is-invalid');
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
                 },
                 invalidHandler: function(form, validator) {
                     var errors = validator.numberOfInvalids();

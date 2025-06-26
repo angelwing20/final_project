@@ -1,47 +1,66 @@
-<!DOCTYPE html>
-<html>
+@extends('public.layout.layout')
 
-<head>
-    <title>Admin Login</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
-</head>
+@section('page_title', 'Login')
 
-<body class="login-page">
+@section('content')
 
-    <div class="login-container">
-        <img src="{{ asset('img/i_mum_mum_logo.png') }}" alt="I Mum Mum Logo" class="logo">
+    <h2 class="custom-title">Admin Login</h2>
 
-        <h2 class="login-title">Admin Login</h2>
+    <form id="form" method="POST" action="{{ route('login.submit') }}">
+        @csrf
 
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                {{ $errors->first() }}
-            </div>
-        @endif
+        <div class="form-group mb-3">
+            <label for="email" class="form-label">Email Address</label>
+            <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}"
+                placeholder="Email address" required>
+        </div>
 
-        <form method="POST" action="{{ route('login.submit') }}">
-            @csrf
+        <div class="form-group mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
+        </div>
 
-            <div class="mb-3">
-                <label for="email" class="form-label">Email address</label>
-                <input type="email" name="email" id="email" class="form-control" required autofocus>
-            </div>
+        <button type="submit" class="btn btn-custom w-100">Login</button>
+    </form>
 
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" name="password" id="password" class="form-control" required>
-            </div>
+@endsection
 
-            <button type="submit" class="btn btn-login text-white w-100">Login</button>
-
-            <p class="mt-3 text-center">
-                Don't have an account?
-                <a href="{{ route('register.index') }}" class="register-link">Register here</a>
-            </p>
-        </form>
-    </div>
-
-</body>
-
-</html>
+@section('script')
+    <script>
+        $(function() {
+            $('#form').validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true,
+                    },
+                    password: {
+                        required: true,
+                        minlength: 6,
+                    },
+                },
+                messages: {
+                    email: {
+                        required: "Please enter your email address.",
+                        email: "Please enter a valid email address.",
+                    },
+                    password: {
+                        required: "Please enter your password.",
+                        minlength: "Your password must be at least 6 characters long.",
+                    },
+                },
+                errorElement: 'span',
+                errorClass: 'invalid-feedback',
+                errorPlacement: function(error, element) {
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                },
+            });
+        })
+    </script>
+@endsection
