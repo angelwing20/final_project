@@ -6,7 +6,7 @@
 
     <div class="row mb-3">
         <div class="col">
-            <h2 class="fw-bold">Supplier</h2>
+            <h2 class="fw-bold">Product Category</h2>
         </div>
         <div class="col-12 col-md-auto">
             <div class="d-flex gap-2 align-items-center float-end">
@@ -25,7 +25,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fw-bold">Add Supplier</h5>
+                    <h5 class="modal-title fw-bold">Add product categories</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
@@ -36,7 +36,8 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="name" class="form-label">Name</label>
+                                    <label for="name" class="form-label">Product Category 
+                                        Name</label>
                                     <input type="text" class="form-control" name="name" id="name"
                                         value="{{ old('name') }}" placeholder="Name" required>
                                 </div>
@@ -60,16 +61,17 @@
     <script>
         $(function() {
             $('#form').validate({
+                ignore: [],
                 errorElement: 'span',
                 errorClass: 'invalid-feedback',
-                errorPlacement: function(error, errorInput) {
-                    errorInput.closest('.form-group').append(error);
+                errorPlacement: function(error, element) {
+                    element.closest('.form-group').append(error);
                 },
-                highlight: function(errorInput, errorClass, validClass) {
-                    $(errorInput).addClass('is-invalid');
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
                 },
-                unhighlight: function(errorInput, errorClass, validClass) {
-                    $(errorInput).removeClass('is-invalid');
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
                 },
                 invalidHandler: function(form, validator) {
                     var errors = validator.numberOfInvalids();

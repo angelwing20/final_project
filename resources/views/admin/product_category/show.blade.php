@@ -1,12 +1,12 @@
 @extends('admin.layout.layout')
 
-@section('page_title', 'Category Detail')
+@section('page_title', 'Product Category Detail')
 
 @section('content')
 
     <div class="row mb-3">
         <div class="col">
-            <h2 class="fw-bold">Category Detail</h2>
+            <h2 class="fw-bold">Product Category Detail</h2>
         </div>
         <div class="col-12 col-md-auto">
             <div class="d-flex gap-2 align-items-center float-end">
@@ -20,7 +20,7 @@
                         <i class="fa-solid fa-trash"></i> Delete
                     </button>
                 </form>
-                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editSupplierModal">
+                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editProductCategoryModal">
                     <i class="fa-solid fa-pen-to-square"></i> Edit
                 </button>
             </div>
@@ -38,51 +38,13 @@
                         {{ $productCategories->name }}
                     </div>
                 </div>
-
-                <div class="col-12">
-                    <hr class="text-muted">
-                </div>
-
-                <div class="col-12">
-                    <div class="fw-bold">
-                        Email:
-                    </div>
-                    <div>
-                        {{ $productCategories->email ?? '-' }}
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <hr class="text-muted">
-                </div>
-
-                <div class="col-12">
-                    <div class="fw-bold">
-                        Phone Number:
-                    </div>
-                    <div>
-                        {{ $productCategories->phone ?? '-' }}
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <hr class="text-muted">
-                </div>
-
-                <div class="col-12">
-                    <div class="fw-bold">
-                        Address:
-                    </div>
-                    <div>
-                        {{ $productCategories->address ?? '-' }}
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>
 
     <!-- Modal for Edit Supplier -->
-    <div class="modal fade" id="editSupplierModal" tabindex="-1">
+    <div class="modal fade" id="editProductCategoryModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -104,29 +66,7 @@
                                         value="{{ $productCategories->name }}" placeholder="Name" required>
                                 </div>
                             </div>
-
-                            <div class="col-12">
-                                <div class="form-group mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" name="email" id="email"
-                                        value="{{ $productCategories->email }}" placeholder="Email">
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="form-group mb-3">
-                                    <label for="phone" class="form-label">Phone Number</label>
-                                    <input type="text" class="form-control" name="phone" id="phone"
-                                        value="{{ $productCategories->phone }}" placeholder="Phone number">
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="form-group mb-3">
-                                    <label for="address" class="form-label">Address</label>
-                                    <textarea class="form-control" name="address" id="address" placeholder="Address" rows="3">{{ $productCategories->address }}</textarea>
-                                </div>
-                            </div>
+                            <div class="row">
 
                             <div class="col-12">
                                 <div class="text-center">
@@ -134,6 +74,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                     </form>
                 </div>
             </div>
@@ -146,16 +87,17 @@
     <script>
         $(function() {
             $('#form').validate({
+                ignore: [],
                 errorElement: 'span',
                 errorClass: 'invalid-feedback',
-                errorPlacement: function(error, errorInput) {
-                    errorInput.closest('.form-group').append(error);
+                errorPlacement: function(error, element) {
+                    element.closest('.form-group').append(error);
                 },
-                highlight: function(errorInput, errorClass, validClass) {
-                    $(errorInput).addClass('is-invalid');
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
                 },
-                unhighlight: function(errorInput, errorClass, validClass) {
-                    $(errorInput).removeClass('is-invalid');
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
                 },
                 invalidHandler: function(form, validator) {
                     var errors = validator.numberOfInvalids();

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\Admin\ProductAdminService;
-use Illuminate\Support\Facades\Validator;
 
 class ProductAdminController extends Controller
 {
@@ -22,51 +21,32 @@ class ProductAdminController extends Controller
     }
 
     public function store(Request $request)
-{
-    $data = $request->only([
-        'product_category_id',
-        'name',
-        'price',
-        'description',
-    ]);
+    {
+        $data = $request->only([
+            'product_category_id',
+            'name',
+            'price',
+            'description',
+            'image'
+        ]);
 
-    // Validate input
-    $validator = Validator::make($data + ['image' => $request->file('image')], [
-        'product_category_id' => 'required|exists:product_categories,id',
-        'name' => 'required|string|max:255',
-        'price' => 'required|string',
-        'description' => 'nullable|string',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-    ]);
+        $result = $this->_productAdminService->createProduct($data);
 
-    if ($validator->fails()) {
-        return back()->withErrors($validator)->withInput();
+        if ($result == null) {
+            $errorMessage = implode("<br>", $this->_productAdminService->_errorMessage);
+            return back()->with('error', $errorMessage)->withInput();
+        }
+
+        return redirect()->route('admin.product.show', $result->id)->with('success', 'Product added successfully');
     }
-
-    // Handle image if uploaded
-    if ($request->hasFile('image')) {
-        $data['image'] = $request->file('image')->store('product_images', 'public');
-    }
-
-    // Create product using service
-    $product = $this->_productAdminService->createProduct($data);
-
-    if (!$product) {
-        $error = implode("<br>", $this->_productAdminService->_errorMessage);
-        return back()->with('error', $error)->withInput();
-    }
-
-    return redirect()->route('admin.product.index')->with('success', 'Product created successfully!');
-}
-
 
     public function show($id)
     {
         $product = $this->_productAdminService->getById($id);
 
-        if (!$product) {
-            $error = implode("<br>", $this->_productAdminService->_errorMessage);
-            return back()->with('error', $error);
+        if ($product == null) {
+            $errorMessage = implode("<br>", $this->_productAdminService->_errorMessage);
+            return back()->with('error', $errorMessage);
         }
 
         return view('admin.product.show', compact('product'));
@@ -74,37 +54,33 @@ class ProductAdminController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'product_category_id' => 'required|exists:product_categories,id',
-            'name' => 'required|string|max:255',
-            'price' => 'required|string',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+        $data = $request->only([
+            'product_category_id',
+            'name',
+            'price',
+            'description',
+            'image'
         ]);
 
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('product_images', 'public');
+        $result = $this->_productAdminService->update($id, $data);
+
+        if ($result == null) {
+            $errorMessage = implode("<br>", $this->_productAdminService->_errorMessage);
+            return back()->with('error', $errorMessage)->withInput();
         }
 
-        $updated = $this->_productAdminService->update($id, $validated);
-
-        if (!$updated) {
-            $error = implode("<br>", $this->_productAdminService->_errorMessage);
-            return back()->with('error', $error)->withInput();
-        }
-
-        return back()->with('success', 'Product updated successfully!');
+        return back()->with('success', 'Product updated successfully');
     }
 
     public function destroy($id)
     {
-        $deleted = $this->_productAdminService->deleteById($id);
+        $result = $this->_productAdminService->deleteById($id);
 
-        if (!$deleted) {
-            $error = implode("<br>", $this->_productAdminService->_errorMessage);
-            return back()->with('error', $error);
+        if ($result == null) {
+            $errorMessage = implode("<br>", $this->_productAdminService->_errorMessage);
+            return back()->with('error', $errorMessage);
         }
 
-        return redirect()->route('admin.product.index')->with('success', 'Product deleted successfully!');
+        return redirect()->route('admin.product.index')->with('success', 'Product deleted successfully');
     }
 }

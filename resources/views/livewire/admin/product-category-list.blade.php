@@ -16,7 +16,7 @@
 
     <!-- Filter Modal -->
     <div class="modal fade" id="filterModal" tabindex="-1" wire:ignore.self>
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Filter</h5>
@@ -24,7 +24,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-12 col-lg-6">
+                        <div class="col-12">
                             <div class="mb-3">
                                 <label for="filterName" class="form-label">Name</label>
                                 <input type="text" id="filterName" class="form-control" placeholder="Name"
@@ -75,7 +75,7 @@
         </div>
     @endif
 
-    @if (empty($category))
+    @if (empty($productCategories))
         <div class="text-center my-4" wire:loading.remove>
             <div class="text-muted">No data found</div>
         </div>

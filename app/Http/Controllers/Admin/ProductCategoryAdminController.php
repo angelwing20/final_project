@@ -34,7 +34,7 @@ class ProductCategoryAdminController extends Controller
             return back()->with('error', $errorMessage)->withInput();
         }
 
-        return redirect()->route('admin.product_category.show', $result->id)->with('success', 'Category added successfully');
+        return redirect()->route('admin.product_category.show', $result->id)->with('success', 'Product Category added successfully');
     }
 
     public function show($id)
@@ -52,7 +52,7 @@ class ProductCategoryAdminController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->only([
-            'name', 
+            'name',
         ]);
 
         $result = $this->_productCategoryAdminService->update($id, $data);
@@ -62,7 +62,7 @@ class ProductCategoryAdminController extends Controller
             return back()->with('error', $errorMessage)->withInput();
         }
 
-        return back()->with('success', 'Category detail updated successfully');
+        return back()->with('success', 'ProductCategory detail updated successfully');
     }
 
     public function destroy($id)
@@ -74,12 +74,12 @@ class ProductCategoryAdminController extends Controller
             return back()->with('error', $errorMessage);
         }
 
-        return redirect()->route('admin.product_category.index')->with('success', 'Category deleted successfully');
+        return redirect()->route('admin.product_category.index')->with('success', 'Product Category deleted successfully');
     }
 
     public function selectOption(Request $request)
     {
-        
+
         $data = [
             "search_term" => $request->search_term ?? null,
             "page" => $request->page ?? 1,

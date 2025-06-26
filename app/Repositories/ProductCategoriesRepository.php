@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\ProductCategory;
-use App\Models\Supplier;
 
 class ProductCategoriesRepository extends Repository
 {

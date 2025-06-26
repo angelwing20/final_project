@@ -38,8 +38,7 @@ class ProductCategoryAdminService extends Service
             DB::commit();
             return $productCategory;
         } catch (Exception $e) {
-            array_push($this->_errorMessage, "Fail to add product .");
-
+            array_push($this->_errorMessage, "Fail to add product category.");
             DB::rollBack();
             return null;
         }
@@ -52,7 +51,7 @@ class ProductCategoryAdminService extends Service
 
             return $productCategory;
         } catch (Exception $e) {
-            array_push($this->_errorMessage, "Fail to get product category list.");
+            array_push($this->_errorMessage, "Fail to get product category.");
 
             return null;
         }
@@ -79,7 +78,7 @@ class ProductCategoryAdminService extends Service
             DB::commit();
             return $productCategory;
         } catch (Exception $e) {
-            array_push($this->_errorMessage, "Fail to update Category list.");
+            array_push($this->_errorMessage, "Fail to update product category.");
 
             DB::rollBack();
             return null;
@@ -96,7 +95,7 @@ class ProductCategoryAdminService extends Service
             DB::commit();
             return $productCategory;
         } catch (Exception $e) {
-            array_push($this->_errorMessage, "Fail to delete Category list.");
+            array_push($this->_errorMessage, "Fail to delete product category.");
 
             DB::rollBack();
             return null;
@@ -110,22 +109,23 @@ class ProductCategoryAdminService extends Service
             $data['offset'] = ($data['page'] - 1) * $data['result_count'];
             
 
-            $countries = $this->_productCategoriesRepository->getAllBySearchTerm($data);
+            $productCategories = $this->_productCategoriesRepository->getAllBySearchTerm($data);
 
             $totalCount = $this->_productCategoriesRepository->getTotalCountBySearchTerm($data);
 
             $results = array(
-                "results" => $countries->toArray(),
+                "results" => $productCategories->toArray(),
                 "pagination" => array(
                     "more" => $totalCount < $data['offset'] + $data['result_count'] ? false : true
                 )
             );
 
             // return $results;
-            return response(123);
+            return $results;
         } catch (Exception $e) {
             array_push($this->_errorMessage, "Currently the list didnt have this product category.");
             DB::rollBack();
+
             return null;
         }
     }
