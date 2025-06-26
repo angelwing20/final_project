@@ -51,11 +51,12 @@ Route::name("admin.")->prefix("admin")->group(function () {
         Route::delete('{id}', [ProductAdminController::class, 'destroy'])->name('destroy');
     });
 
-    Route::name('product_category.')->prefix('product-category')->group(function () {
+    Route::name("product_category.")->prefix("product-category")->group(function () {
         Route::get('/', [ProductCategoryAdminController::class, 'index'])->name('index');
         Route::post('store', [ProductCategoryAdminController::class, 'store'])->name('store');
+        Route::get('select-search', [ProductCategoryAdminController::class, 'selectOption'])->name('select_search');
         Route::get('{id}', [ProductCategoryAdminController::class, 'show'])->name('show');
-        Route::post('{id}/update', [ProductCategoryAdminController::class, 'update'])->name('update');
+        Route::patch('{id}/update', [ProductCategoryAdminController::class, 'update'])->name('update');
         Route::delete('{id}', [ProductCategoryAdminController::class, 'destroy'])->name('destroy');
     });
 

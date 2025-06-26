@@ -2,20 +2,20 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
-class SupplierList extends Component
+class ProductList extends Component
 {
-    public $noMoreData = false;
+    public $products;
     public $page = 0;
     public $limitDataPerPage = 30;
-    public $suppliers;
+    public $noMoreData = false;
 
     public $filter = [
-        'name' => null,
-        'email' => null,
-        'phone' => null,
+        'product_category_id' => null,
+        'name' => null
     ];
 
     public function loadMore()
@@ -33,7 +33,7 @@ class SupplierList extends Component
     {
         $this->page = 0;
         $this->noMoreData = false;
-        $this->suppliers = [];
+        $this->products = [];
         $this->render();
     }
 
@@ -47,12 +47,17 @@ class SupplierList extends Component
 
     public function render()
     {
-        $query = DB::table('suppliers')
+        $query = DB::table('products')
+            ->join('product_categories', 'products.product_category_id', '=', 'product_categories.id')
             ->select(
-                'id',
-                'name',
-                'email',
-                'phone',
+                'products.id',
+                'products.product_category_id',
+                'products.name',
+                'products.price',
+                'products.description',
+                'products.image',
+
+                'product_categories.name as product_category_name'
             )
             ->orderBy('name', 'asc');
 
@@ -60,12 +65,8 @@ class SupplierList extends Component
             $query = $query->where('name', 'like', '%' . $this->filter['name'] . '%');
         }
 
-        if (isset($this->filter['email']) && $this->filter['email'] !== null) {
-            $query = $query->where('email', 'like', '%' . $this->filter['email'] . '%');
-        }
-
-        if (isset($this->filter['phone']) && $this->filter['phone'] !== null) {
-            $query = $query->where('phone', 'like', '%' . $this->filter['phone'] . '%');
+        if (isset($this->filter['product_category_id']) && $this->filter['product_category_id'] !== null) {
+            $query = $query->where('product_category_id', '=', $this->filter['product_category_id']);
         }
 
         $query = $query
@@ -74,16 +75,16 @@ class SupplierList extends Component
             ->get()
             ->toArray();
 
-        if (count($query) < $this->limitDataPerPage || count($query) == 0) {
+        if (count($query) < $this->limitDataPerPage || count($query) === 0) {
             $this->noMoreData = true;
         }
 
-        if ($this->page == 0) {
-            $this->suppliers = $query;
+        if ($this->page === 0) {
+            $this->products = $query;
         } else {
-            $this->suppliers = [...$this->suppliers, ...$query];
+            $this->products = [...$this->products, ...$query];
         }
 
-        return view('livewire.admin.supplier-list');
+        return view('livewire.admin.product-list');
     }
 }

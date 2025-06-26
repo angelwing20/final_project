@@ -1,47 +1,72 @@
 @extends('admin.layout.layout')
 
-@section('page_title', 'Supplier')
+@section('page_title', 'Product Category Detail')
 
 @section('content')
 
     <div class="row mb-3">
         <div class="col">
-            <h2 class="fw-bold">Product Category</h2>
+            <h2 class="fw-bold">Product Category Detail</h2>
         </div>
         <div class="col-12 col-md-auto">
             <div class="d-flex gap-2 align-items-center float-end">
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSupplierModal">
-                    <i class="fa-solid fa-plus"></i> Add
+                <a href="{{ route('admin.product_category.index') }}" class="btn btn-secondary">
+                    <i class="fa-solid fa-arrow-left"></i> Back
+                </a>
+                <form action="{{ route('admin.product_category.destroy', ['id' => $productCategories->id]) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger" onclick="deleteConfirmation(event)">
+                        <i class="fa-solid fa-trash"></i> Delete
+                    </button>
+                </form>
+                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editProductCategoryModal">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit
                 </button>
             </div>
         </div>
     </div>
 
-    {{-- livewire --}}
-    @livewire('admin.product-category-list')
+    <div class="card card-shadow border-0 bg-white">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="fw-bold">
+                        Name:
+                    </div>
+                    <div>
+                        {{ $productCategories->name }}
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
 
-    <!-- Modal for Add Supplier -->
-    <div class="modal fade" id="addSupplierModal" tabindex="-1">
+    <!-- Modal for Edit Supplier -->
+    <div class="modal fade" id="editProductCategoryModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fw-bold">Add product categories</h5>
+                    <h5 class="modal-title fw-bold">Edit Supplier</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
-                    <form id="form" action="{{ route('admin.product_category.store') }}" method="POST">
+                    <form id="form" action="{{ route('admin.product_category.update', ['id' => $productCategories->id]) }}"
+                        method="POST">
                         @csrf
+                        @method('PATCH')
 
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="name" class="form-label">Product Category 
-                                        Name</label>
+                                    <label for="name" class="form-label">Name</label>
                                     <input type="text" class="form-control" name="name" id="name"
-                                        value="{{ old('name') }}" placeholder="Name" required>
+                                        value="{{ $productCategories->name }}" placeholder="Name" required>
                                 </div>
                             </div>
+                            <div class="row">
 
                             <div class="col-12">
                                 <div class="text-center">
@@ -49,6 +74,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                     </form>
                 </div>
             </div>

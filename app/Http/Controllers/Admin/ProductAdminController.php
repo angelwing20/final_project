@@ -4,51 +4,83 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Services\Admin\ProductAdminService;
 
 class ProductAdminController extends Controller
 {
+    private $_productAdminService;
+
+    public function __construct(ProductAdminService $productAdminService)
+    {
+        $this->_productAdminService = $productAdminService;
+    }
+
     public function index()
     {
-        return view('admin.product.index'); // 记得view文件也跟着放到 resources/views/admin/product/index.blade.php
+        return view('admin.product.index');
     }
 
     public function store(Request $request)
     {
-        // 验证数据
-        $validated = $request->validate([
-            'name'  => 'required|string|max:255',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        $data = $request->only([
+            'product_category_id',
+            'name',
+            'price',
+            'description',
+            'image'
         ]);
 
-        // 处理图片上传
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('product_images', 'public');
-            $validated['image_path'] = $path;
+        $result = $this->_productAdminService->createProduct($data);
+
+        if ($result == null) {
+            $errorMessage = implode("<br>", $this->_productAdminService->_errorMessage);
+            return back()->with('error', $errorMessage)->withInput();
         }
 
-        // 目前我们先测试用 dd 查看接收到的数据
-        dd($validated);
+        return redirect()->route('admin.product.show', $result->id)->with('success', 'Product added successfully');
     }
 
     public function show($id)
     {
-        // 暂不处理
-    }
+        $product = $this->_productAdminService->getById($id);
 
-    public function edit($id)
-    {
-        // 暂不处理
+        if ($product == null) {
+            $errorMessage = implode("<br>", $this->_productAdminService->_errorMessage);
+            return back()->with('error', $errorMessage);
+        }
+
+        return view('admin.product.show', compact('product'));
     }
 
     public function update(Request $request, $id)
     {
-        // 暂不处理
+        $data = $request->only([
+            'product_category_id',
+            'name',
+            'price',
+            'description',
+            'image'
+        ]);
+
+        $result = $this->_productAdminService->update($id, $data);
+
+        if ($result == null) {
+            $errorMessage = implode("<br>", $this->_productAdminService->_errorMessage);
+            return back()->with('error', $errorMessage)->withInput();
+        }
+
+        return back()->with('success', 'Product updated successfully');
     }
 
     public function destroy($id)
     {
-        // 暂不处理
+        $result = $this->_productAdminService->deleteById($id);
+
+        if ($result == null) {
+            $errorMessage = implode("<br>", $this->_productAdminService->_errorMessage);
+            return back()->with('error', $errorMessage);
+        }
+
+        return redirect()->route('admin.product.index')->with('success', 'Product deleted successfully');
     }
 }
