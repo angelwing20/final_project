@@ -47,7 +47,7 @@ class ProductCategoryAdminService extends Service
     public function getById($id)
     {
         try {
-            $productCategory= $this->_productCategoriesRepository->getById($id);
+            $productCategory = $this->_productCategoriesRepository->getById($id);
 
             return $productCategory;
         } catch (Exception $e) {
@@ -78,7 +78,7 @@ class ProductCategoryAdminService extends Service
             DB::commit();
             return $productCategory;
         } catch (Exception $e) {
-            array_push($this->_errorMessage, "Fail to update product category.");
+            array_push($this->_errorMessage, "Fail to update product category detail.");
 
             DB::rollBack();
             return null;
@@ -107,7 +107,7 @@ class ProductCategoryAdminService extends Service
         try {
             $data['result_count'] = 50;
             $data['offset'] = ($data['page'] - 1) * $data['result_count'];
-            
+
 
             $productCategories = $this->_productCategoriesRepository->getAllBySearchTerm($data);
 

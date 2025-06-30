@@ -11,14 +11,14 @@
         <div class="col-12 col-md-auto">
             <div class="d-flex gap-2 align-items-center float-end">
                 <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                    Add Product
+                    <i class="fa-solid fa-plus"></i> Add
                 </button>
             </div>
         </div>
     </div>
 
     {{-- livewire --}}
-     @livewire('admin.product-list')
+    @livewire('admin.product-list')
 
     <!-- Modal for Add Product -->
     <div class="modal fade" id="addProductModal" tabindex="-1">
@@ -30,7 +30,8 @@
                 </div>
 
                 <div class="modal-body">
-                    <form id="form" action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
+                    <form id="form" action="{{ route('admin.product.store') }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
 
                         <div class="row">
@@ -141,8 +142,8 @@
                 theme: 'bootstrap-5',
                 allowClear: true,
                 dropdownParent: $('#addProductModal .modal-content'),
-                placeholder: 'Select Product Category',
-                    
+                placeholder: 'Select product category',
+
                 ajax: {
                     url: "{{ route('admin.product_category.select_search') }}",
                     dataType: 'json',

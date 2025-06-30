@@ -111,7 +111,7 @@
                 theme: 'bootstrap-5',
                 allowClear: true,
                 dropdownParent: $('#filterModal .modal-content'),
-                placeholder: 'Product Category',
+                placeholder: 'Product category',
 
                 ajax: {
                     url: "{{ route('admin.product_category.select_search') }}",

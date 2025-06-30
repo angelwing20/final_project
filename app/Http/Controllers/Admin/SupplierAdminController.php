@@ -36,7 +36,7 @@ class SupplierAdminController extends Controller
             return back()->with('error', $errorMessage)->withInput();
         }
 
-        return redirect()->route('admin.supplier.show', $result->id)->with('success', 'Supplier added successfully');
+        return redirect()->route('admin.supplier.show', $result->id)->with('success', 'Supplier added successfully.');
     }
 
     public function show($id)
@@ -67,7 +67,7 @@ class SupplierAdminController extends Controller
             return back()->with('error', $errorMessage)->withInput();
         }
 
-        return back()->with('success', 'Supplier detail updated successfully');
+        return back()->with('success', 'Supplier detail updated successfully.');
     }
 
     public function destroy($id)
@@ -79,6 +79,6 @@ class SupplierAdminController extends Controller
             return back()->with('error', $errorMessage);
         }
 
-        return redirect()->route('admin.supplier.index')->with('success', 'Supplier deleted successfully');
+        return redirect()->route('admin.supplier.index')->with('success', 'Supplier deleted successfully.');
     }
 }

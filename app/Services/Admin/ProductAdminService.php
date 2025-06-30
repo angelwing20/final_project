@@ -108,7 +108,7 @@ class ProductAdminService extends Service
             if (!empty($data['image'])) {
                 if ($product['image'] != null && Storage::disk('public')->exists('product/' . $product['image'])) {
                     Storage::disk('public')->delete('product/' . $product['image']);
-                }   
+                }
 
                 $fileName = $this->generateFileName();
                 $fileExtension = $data['image']->extension();
@@ -123,7 +123,7 @@ class ProductAdminService extends Service
             DB::commit();
             return $product;
         } catch (Exception $e) {
-            array_push($this->_errorMessage, "Fail to update Product Detail.");
+            array_push($this->_errorMessage, "Fail to update product detail.");
 
             DB::rollBack();
             return null;

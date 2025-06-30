@@ -59,14 +59,14 @@ class ProductList extends Component
 
                 'product_categories.name as product_category_name'
             )
-            ->orderBy('name', 'asc');
+            ->orderBy('products.name', 'asc');
 
         if (isset($this->filter['name']) && $this->filter['name'] !== null) {
-            $query = $query->where('name', 'like', '%' . $this->filter['name'] . '%');
+            $query = $query->where('products.name', 'like', '%' . $this->filter['name'] . '%');
         }
 
         if (isset($this->filter['product_category_id']) && $this->filter['product_category_id'] !== null) {
-            $query = $query->where('product_category_id', '=', $this->filter['product_category_id']);
+            $query = $query->where('products.product_category_id', '=', $this->filter['product_category_id']);
         }
 
         $query = $query

@@ -200,7 +200,7 @@
                 theme: 'bootstrap-5',
                 allowClear: true,
                 dropdownParent: $('#editProductModal .modal-content'),
-                placeholder: 'Select Product Category',
+                placeholder: 'Select product category',
 
                 ajax: {
                     url: "{{ route('admin.product_category.select_search') }}",

@@ -37,7 +37,7 @@ class ProductAdminController extends Controller
             return back()->with('error', $errorMessage)->withInput();
         }
 
-        return redirect()->route('admin.product.show', $result->id)->with('success', 'Product added successfully');
+        return redirect()->route('admin.product.show', $result->id)->with('success', 'Product added successfully.');
     }
 
     public function show($id)
@@ -81,6 +81,6 @@ class ProductAdminController extends Controller
             return back()->with('error', $errorMessage);
         }
 
-        return redirect()->route('admin.product.index')->with('success', 'Product deleted successfully');
+        return redirect()->route('admin.product.index')->with('success', 'Product deleted successfully.');
     }
 }

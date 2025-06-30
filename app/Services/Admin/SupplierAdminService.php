@@ -85,7 +85,7 @@ class SupplierAdminService extends Service
             DB::commit();
             return $supplier;
         } catch (Exception $e) {
-            array_push($this->_errorMessage, "Fail to update supplier.");
+            array_push($this->_errorMessage, "Fail to update supplier detail.");
 
             DB::rollBack();
             return null;
@@ -102,7 +102,7 @@ class SupplierAdminService extends Service
             DB::commit();
             return $supplier;
         } catch (Exception $e) {
-            array_push($this->_errorMessage, "Fail to get supplier.");
+            array_push($this->_errorMessage, "Fail to delete supplier.");
 
             DB::rollBack();
             return null;
