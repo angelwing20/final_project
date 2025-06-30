@@ -40,8 +40,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" wire:click="resetFilter"
-                        data-bs-dismiss="modal" onclick="resetFilterForm('#filterModal')">Reset</button>
+                    <button type="button" class="btn btn-danger" wire:click="resetFilter" data-bs-dismiss="modal"
+                        onclick="resetFilterForm('#filterModal')">Reset</button>
                     <button type="button" class="btn btn-warning" wire:click="applyFilter"
                         data-bs-dismiss="modal">Apply</button>
                 </div>
@@ -57,28 +57,26 @@
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-auto">
-                                    <div class="fw-bold d-flex align-items-center">
-                                        <img 
-                                            src="{{ $product->image ? asset('storage/product/'.$product->image) : asset('img/default-image.png') }}"
+                                    <div class="default-image-wrapper">
+                                        <img src="{{ $product->image ? asset('storage/product/' . $product->image) : asset('img/default-image.png') }}"
                                             onerror="this.onerror=null;this.src='{{ asset('img/default-image.png') }}'"
-                                            alt="Product Image"
-                                            class="img-thumbnail me-3"
-                                            style="width: 100px; height: 100px; object-fit: cover;"
-                                        >
+                                            alt="Product Image" style="width: 100px; height: 100px; object-fit: cover;">
                                     </div>
                                 </div>
+
                                 <div class="col">
                                     <div class="fw-bold">
                                         {{ $product->name }}
                                     </div>
                                     <div class="fw-bold">
-                                        <span class="badge rounded-pill text-bg-primary">{{ $product->product_category_name }}</span>
+                                        <span
+                                            class="badge rounded-pill text-bg-warning">{{ $product->product_category_name }}</span>
                                     </div>
-                                    
                                 </div>
+
                                 <div class="col-auto">
                                     <div class="fw-bold">
-                                        Price: {{ $product->price}}
+                                        Price: {{ $product->price }}
                                     </div>
                                 </div>
                             </div>
@@ -108,13 +106,13 @@
 
 @section('scripts')
     <script>
-        $(function(){
+        $(function() {
             $('#filterProductCategory').select2({
                 theme: 'bootstrap-5',
                 allowClear: true,
                 dropdownParent: $('#filterModal .modal-content'),
                 placeholder: 'Product Category',
-                    
+
                 ajax: {
                     url: "{{ route('admin.product_category.select_search') }}",
                     dataType: 'json',

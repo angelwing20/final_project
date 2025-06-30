@@ -31,19 +31,18 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-12 mb-3 text-center">
-                    <div>
-                        <img src="{{ $product->image ? asset('storage/product/' . $product->image) : asset('img/default-image.png') }}"
-                        onerror="this.onerror=null;this.src='{{ asset('img/default-image.png') }}'"
-                        alt="Product Image"
+                    <img src="{{ $product->image ? asset('storage/product/' . $product->image) : asset('img/default-image.png') }}"
+                        onerror="this.onerror=null;this.src='{{ asset('img/default-image.png') }}'" alt="Product Image"
                         style="width: 200px; height: 200px; object-fit: cover; border: 1px solid #ccc; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); display: block; margin: 0 auto;">
-                    </div>
                 </div>
                 <div class="col-12">
                     <div class="fw-bold">
                         Product Category :
                     </div>
                     <div>
-                        {{ $product->productCategory->name }}
+                        <a class="text-decoration-none"
+                            href="{{ route('admin.product_category.show', ['id' => $product->product_category_id]) }}"><span
+                                class="badge rounded-pill text-bg-warning">{{ $product->productCategory->name }}</span></a>
                     </div>
                     <hr class="text-muted">
                 </div>
@@ -87,8 +86,8 @@
                 </div>
 
                 <div class="modal-body">
-                    <form id="form" action="{{ route('admin.product.update', ['id' => $product->id]) }}"
-                        method="POST" enctype="multipart/form-data">
+                    <form id="form" action="{{ route('admin.product.update', ['id' => $product->id]) }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
 
@@ -96,11 +95,10 @@
                             <div class="col-12">
                                 <div class="default-image-wrapper mb-3">
                                     <img id="image-display"
-                                    src="{{ $product->image ? asset('storage/product/'. $product->image) : asset('img/default-image.png') }}"
-                                    data-initial-image="{{ asset('img/default-image.png') }}"
-                                    onerror="this.onerror=null;this.src='{{ $product->image ? asset('storage/product/'. $product->image) : asset('img/default-image.png') }}'"
-                                    alt="Product Image"
-                                    width="150">
+                                        src="{{ $product->image ? asset('storage/product/' . $product->image) : asset('img/default-image.png') }}"
+                                        data-initial-image="{{ asset('img/default-image.png') }}"
+                                        onerror="this.onerror=null;this.src='{{ $product->image ? asset('storage/product/' . $product->image) : asset('img/default-image.png') }}'"
+                                        alt="Product Image" width="150">
                                     <input type="file" class="image-input d-none" name="image" id="image"
                                         accept=".jpg, .jpeg, .png, .webp" hidden>
                                 </div>
@@ -116,13 +114,13 @@
                                     <label for="product_category_id" class="form-label">Product Category</label>
                                     <select class="form-select" name="product_category_id" id="product_category_id"
                                         style="width: 100%" required>
-                                         <option value="{{ $product->product_category_id }}" selected>
-                                        {{ $product->productCategory->name }}
-                                    </option>
+                                        <option value="{{ $product->product_category_id }}" selected>
+                                            {{ $product->productCategory->name }}
+                                        </option>
                                     </select>
                                 </div>
                             </div>
-                             <div class="col-12">
+                            <div class="col-12">
                                 <div class="form-group mb-3">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" class="form-control" name="name" id="name"
@@ -203,7 +201,7 @@
                 allowClear: true,
                 dropdownParent: $('#editProductModal .modal-content'),
                 placeholder: 'Select Product Category',
-                    
+
                 ajax: {
                     url: "{{ route('admin.product_category.select_search') }}",
                     dataType: 'json',
