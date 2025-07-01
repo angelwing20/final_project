@@ -1,49 +1,42 @@
 @extends('admin.layout.layout')
 
-@section('page_title', 'Inventory')
+@section('page_title', 'ingredient')
 
 @section('content')
 
     <div class="row mb-3">
         <div class="col">
-            <h2 class="fw-bold">Inventory</h2>
+            <h2 class="fw-bold">Ingredient</h2>
         </div>
         <div class="col-12 col-md-auto">
             <div class="d-flex gap-2 align-items-center float-end">
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addInventoryModal">
-                    Add Inventory
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addIngredientModal">
+                    <i class="fa-solid fa-plus"></i> Add
                 </button>
             </div>
         </div>
     </div>
 
-    <div class="d-flex mb-4">
-        <input type="text" name="search" class="form-control me-2" placeholder="Search inventory...">
-
-        <button class="btn btn-secondary">
-            <i class="fa-solid fa-filter"></i>
-        </button>
-    </div>
-
     {{-- livewire --}}
+    @livewire('admin.ingredient-list')
 
-
-    <!-- Modal for Add Inventory -->
-    <div class="modal fade" id="addInventoryModal" tabindex="-1">
+    <!-- Modal for Add Product -->
+    <div class="modal fade" id="addIngredientModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fw-bold">Add Inventory</h5>
+                    <h5 class="modal-title fw-bold">Add Ingredient</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
-                    <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
+                    <form id="form" action="{{ route('admin.ingredient.store') }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
 
                         <div class="row">
                             <div class="col-12">
-                                <div class="d-flex justify-content-center mb-3">
+                                <div class="default-image-wrapper mb-3">
                                     <img id="image-display" src="{{ asset('img/default-image.png') }}"
                                         data-initial-image="{{ asset('img/default-image.png') }}"
                                         onerror="this.onerror=null; this.src='{{ asset('img/default-image.png') }}'">
@@ -60,8 +53,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="product_category" class="form-label">Inventory Category</label>
-                                    <select class="form-select" name="product_category" id="product_category"
+                                    <label for="ingredient_category_id" class="form-label">Ingredient Category</label>
+                                    <select class="form-select" name="ingredient_category_id" id="ingredient_category_id"
                                         style="width: 100%" required>
                                     </select>
                                 </div>
@@ -77,17 +70,17 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="price" class="form-label">Price</label>
-                                    <input type="number" class="form-control" name="price" id="price" step="0.01"
-                                        placeholder="Price" required>
+                                    <label for="Weight" class="form-label">Weight</label>
+                                    <input type="number" class="form-control" name="weight" id="weight" step="0.01"
+                                        placeholder="weight" required>
                                 </div>
                             </div>
 
-                            <div class="col-12">
+                              <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="price" class="form-label">Quantity</label>
-                                    <input type="number" class="form-control" name="quantity" id="quantity" step="0.01"
-                                        placeholder="Quantity" required>
+                                    <label for="Alarm_weight" class="form-label">Alarm_weight</label>
+                                    <input type="number" class="form-control" name="alarm_weight" id="alarm_weight" step="0.01"
+                                        placeholder="alarm_weight" required>
                                 </div>
                             </div>
 
@@ -115,6 +108,28 @@
 @section('script')
     <script>
         $(function() {
+            $('#form').validate({
+                ignore: [],
+                errorElement: 'span',
+                errorClass: 'invalid-feedback',
+                errorPlacement: function(error, element) {
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                },
+                invalidHandler: function(form, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        notifier.show('Error!', 'Please ensure all inputs are correct.', 'warning', '',
+                            4000);
+                    }
+                },
+            })
+
             $('.image-input').change(function(e) {
                 const file = e.target.files[0];
                 if (file) {
@@ -128,6 +143,39 @@
                     var initialImage = $('#image-display').data('initial-image');
                     $('#image-display').attr("src", initialImage);
                     $('#remove-btn').addClass('d-none');
+                }
+            });
+
+            $('#ingredient_category_id').select2({
+                theme: 'bootstrap-5',
+                allowClear: true,
+                dropdownParent: $('#addIngredientModal .modal-content'),
+                placeholder: 'Select ingredient category',
+
+                ajax: {
+                    url: "{{ route('admin.ingredient_category.select_search') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        var query = {
+                            search_term: params.term,
+                            page: params.page,
+                        }
+                        return query;
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data.results, function(item) {
+                                return {
+                                    text: item.name,
+                                    id: item.id,
+                                }
+                            }),
+                            pagination: {
+                                more: data.pagination.more
+                            }
+                        };
+                    },
                 }
             });
         })

@@ -13,16 +13,16 @@
                 Dashboard
             </a>
 
-            <a href="{{ route('admin.inventory.index') }}"
-                class="sidebar-link {{ Request::routeIs('admin.inventory.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.ingredient.index') }}"
+                class="sidebar-link {{ Request::routeIs('admin.ingredient.*') ? 'active' : '' }}">
                 <i class="fas fa-boxes-stacked"></i>
-                Inventory
+                Ingredient
             </a>
 
-            <a href="{{ route('admin.inventory_category.index') }}"
-                class="sidebar-link {{ Request::routeIs('admin.inventory_category.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.ingredient_category.index') }}"
+                class="sidebar-link {{ Request::routeIs('admin.ingredient_category.*') ? 'active' : '' }}">
                 <i class="fas fa-boxes-stacked"></i>
-                Inventory Category
+                Ingredient Category
             </a>
 
             <a href="{{ route('admin.supplier.index') }}"
