@@ -1,9 +1,9 @@
- <div>
+<div>
     <div class="row align-items-center mb-4">
         <div class="col">
             <div class="search-group">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" class="form-control ps-5 py-2" placeholder="Search name"
+                <input type="text" class="form-control ps-5 py-2" placeholder="搜索名称"
                     wire:keydown.debounce.300ms="search($event.target.value)" wire:model="filter.name">
             </div>
         </div>
@@ -14,26 +14,26 @@
         </div>
     </div>
 
-    <!-- Filter Modal -->
+    <!-- 过滤模态框 -->
     <div class="modal fade" id="filterModal" tabindex="-1" wire:ignore.self>
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Filter</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title">过滤</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-12">
                             <div class="mb-3">
-                                <label for="filterName" class="form-label">Name</label>
-                                <input type="text" id="filterName" class="form-control" placeholder="Name"
+                                <label for="filterName" class="form-label">名称</label>
+                                <input type="text" id="filterName" class="form-control" placeholder="名称"
                                     wire:model="filter.name">
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="mb-3" wire:ignore>
-                                <label for="filterIngredientCategory" class="form-label">Ingredient Category</label>
+                                <label for="filterIngredientCategory" class="form-label">食材分类</label>
                                 <select class="form-control" id="filterIngredientCategory" style="width: 100%"></select>
                             </div>
                         </div>
@@ -41,9 +41,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" wire:click="resetFilter" data-bs-dismiss="modal"
-                        onclick="resetFilterForm('#filterModal')">Reset</button>
+                        onclick="resetFilterForm('#filterModal')">重置</button>
                     <button type="button" class="btn btn-warning" wire:click="applyFilter"
-                        data-bs-dismiss="modal">Apply</button>
+                        data-bs-dismiss="modal">应用</button>
                 </div>
             </div>
         </div>
@@ -60,10 +60,9 @@
                                     <div class="default-image-wrapper">
                                         <img src="{{ $ingredient->image ? asset('storage/ingredient/' . $ingredient->image) : asset('img/default-image.png') }}"
                                             onerror="this.onerror=null;this.src='{{ asset('img/default-image.png') }}'"
-                                            alt="Ingredient Image" style="width: 100px; height: 100px; object-fit: cover;">
+                                            alt="食材图片" style="width: 100px; height: 100px; object-fit: cover;">
                                     </div>
                                 </div>
-
                                 <div class="col">
                                     <div class="fw-bold">
                                         {{ $ingredient->name }}
@@ -73,11 +72,15 @@
                                             class="badge rounded-pill text-bg-warning">{{ $ingredient->ingredient_category_name }}</span>
                                     </div>
                                 </div>
-
                                 <div class="col-auto">
                                     <div class="fw-bold">
-                                        Weight: {{ $ingredient->weight }}
+                                        重量: {{ $ingredient->weight }}
                                     </div>
+                                    @if ($ingredient->weight !== null && $ingredient->alarm_weight !== null && $ingredient->weight < $ingredient->alarm_weight)
+                                        <div class="badge bg-danger mt-2" style="padding: 5px; font-size: 0.9em;">
+                                            low_stock_alert
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -89,59 +92,16 @@
 
     @if (!$noMoreData)
         <div x-intersect.full="$wire.loadMore()"></div>
-
         <div class="d-flex justify-content-center align-items-center my-4" wire:loading>
             <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
+                <span class="visually-hidden">加载中...</span>
             </div>
         </div>
     @endif
 
-    @if (empty($ingredient))
+    @if (empty($ingredients))
         <div class="text-center my-4" wire:loading.remove>
-            <div class="text-muted">No data found</div>
+            <div class="text-muted">未找到数据</div>
         </div>
     @endif
 </div>
-
-@section('scripts')
-    <script>
-        $(function() {
-            $('#filterIngredientCategory').select2({
-                theme: 'bootstrap-5',
-                allowClear: true,
-                dropdownParent: $('#filterModal .modal-content'),
-                placeholder: 'Ingredient category',
-
-                ajax: {
-                    url: "{{ route('admin.ingredient_category.select_search') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        var query = {
-                            search_term: params.term,
-                            page: params.page,
-                        }
-                        return query;
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.results, function(item) {
-                                return {
-                                    text: item.name,
-                                    id: item.id,
-                                }
-                            }),
-                            pagination: {
-                                more: data.pagination.more
-                            }
-                        };
-                    },
-                }
-            }).on('change', function(e) {
-                var selectedId = $(this).val();
-                @this.set('filter.ingredient_category_id', selectedId, false);
-            });
-        })
-    </script>
-@endsection

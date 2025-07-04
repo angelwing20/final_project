@@ -10,13 +10,39 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * IngredientAdminService Class
+ * This service handles CRUD operations for ingredients, including file uploads and low stock management.
+ */
 class IngredientAdminService extends Service
 {
+   
     private $_ingredientRepository;
+
 
     public function __construct(IngredientRepository $ingredientRepository)
     {
         $this->_ingredientRepository = $ingredientRepository;
+    }
+
+    public function getAll()
+    {
+        try {
+            return $this->_ingredientRepository->getAll();
+        } catch (Exception $e) {
+            array_push($this->_errorMessage, "Fail to retrieve all ingredients.");
+            return null;
+        }
+    }
+
+    public function getLowStockIngredients()
+    {
+        try {
+            return $this->_ingredientRepository->getLowStockIngredients();
+        } catch (Exception $e) {
+            array_push($this->_errorMessage, "Fail to retrieve low stock ingredients.");
+            return null;
+        }
     }
 
     public function createIngredient($data)
@@ -31,11 +57,10 @@ class IngredientAdminService extends Service
                 'weight' => 'required|numeric',
                 'alarm_weight' => 'required|numeric',
                 'description' => 'nullable|string|max:16777215',
-
             ]);
 
             if ($validator->fails()) {
-                dd($validator->errors());
+                // 移除 dd() 用于调试，改为记录错误
                 foreach ($validator->errors()->all() as $error) {
                     array_push($this->_errorMessage, $error);
                 }
@@ -63,7 +88,7 @@ class IngredientAdminService extends Service
             return null;
         }
     }
-    
+
     public function generateFileName()
     {
         return Str::random(5) . Str::uuid() . Str::random(5);
@@ -97,7 +122,7 @@ class IngredientAdminService extends Service
             ]);
 
             if ($validator->fails()) {
-                dd($validator->errors());
+                // 移除 dd() 用于调试，改为记录错误
                 foreach ($validator->errors()->all() as $error) {
                     array_push($this->_errorMessage, $error);
                 }
