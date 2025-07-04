@@ -17,7 +17,15 @@ class IngredientAdminController extends Controller
 
     public function index()
     {
-        return view('admin.ingredient.index');
+        $ingredients = $this->_ingredientAdminService->getAll(); // 假设存在此方法
+        $lowStockIngredients = $this->_ingredientAdminService->getLowStockIngredients(); // 新增方法
+
+        if ($ingredients === null) {
+            $errorMessage = implode("<br>", $this->_ingredientAdminService->_errorMessage);
+            return back()->with('error', $errorMessage);
+        }
+
+        return view('admin.ingredient.index', compact('ingredients', 'lowStockIngredients'));
     }
 
     public function store(Request $request)

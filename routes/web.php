@@ -55,22 +55,22 @@ Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
         Route::delete('{id}', [ProductCategoryAdminController::class, 'destroy'])->name('destroy');
     });
 
-        Route::name("ingredient.")->prefix("ingredient")->group(function () {
-            Route::get('/', [IngredientAdminController::class, 'index'])->name('index');
-            Route::post('store', [IngredientAdminController::class, 'store'])->name('store');
-            Route::get('{id}', [IngredientAdminController::class, 'show'])->name('show');
-            Route::post('{id}/update', [IngredientAdminController::class, 'update'])->name('update');
-            Route::delete('{id}', [IngredientAdminController::class, 'destroy'])->name('destroy');
-        });
+    Route::name("ingredient.")->prefix("ingredient")->group(function () {
+        Route::get('/', [IngredientAdminController::class, 'index'])->name('index');
+        Route::post('store', [IngredientAdminController::class, 'store'])->name('store');
+        Route::get('{id}', [IngredientAdminController::class, 'show'])->name('show');
+        Route::match(['POST', 'PATCH'], '{id}/update', [IngredientAdminController::class, 'update'])->name('update');
+        Route::delete('{id}', [IngredientAdminController::class, 'destroy'])->name('destroy');
+    });
 
-        Route::name("ingredient_category.")->prefix("ingredient-category")->group(function () {
-            Route::get('/', [IngredientCategoryAdminController::class, 'index'])->name('index');
-            Route::post('store', [IngredientCategoryAdminController::class, 'store'])->name('store');
-            Route::get('select-search', [IngredientCategoryAdminController::class, 'selectOption'])->name('select_search');
-            Route::get('{id}', [IngredientCategoryAdminController::class, 'show'])->name('show');
-            Route::post('{id}/update', [IngredientCategoryAdminController::class, 'update'])->name('update');
-            Route::delete('{id}', [IngredientCategoryAdminController::class, 'destroy'])->name('destroy');
-        });
+    Route::name("ingredient_category.")->prefix("ingredient-category")->group(function () {
+        Route::get('/', [IngredientCategoryAdminController::class, 'index'])->name('index');
+        Route::post('store', [IngredientCategoryAdminController::class, 'store'])->name('store');
+        Route::get('select-search', [IngredientCategoryAdminController::class, 'selectOption'])->name('select_search');
+        Route::get('{id}', [IngredientCategoryAdminController::class, 'show'])->name('show');
+        Route::match(['POST', 'PATCH'], '{id}/update', [IngredientCategoryAdminController::class, 'update'])->name('update');
+        Route::delete('{id}', [IngredientCategoryAdminController::class, 'destroy'])->name('destroy');
+    });
 
     Route::name("staff.")->prefix("staff")->group(function () {
         Route::get("/", [StaffAdminController::class, "index"])->name("index");

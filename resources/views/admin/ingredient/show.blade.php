@@ -57,10 +57,19 @@
                 </div>
                 <div class="col-12">
                     <div class="fw-bold">
-                        Price:
+                        Weight:
                     </div>
                     <div>
-                        {{ $ingredient->price }}
+                        {{ $ingredient->weight }}
+                    </div>
+                    <hr class="text-muted">
+                </div>
+                <div class="col-12">
+                    <div class="fw-bold">
+                        Alarm_weight:
+                    </div>
+                    <div>
+                        {{ $ingredient->alarm_weight }}
                     </div>
                     <hr class="text-muted">
                 </div>
@@ -129,9 +138,16 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="price" class="form-label">Price</label>
-                                    <input type="text" class="form-control" name="price" id="price"
-                                        value="{{ $ingredient->price }}" placeholder="Price" required>
+                                    <label for="weight" class="form-label">weight</label>
+                                    <input type="text" readonly class="form-control" name="weight" id="weight"
+                                        value="{{ $ingredient->weight }}" placeholder="weight" required>
+                                </div>
+                            </div>
+                             <div class="col-12">
+                                <div class="form-group mb-3">
+                                    <label for="alarm_weight" class="form-label">alarm weight</label>
+                                    <input type="text" class="form-control" name="alarm_weight" id="alarm_weight"
+                                        value="{{ $ingredient->alarm_weight }}" placeholder="alarm_weight" required>
                                 </div>
                             </div>
                             <div class="col-12">
