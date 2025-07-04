@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\IngredientCategory;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -13,15 +12,17 @@ class IngredientCategoryList extends Component
     public $limitDataPerPage = 30;
     public $noMoreData = false;
 
-    public $filter=[
-        'name'=> null
+    public $filter = [
+        'name' => null
     ];
 
-    public function loadMore(){
+    public function loadMore()
+    {
         $this->page++;
     }
 
-    public function search($name){
+    public function search($name)
+    {
         $this->filter['name'] = $name;
         $this->applyFilter();
     }
@@ -44,7 +45,7 @@ class IngredientCategoryList extends Component
 
     public function render()
     {
-         $query = DB::table('ingredient_categories')
+        $query = DB::table('ingredient_categories')
             ->select(
                 'id',
                 'name',
@@ -73,5 +74,4 @@ class IngredientCategoryList extends Component
 
         return view('livewire.admin.ingredient-category-list');
     }
-
 }

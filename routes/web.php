@@ -26,8 +26,9 @@ Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
     Route::get('/', [DashboardAdminController::class, 'index'])->name('dashboard');
 
     Route::name("account.")->prefix("account")->group(function () {
-        Route::get('/', [ProfileAdminController::class, 'index'])->name('index');
-        Route::post('update', [ProfileAdminController::class, 'update'])->name('update');
+        Route::get('/', [ProfileAdminController::class, 'index'])->name('profile');
+        Route::patch('/', [ProfileAdminController::class, 'update'])->name('update');
+        Route::patch('update-password', [ProfileAdminController::class, 'updatePassword'])->name('update_password');
     });
 
     Route::name("supplier.")->prefix("supplier")->group(function () {
@@ -59,7 +60,7 @@ Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
         Route::get('/', [IngredientAdminController::class, 'index'])->name('index');
         Route::post('store', [IngredientAdminController::class, 'store'])->name('store');
         Route::get('{id}', [IngredientAdminController::class, 'show'])->name('show');
-        Route::match(['POST', 'PATCH'], '{id}/update', [IngredientAdminController::class, 'update'])->name('update');
+        Route::patch('{id}', [IngredientAdminController::class, 'update'])->name('update');
         Route::delete('{id}', [IngredientAdminController::class, 'destroy'])->name('destroy');
     });
 
@@ -68,7 +69,7 @@ Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
         Route::post('store', [IngredientCategoryAdminController::class, 'store'])->name('store');
         Route::get('select-search', [IngredientCategoryAdminController::class, 'selectOption'])->name('select_search');
         Route::get('{id}', [IngredientCategoryAdminController::class, 'show'])->name('show');
-        Route::match(['POST', 'PATCH'], '{id}/update', [IngredientCategoryAdminController::class, 'update'])->name('update');
+        Route::patch('{id}', [IngredientCategoryAdminController::class, 'update'])->name('update');
         Route::delete('{id}', [IngredientCategoryAdminController::class, 'destroy'])->name('destroy');
     });
 

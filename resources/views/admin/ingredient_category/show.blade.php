@@ -13,7 +13,8 @@
                 <a href="{{ route('admin.ingredient_category.index') }}" class="btn btn-secondary">
                     <i class="fa-solid fa-arrow-left"></i> Back
                 </a>
-                <form action="{{ route('admin.ingredient_category.destroy', ['id' => $ingredientCategories->id]) }}" method="POST">
+                <form action="{{ route('admin.ingredient_category.destroy', ['id' => $ingredientCategory->id]) }}"
+                    method="POST">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger" onclick="deleteConfirmation(event)">
@@ -35,7 +36,7 @@
                         Name:
                     </div>
                     <div>
-                        {{ $ingredientCategories->name }}
+                        {{ $ingredientCategory->name }}
                     </div>
                 </div>
 
@@ -44,7 +45,7 @@
     </div>
 
     <!-- Modal for Edit Supplier -->
-    <div class="modal fade" id="editingredientCategoryModal" tabindex="-1">
+    <div class="modal fade" id="editIngredientCategoryModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -54,7 +55,7 @@
 
                 <div class="modal-body">
                     <form id="form"
-                        action="{{ route('admin.ingredient_category.update', ['id' => $ingredientCategories->id]) }}"
+                        action="{{ route('admin.ingredient_category.update', ['id' => $ingredientCategory->id]) }}"
                         method="POST">
                         @csrf
                         @method('PATCH')
@@ -64,7 +65,7 @@
                                 <div class="form-group mb-3">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" class="form-control" name="name" id="name"
-                                        value="{{ $ingredientCategories->name }}" placeholder="Name" required>
+                                        value="{{ $ingredientCategory->name }}" placeholder="Name" required>
                                 </div>
                             </div>
                             <div class="row">
@@ -75,7 +76,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                        </div>
                     </form>
                 </div>
             </div>

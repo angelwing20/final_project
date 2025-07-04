@@ -19,13 +19,13 @@ class UserSeeder extends Seeder
             'image' => null,
             'email' => 'superadmin@gmail.com',
             'password' => bcrypt('123456'),
-        ])->assignRole('superadmin');
+        ])->assignRole('Superadmin');
 
         User::create([
             'name' => 'Admin',
             'image' => null,
             'email' => 'admin@gmail.com',
             'password' => bcrypt('123456'),
-        ])->assignRole('admin');
+        ])->assignRole('Admin');
     }
 }

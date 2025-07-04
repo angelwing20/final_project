@@ -37,7 +37,7 @@
                 </div>
                 <div class="col-12">
                     <div class="fw-bold">
-                         Ingredient Category :
+                        Ingredient Category :
                     </div>
                     <div>
                         <a class="text-decoration-none"
@@ -57,10 +57,17 @@
                 </div>
                 <div class="col-12">
                     <div class="fw-bold">
-                        Weight:
+                        Weight: @if (
+                            $ingredient->weight !== null &&
+                                $ingredient->alarm_weight !== null &&
+                                $ingredient->weight <= $ingredient->alarm_weight)
+                            <div class="badge bg-danger mt-2" style="padding: 5px; font-size: 0.9em;">
+                                Low stock
+                            </div>
+                        @endif
                     </div>
                     <div>
-                        {{ $ingredient->weight }}
+                        {{ $ingredient->weight }} kg
                     </div>
                     <hr class="text-muted">
                 </div>
@@ -69,7 +76,7 @@
                         Alarm_weight:
                     </div>
                     <div>
-                        {{ $ingredient->alarm_weight }}
+                        {{ $ingredient->alarm_weight }} kg
                     </div>
                     <hr class="text-muted">
                 </div>
@@ -90,13 +97,13 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fw-bold">Edit ingredient Detail</h5>
+                    <h5 class="modal-title fw-bold">Edit Ingredient Detail</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
-                    <form id="form" action="{{ route('admin.ingredient.update', ['id' => $ingredient->id]) }}" method="POST"
-                        enctype="multipart/form-data">
+                    <form id="form" action="{{ route('admin.ingredient.update', ['id' => $ingredient->id]) }}"
+                        method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
 
@@ -138,16 +145,9 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="weight" class="form-label">weight</label>
-                                    <input type="text" readonly class="form-control" name="weight" id="weight"
-                                        value="{{ $ingredient->weight }}" placeholder="weight" required>
-                                </div>
-                            </div>
-                             <div class="col-12">
-                                <div class="form-group mb-3">
-                                    <label for="alarm_weight" class="form-label">alarm weight</label>
+                                    <label for="alarm_weight" class="form-label">Alarm Weight (kg)</label>
                                     <input type="text" class="form-control" name="alarm_weight" id="alarm_weight"
-                                        value="{{ $ingredient->alarm_weight }}" placeholder="alarm_weight" required>
+                                        value="{{ $ingredient->alarm_weight }}" placeholder="Alarm Weight" required>
                                 </div>
                             </div>
                             <div class="col-12">

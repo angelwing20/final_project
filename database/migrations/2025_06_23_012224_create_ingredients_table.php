@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('ingredient_category_id')->constrained();
             $table->string('name');
             $table->string('image')->nullable();
-            $table->string('weight');
-            $table->string('alarm_weight');
+            $table->decimal('weight', 8, 2)->nullable()->default('0');
+            $table->decimal('alarm_weight', 8, 2);
             $table->text('description')->nullable();
             $table->timestamps();
         });

@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <form action="{{ route('admin.ingredient_category.store') }}" method="POST">
+                    <form id="form" action="{{ route('admin.ingredient_category.store') }}" method="POST">
                         @csrf
 
                         <div class="row">
@@ -59,7 +59,27 @@
 @section('script')
     <script>
         $(function() {
-
+            $('#form').validate({
+                ignore: [],
+                errorElement: 'span',
+                errorClass: 'invalid-feedback',
+                errorPlacement: function(error, element) {
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                },
+                invalidHandler: function(form, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        notifier.show('Error!', 'Please ensure all inputs are correct.', 'warning', '',
+                            4000);
+                    }
+                },
+            })
         })
     </script>
 @endsection

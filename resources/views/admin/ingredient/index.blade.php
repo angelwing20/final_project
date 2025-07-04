@@ -1,6 +1,6 @@
 @extends('admin.layout.layout')
 
-@section('page_title', 'ingredient')
+@section('page_title', 'Ingredient')
 
 @section('content')
 
@@ -70,17 +70,17 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="Weight" class="form-label">Weight</label>
+                                    <label for="Weight" class="form-label">Weight (kg)</label>
                                     <input type="number" class="form-control" name="weight" id="weight" step="0.01"
-                                        placeholder="weight" required>
+                                        placeholder="Weight">
                                 </div>
                             </div>
 
-                              <div class="col-12">
+                            <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="Alarm_weight" class="form-label">Alarm_weight</label>
-                                    <input type="number" class="form-control" name="alarm_weight" id="alarm_weight" step="0.01"
-                                        placeholder="alarm_weight" required>
+                                    <label for="Alarm_weight" class="form-label">Alarm Weight (kg)</label>
+                                    <input type="number" class="form-control" name="alarm_weight" id="alarm_weight"
+                                        step="0.01" placeholder="Alarm weight" required>
                                 </div>
                             </div>
 

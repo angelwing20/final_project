@@ -29,54 +29,55 @@
 
     @yield('script')
     @yield('scripts')
+
+    <script>
+        @if (session()->has('success'))
+            notifier.show('Success!', '{!! session('success') !!}', 'success', '', 4000);
+        @elseif (session('error'))
+            notifier.show('Failed!', '{!! session('error') !!}', 'danger', '', 4000);
+        @endif
+
+        function toggleSidebar() {
+            if ($("#sidebar").hasClass("sidebar-open")) {
+                $("#sidebar").removeClass("sidebar-open");
+                $("body").css("overflow-y", "auto");
+            } else {
+                $("#sidebar").addClass("sidebar-open");
+                $("body").css("overflow-y", "hidden");
+            }
+        }
+
+        function toggleSidebarSectionGroup(e) {
+            var sectionGroup = $(e).closest('.sidebar-section-group');
+
+            if (sectionGroup.hasClass('active')) {
+                sectionGroup.removeClass('active');
+            } else {
+                sectionGroup.addClass('active');
+            }
+        }
+
+        function deleteConfirmation(e) {
+            e.preventDefault();
+
+            const form = e.target.closest('form');
+
+            Swal.fire({
+                title: 'Are you sure you want to delete?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Confirm',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#fca7af',
+                cancelButtonColor: '#6c757d'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        }
+    </script>
+
 </body>
 
 </html>
-
-<script>
-    @if (session('success'))
-        notifier.show('Success!', '{{ session('success') }}', 'success', '', 4000);
-    @elseif (session('error'))
-        notifier.show('Failed!', '{{ session('error') }}', 'danger', '', 4000);
-    @endif
-
-    function toggleSidebar() {
-        if ($("#sidebar").hasClass("sidebar-open")) {
-            $("#sidebar").removeClass("sidebar-open");
-            $("body").css("overflow-y", "auto");
-        } else {
-            $("#sidebar").addClass("sidebar-open");
-            $("body").css("overflow-y", "hidden");
-        }
-    }
-
-    function toggleSidebarSectionGroup(e) {
-        var sectionGroup = $(e).closest('.sidebar-section-group');
-
-        if (sectionGroup.hasClass('active')) {
-            sectionGroup.removeClass('active');
-        } else {
-            sectionGroup.addClass('active');
-        }
-    }
-
-    function deleteConfirmation(e) {
-        e.preventDefault();
-
-        const form = e.target.closest('form');
-
-        Swal.fire({
-            title: 'Are you sure you want to delete?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Confirm',
-            cancelButtonText: 'Cancel',
-            confirmButtonColor: '#fca7af',
-            cancelButtonColor: '#6c757d'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                form.submit();
-            }
-        });
-    }
-</script>

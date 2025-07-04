@@ -12,7 +12,7 @@ class RolesAndPermissionsSeeder extends Seeder
     {
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        $roles = ['superadmin', 'admin'];
+        $roles = ['Superadmin', 'Admin'];
 
         foreach ($roles as $role) {
             Role::firstOrCreate(['name' => $role]);

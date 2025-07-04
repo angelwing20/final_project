@@ -39,14 +39,14 @@ class IngredientCategoryAdminController extends Controller
 
     public function show($id)
     {
-        $ingredientCategories = $this->_ingredientCategoryAdminService->getById($id);
+        $ingredientCategory = $this->_ingredientCategoryAdminService->getById($id);
 
-        if ($ingredientCategories == null) {
+        if ($ingredientCategory == null) {
             $errorMessage = implode("<br>", $this->_ingredientCategoryAdminService->_errorMessage);
             return back()->with('error', $errorMessage);
         }
 
-        return view('admin.ingredient_category.show', compact('ingredientCategories'));
+        return view('admin.ingredient_category.show', compact('ingredientCategory'));
     }
 
     public function update(Request $request, $id)
@@ -62,7 +62,7 @@ class IngredientCategoryAdminController extends Controller
             return back()->with('error', $errorMessage)->withInput();
         }
 
-        return back()->with('success', 'ingredient category detail updated successfully.');
+        return back()->with('success', 'Ingredient category detail updated successfully.');
     }
 
     public function destroy($id)
@@ -74,7 +74,7 @@ class IngredientCategoryAdminController extends Controller
             return back()->with('error', $errorMessage);
         }
 
-        return redirect()->route('admin.ingredient_category.index')->with('success', 'ingredient category deleted successfully.');
+        return redirect()->route('admin.ingredient_category.index')->with('success', 'Ingredient category deleted successfully.');
     }
 
     public function selectOption(Request $request)

@@ -17,15 +17,7 @@ class IngredientAdminController extends Controller
 
     public function index()
     {
-        $ingredients = $this->_ingredientAdminService->getAll(); // 假设存在此方法
-        $lowStockIngredients = $this->_ingredientAdminService->getLowStockIngredients(); // 新增方法
-
-        if ($ingredients === null) {
-            $errorMessage = implode("<br>", $this->_ingredientAdminService->_errorMessage);
-            return back()->with('error', $errorMessage);
-        }
-
-        return view('admin.ingredient.index', compact('ingredients', 'lowStockIngredients'));
+        return view('admin.ingredient.index');
     }
 
     public function store(Request $request)
@@ -37,7 +29,6 @@ class IngredientAdminController extends Controller
             'weight',
             'alarm_weight',
             'description',
-
         ]);
 
         $result = $this->_ingredientAdminService->createIngredient($data);
@@ -68,10 +59,8 @@ class IngredientAdminController extends Controller
             'ingredient_category_id',
             'image',
             'name',
-            'weight',
             'alarm_weight',
             'description',
-
         ]);
 
         $result = $this->_ingredientAdminService->update($id, $data);
@@ -81,7 +70,7 @@ class IngredientAdminController extends Controller
             return back()->with('error', $errorMessage)->withInput();
         }
 
-        return back()->with('success', 'Ingredient updated successfully');
+        return back()->with('success', 'Ingredient detail updated successfully');
     }
 
     public function destroy($id)

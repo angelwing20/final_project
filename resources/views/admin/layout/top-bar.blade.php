@@ -7,17 +7,18 @@
 
 
     <a class="topbar-title mx-auto" href="{{ route('admin.dashboard') }}">
-        <h4 class="mb-0">I Mum Mum 板面专卖店</h4>
+        <h4 class="mb-0">I Mum Mum Pan Mee</h4>
     </a>
 
     <div class="float-end">
         <div role="button" data-bs-toggle="dropdown">
-            <img src="{{ asset('img/default-avatar-light.png') }}" class="user-image"
-                onerror="this.onerror=null; this.src='{{ asset('img/default-avatar-light.png') }}'">
+            <img src="{{ Auth::user()->image ? asset('storage/profile/' . Auth::user()->image) : asset('img/default-avatar-light.png') }}"
+                class="user-image"
+                onerror="this.onerror=null; this.src='{{ Auth::user()->image ? asset('storage/profile/' . Auth::user()->image) : asset('img/default-avatar-light.png') }}'">
         </div>
         <ul class="dropdown-menu">
             <li>
-                <a class="dropdown-item" href="{{ route('admin.account.index') }}">
+                <a class="dropdown-item" href="{{ route('admin.account.profile') }}">
                     <div class="d-flex align-items-center gap-2">
                         <i class="fa-solid fa-user-gear"></i> Account Profile
                     </div>
