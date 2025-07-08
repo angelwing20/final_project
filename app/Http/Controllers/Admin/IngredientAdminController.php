@@ -100,4 +100,22 @@ class IngredientAdminController extends Controller
         $results = $this->_ingredientAdminService->getSelectOption($data);
         return $results;
     }
+
+    public function updateWeight(Request $request)
+    {
+        $data = $request->only([
+            'ingredient_id',
+            'supplier_id',
+            'weight',
+        ]);
+
+        $result = $this->_ingredientAdminService->updateWeight($data);
+
+        if ($result == null) {
+            $errorMessage = implode("<br>", $this->_ingredientAdminService->_errorMessage);
+            return back()->with('error', $errorMessage)->withInput();
+        }
+
+        return back()->with('success', 'Stock refill successfully.');
+    }
 }

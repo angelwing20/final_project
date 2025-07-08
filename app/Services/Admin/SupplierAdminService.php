@@ -108,4 +108,31 @@ class SupplierAdminService extends Service
             return null;
         }
     }
+
+    public function getSelectOption($data)
+    {
+        try {
+            $data['result_count'] = 50;
+            $data['offset'] = ($data['page'] - 1) * $data['result_count'];
+
+
+            $suppliers = $this->_supplierRepository->getAllBySearchTerm($data);
+
+            $totalCount = $this->_supplierRepository->getTotalCountBySearchTerm($data);
+
+            $results = array(
+                "results" => $suppliers->toArray(),
+                "pagination" => array(
+                    "more" => $totalCount < $data['offset'] + $data['result_count'] ? false : true
+                )
+            );
+
+            return $results;
+        } catch (Exception $e) {
+            array_push($this->_errorMessage, "Currently the list didnt have this supplier.");
+            DB::rollBack();
+
+            return null;
+        }
+    }
 }

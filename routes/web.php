@@ -35,6 +35,7 @@ Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
     Route::name("supplier.")->prefix("supplier")->group(function () {
         Route::get('/', [SupplierAdminController::class, 'index'])->name('index');
         Route::post('/', [SupplierAdminController::class, 'store'])->name('store');
+        Route::get('select-search', [SupplierAdminController::class, 'selectOption'])->name('select_search');
         Route::get('{id}', [SupplierAdminController::class, 'show'])->name('show');
         Route::patch('{id}', [SupplierAdminController::class, 'update'])->name('update');
         Route::delete('{id}', [SupplierAdminController::class, 'destroy'])->name('destroy');
@@ -68,6 +69,7 @@ Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
         Route::post('store', [IngredientAdminController::class, 'store'])->name('store');
         Route::get('select-search', [IngredientAdminController::class, 'selectOption'])->name('select_search');
         Route::get('{id}', [IngredientAdminController::class, 'show'])->name('show');
+        Route::patch('update-weight', [IngredientAdminController::class, 'updateWeight'])->name('update_weight');
         Route::patch('{id}', [IngredientAdminController::class, 'update'])->name('update');
         Route::delete('{id}', [IngredientAdminController::class, 'destroy'])->name('destroy');
     });

@@ -3,6 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Repositories\IngredientRepository;
+use App\Repositories\SupplyHistoryRepository;
 use Exception;
 use App\Services\Service;
 use Illuminate\Support\Facades\DB;
@@ -18,11 +19,13 @@ class IngredientAdminService extends Service
 {
 
     private $_ingredientRepository;
+    private $_supplyHistoryRepository;
 
 
-    public function __construct(IngredientRepository $ingredientRepository)
+    public function __construct(IngredientRepository $ingredientRepository, SupplyHistoryRepository $supplyHistoryRepository)
     {
         $this->_ingredientRepository = $ingredientRepository;
+        $this->_supplyHistoryRepository = $supplyHistoryRepository;
     }
 
     public function createIngredient($data)
@@ -133,6 +136,44 @@ class IngredientAdminService extends Service
             return $ingredient;
         } catch (Exception $e) {
             array_push($this->_errorMessage, "Fail to update ingredient detail.");
+
+            DB::rollBack();
+            return null;
+        }
+    }
+
+    public function updateWeight($data)
+    {
+        DB::beginTransaction();
+
+        try {
+            $validator = Validator::make($data, [
+                'ingredient_id' => 'required|exists:ingredients,id',
+                'supplier_id' => 'required|exists:suppliers,id',
+                'weight' => 'required|numeric',
+            ]);
+
+            if ($validator->fails()) {
+                foreach ($validator->errors()->all() as $error) {
+                    array_push($this->_errorMessage, $error);
+                }
+                return null;
+            }
+
+            $supplier = $this->_supplyHistoryRepository->save($data);
+
+            $id = $data['ingredient_id'];
+
+            $ingredient = $this->_ingredientRepository->getById($id);
+
+            $data['weight'] = $ingredient['weight'] += $data['weight'];
+
+            $ingredient = $this->_ingredientRepository->update($id, $data);
+
+            DB::commit();
+            return $ingredient;
+        } catch (Exception $e) {
+            array_push($this->_errorMessage, "Fail to refill stock.");
 
             DB::rollBack();
             return null;

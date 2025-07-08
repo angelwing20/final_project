@@ -85,4 +85,15 @@ class SupplierAdminController extends Controller
 
         return redirect()->route('admin.supplier.index')->with('success', 'Supplier deleted successfully.');
     }
+
+    public function selectOption(Request $request)
+    {
+        $data = [
+            "search_term" => $request->search_term ?? null,
+            "page" => $request->page ?? 1,
+        ];
+
+        $results = $this->_supplierAdminService->getSelectOption($data);
+        return $results;
+    }
 }

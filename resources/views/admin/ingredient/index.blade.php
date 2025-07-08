@@ -10,6 +10,9 @@
         </div>
         <div class="col-12 col-md-auto">
             <div class="d-flex gap-2 align-items-center float-end">
+                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#refillStockModal">
+                    <i class="fa-solid fa-plus"></i> Refill Stock
+                </button>
                 <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addIngredientModal">
                     <i class="fa-solid fa-plus"></i> Add
                 </button>
@@ -19,6 +22,59 @@
 
     {{-- livewire --}}
     @livewire('admin.ingredient-list')
+
+    <!-- Modal for refill stock -->
+    <div class="modal fade" id="refillStockModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Refill Stock</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="refill-form" action="{{ route('admin.ingredient.update_weight') }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group mb-3">
+                                    <label for="ingredient_id" class="form-label">Ingredient</label>
+                                    <select class="form-select" name="ingredient_id" id="ingredient_id" style="width: 100%"
+                                        required>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-group mb-3">
+                                    <label for="supplier_id" class="form-label">Supplier</label>
+                                    <select class="form-select" name="supplier_id" id="supplier_id" style="width: 100%"
+                                        required>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-group mb-3">
+                                    <label for="Weight" class="form-label">Weight (kg)</label>
+                                    <input type="number" class="form-control" name="weight" id="weight" step="0.01"
+                                        placeholder="Weight" required>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-warning">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal for Add Product -->
     <div class="modal fade" id="addIngredientModal" tabindex="-1">
@@ -71,8 +127,8 @@
                             <div class="col-12">
                                 <div class="form-group mb-3">
                                     <label for="Weight" class="form-label">Weight (kg)</label>
-                                    <input type="number" class="form-control" name="weight" id="weight" step="0.01"
-                                        placeholder="Weight">
+                                    <input type="number" class="form-control" name="weight" id="weight"
+                                        step="0.01" placeholder="Weight">
                                 </div>
                             </div>
 
@@ -130,6 +186,27 @@
                 },
             })
 
+            $('#refill-form').validate({
+                errorElement: 'span',
+                errorClass: 'invalid-feedback',
+                errorPlacement: function(error, element) {
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                },
+                invalidHandler: function(form, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        notifier.show('Error!', 'Please ensure all inputs are correct.', 'warning', '',
+                            4000);
+                    }
+                },
+            })
+
             $('.image-input').change(function(e) {
                 const file = e.target.files[0];
                 if (file) {
@@ -154,6 +231,72 @@
 
                 ajax: {
                     url: "{{ route('admin.ingredient_category.select_search') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        var query = {
+                            search_term: params.term,
+                            page: params.page,
+                        }
+                        return query;
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data.results, function(item) {
+                                return {
+                                    text: item.name,
+                                    id: item.id,
+                                }
+                            }),
+                            pagination: {
+                                more: data.pagination.more
+                            }
+                        };
+                    },
+                }
+            });
+
+            $('#ingredient_id').select2({
+                theme: 'bootstrap-5',
+                allowClear: true,
+                dropdownParent: $('#refillStockModal .modal-content'),
+                placeholder: 'Select ingredient',
+
+                ajax: {
+                    url: "{{ route('admin.ingredient.select_search') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        var query = {
+                            search_term: params.term,
+                            page: params.page,
+                        }
+                        return query;
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data.results, function(item) {
+                                return {
+                                    text: item.name,
+                                    id: item.id,
+                                }
+                            }),
+                            pagination: {
+                                more: data.pagination.more
+                            }
+                        };
+                    },
+                }
+            });
+
+            $('#supplier_id').select2({
+                theme: 'bootstrap-5',
+                allowClear: true,
+                dropdownParent: $('#refillStockModal .modal-content'),
+                placeholder: 'Select supplier',
+
+                ajax: {
+                    url: "{{ route('admin.supplier.select_search') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function(params) {

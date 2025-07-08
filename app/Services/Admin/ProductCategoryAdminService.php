@@ -120,7 +120,6 @@ class ProductCategoryAdminService extends Service
                 )
             );
 
-            // return $results;
             return $results;
         } catch (Exception $e) {
             array_push($this->_errorMessage, "Currently the list didnt have this product category.");

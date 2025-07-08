@@ -27,60 +27,6 @@
         </div>
     </div>
 
-    <div class="card card-shadow border-0 bg-white">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-12">
-                    <div class="fw-bold">
-                        Name:
-                    </div>
-                    <div>
-                        {{ $supplier->name }}
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <hr class="text-muted">
-                </div>
-
-                <div class="col-12">
-                    <div class="fw-bold">
-                        Email:
-                    </div>
-                    <div>
-                        {{ $supplier->email ?? '-' }}
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <hr class="text-muted">
-                </div>
-
-                <div class="col-12">
-                    <div class="fw-bold">
-                        Phone Number:
-                    </div>
-                    <div>
-                        {{ $supplier->phone ?? '-' }}
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <hr class="text-muted">
-                </div>
-
-                <div class="col-12">
-                    <div class="fw-bold">
-                        Address:
-                    </div>
-                    <div>
-                        {{ $supplier->address ?? '-' }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Modal for Edit Supplier -->
     <div class="modal fade" id="editSupplierModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
@@ -139,6 +85,68 @@
             </div>
         </div>
     </div>
+
+    <div class="card card-shadow border-0 bg-white">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="fw-bold">
+                        Name:
+                    </div>
+                    <div>
+                        {{ $supplier->name }}
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <hr class="text-muted">
+                </div>
+
+                <div class="col-12">
+                    <div class="fw-bold">
+                        Email:
+                    </div>
+                    <div>
+                        {{ $supplier->email ?? '-' }}
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <hr class="text-muted">
+                </div>
+
+                <div class="col-12">
+                    <div class="fw-bold">
+                        Phone Number:
+                    </div>
+                    <div>
+                        {{ $supplier->phone ?? '-' }}
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <hr class="text-muted">
+                </div>
+
+                <div class="col-12">
+                    <div class="fw-bold">
+                        Address:
+                    </div>
+                    <div>
+                        {{ $supplier->address ?? '-' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 mb-3">
+        <div class="col">
+            <h2 class="fw-bold">Supply History</h2>
+        </div>
+    </div>
+
+    @livewire('admin.supplier.supply-history-list')
 
 @endsection
 
