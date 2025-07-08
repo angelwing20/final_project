@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ProductAdminController;
 use App\Http\Controllers\Admin\ProductCategoryAdminController;
 use App\Http\Controllers\Admin\IngredientAdminController;
 use App\Http\Controllers\Admin\IngredientCategoryAdminController;
+use App\Http\Controllers\Admin\ProductIngredientAdminController;
 use App\Http\Controllers\Admin\ProfileAdminController;
 use App\Http\Controllers\Admin\SupplierAdminController;
 use App\Http\Controllers\Admin\StaffAdminController;
@@ -45,6 +46,12 @@ Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
         Route::get('{id}', [ProductAdminController::class, 'show'])->name('show');
         Route::patch('{id}', [ProductAdminController::class, 'update'])->name('update');
         Route::delete('{id}', [ProductAdminController::class, 'destroy'])->name('destroy');
+
+        Route::name("ingredient.")->prefix("ingredient")->group(function () {
+            Route::post('/', [ProductIngredientAdminController::class, 'store'])->name('store');
+            Route::patch('{id}', [ProductIngredientAdminController::class, 'update'])->name('update');
+            Route::delete('{id}', [ProductIngredientAdminController::class, 'destroy'])->name('destroy');
+        });
     });
 
     Route::name("product_category.")->prefix("product-category")->group(function () {
@@ -59,6 +66,7 @@ Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
     Route::name("ingredient.")->prefix("ingredient")->group(function () {
         Route::get('/', [IngredientAdminController::class, 'index'])->name('index');
         Route::post('store', [IngredientAdminController::class, 'store'])->name('store');
+        Route::get('select-search', [IngredientAdminController::class, 'selectOption'])->name('select_search');
         Route::get('{id}', [IngredientAdminController::class, 'show'])->name('show');
         Route::patch('{id}', [IngredientAdminController::class, 'update'])->name('update');
         Route::delete('{id}', [IngredientAdminController::class, 'destroy'])->name('destroy');

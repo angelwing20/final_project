@@ -43,6 +43,10 @@ class SupplierAdminController extends Controller
     {
         $supplier = $this->_supplierAdminService->getById($id);
 
+        if ($supplier == false) {
+            abort(404);
+        }
+
         if ($supplier == null) {
             $errorMessage = implode("<br>", $this->_supplierAdminService->_errorMessage);
             return back()->with('error', $errorMessage);

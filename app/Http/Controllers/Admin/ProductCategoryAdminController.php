@@ -41,6 +41,10 @@ class ProductCategoryAdminController extends Controller
     {
         $productCategories = $this->_productCategoryAdminService->getById($id);
 
+        if ($productCategories == false) {
+            abort(404);
+        }
+
         if ($productCategories == null) {
             $errorMessage = implode("<br>", $this->_productCategoryAdminService->_errorMessage);
             return back()->with('error', $errorMessage);

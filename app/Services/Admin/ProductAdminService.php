@@ -92,7 +92,6 @@ class ProductAdminService extends Service
             ]);
 
             if ($validator->fails()) {
-                dd($validator->errors());
                 foreach ($validator->errors()->all() as $error) {
                     array_push($this->_errorMessage, $error);
                 }

@@ -41,6 +41,10 @@ class IngredientCategoryAdminController extends Controller
     {
         $ingredientCategory = $this->_ingredientCategoryAdminService->getById($id);
 
+        if ($ingredientCategory == false) {
+            abort(404);
+        }
+
         if ($ingredientCategory == null) {
             $errorMessage = implode("<br>", $this->_ingredientCategoryAdminService->_errorMessage);
             return back()->with('error', $errorMessage);

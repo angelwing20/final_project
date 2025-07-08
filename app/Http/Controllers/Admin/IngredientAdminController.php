@@ -45,6 +45,10 @@ class IngredientAdminController extends Controller
     {
         $ingredient = $this->_ingredientAdminService->getById($id);
 
+        if ($ingredient == false) {
+            abort(404);
+        }
+
         if ($ingredient == null) {
             $errorMessage = implode("<br>", $this->_ingredientAdminService->_errorMessage);
             return back()->with('error', $errorMessage);
@@ -70,7 +74,7 @@ class IngredientAdminController extends Controller
             return back()->with('error', $errorMessage)->withInput();
         }
 
-        return back()->with('success', 'Ingredient detail updated successfully');
+        return back()->with('success', 'Ingredient detail updated successfully.');
     }
 
     public function destroy($id)
@@ -83,5 +87,17 @@ class IngredientAdminController extends Controller
         }
 
         return redirect()->route('admin.ingredient.index')->with('success', 'ingredient deleted successfully.');
+    }
+
+    public function selectOption(Request $request)
+    {
+        $data = [
+            "search_term" => $request->search_term ?? null,
+            "page" => $request->page ?? 1,
+            "exclude_product_id" => $request->exclude_product_id ?? null,
+        ];
+
+        $results = $this->_ingredientAdminService->getSelectOption($data);
+        return $results;
     }
 }

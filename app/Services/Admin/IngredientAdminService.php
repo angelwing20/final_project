@@ -155,4 +155,34 @@ class IngredientAdminService extends Service
             return null;
         }
     }
+
+    public function getSelectOption($data)
+    {
+        try {
+            $data['result_count'] = 50;
+            $data['offset'] = ($data['page'] - 1) * $data['result_count'];
+
+            if ($data['exclude_product_id'] == null) {
+                $ingredients = $this->_ingredientRepository->getAllBySearchTerm($data);
+                $totalCount = $this->_ingredientRepository->getTotalCountBySearchTerm($data);
+            } else {
+                $ingredients = $this->_ingredientRepository->getAllBySearchTermAndExcludeProduct($data, $data['exclude_product_id']);
+                $totalCount = $this->_ingredientRepository->getTotalCountBySearchTermAndExcludeProduct($data, $data['exclude_product_id']);
+            }
+
+            $results = array(
+                "results" => $ingredients->toArray(),
+                "pagination" => array(
+                    "more" => $totalCount < $data['offset'] + $data['result_count'] ? false : true
+                )
+            );
+
+            return $results;
+        } catch (Exception $e) {
+            array_push($this->_errorMessage, "Currently the list didnt have this ingredient.");
+            DB::rollBack();
+
+            return null;
+        }
+    }
 }
