@@ -4,9 +4,9 @@
 
 @section('content')
 
-    <div class="row g-3 mb-4">
+    <div class="row mb-3">
         <div class="col">
-            <h3 class="mb-0 fw-bold">Account Profile</h3>
+            <h2 class="fw-bold">Account Profile</h2>
         </div>
 
         <div class="col-12 col-md-auto">
@@ -24,13 +24,13 @@
 
     <div class="card card-shadow border-0">
         <div class="card-body p-3 p-md-4">
-            <div class="row g-4 align-items-start">
+            <div class="row g-4 align-items-center">
 
                 <div class="col-12">
                     <div class="text-center">
                         <div class="default-avatar-wrapper mb-3">
-                            <img src="{{ $user->image ? asset('storage/profile/' . $user->image) : asset('img/default-avatar-dark.png') }}"
-                                onerror="this.onerror=null; this.src='{{ $user->image ? asset('storage/profile/' . $user->image) : asset('img/default-avatar-dark.png') }}'">
+                            <img src="{{ $user->image ? asset('storage/profile/' . $user->image) : asset('img/default-avatar-light.png') }}"
+                                onerror="this.onerror=null; this.src='{{ $user->image ? asset('storage/profile/' . $user->image) : asset('img/default-avatar-light.png') }}'">
                         </div>
                         <span class="badge rounded-pill text-bg-warning">{{ Auth::user()->getRoleNames()->first() }}</span>
                     </div>
@@ -89,9 +89,9 @@
 
                                 <div class="default-avatar-wrapper mb-3">
                                     <img id="image-display"
-                                        src="{{ $user->image ? asset('storage/profile/' . $user->image) : asset('img/default-image.png') }}"
-                                        data-initial-image="{{ asset('img/default-image.png') }}"
-                                        onerror="this.onerror=null;this.src='{{ $user->image ? asset('storage/profile/' . $user->image) : asset('img/default-image.png') }}'"
+                                        src="{{ $user->image ? asset('storage/profile/' . $user->image) : asset('img/default-avatar-light.png') }}"
+                                        data-initial-image="{{ asset('img/default-avatar-light.png') }}"
+                                        onerror="this.onerror=null;this.src='{{ $user->image ? asset('storage/profile/' . $user->image) : asset('img/default-avatar-light.png') }}'"
                                         alt="Profile Image" width="150">
                                     <input type="file" class="image-input d-none" name="image" id="image"
                                         accept=".jpg, .jpeg, .png, .webp" hidden>

@@ -84,10 +84,11 @@ Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
     });
 
     Route::name("staff.")->prefix("staff")->group(function () {
-        Route::get("/", [StaffAdminController::class, "index"])->name("index");
-        // Route::post("/")->name("store");
-        Route::get("{id}", [StaffAdminController::class, "show"])->name("show");
-        // Route::patch("/")->name("update");
-        // Route::delete("/")->name("delete");
+        Route::get('/', [StaffAdminController::class, "index"])->name("index");
+        Route::post('/', [StaffAdminController::class, "store"])->name("store");
+        Route::get('{id}', [StaffAdminController::class, "show"])->name("show");
+        Route::patch('update-password/{id}', [StaffAdminController::class, 'updatePassword'])->name('update_password');
+        Route::patch('{id}', [StaffAdminController::class, "update"])->name("update");
+        Route::delete('{id}', [StaffAdminController::class, "destroy"])->name("destroy");
     });
 });

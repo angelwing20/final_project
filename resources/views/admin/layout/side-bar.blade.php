@@ -56,7 +56,7 @@
 
                 <div class="sidebar-sub-item">
                     <a href="{{ route('admin.staff.index') }}"
-                        class="sidebar-link {{ Request::routeIs('admin.staff.index') ? 'active' : '' }}">
+                        class="sidebar-link {{ Request::routeIs('admin.staff.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-users"></i> Staff
                     </a>
                 </div>
