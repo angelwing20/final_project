@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Livewire\Admin\Supplier;
+namespace App\Livewire\Admin\Ingredient;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
-class SupplyHistoryList extends Component
+class RefillStockHistoryList extends Component
 {
-    public $supplyHistories;
+    public $refillStockHistories;
     public $page = 0;
     public $limitDataPerPage = 10;
     public $noMoreData = false;
@@ -21,13 +21,12 @@ class SupplyHistoryList extends Component
     public function render()
     {
         $query = DB::table('supply_histories')
-            ->join('ingredients', 'supply_histories.ingredient_id', '=', 'ingredients.id')
+            ->join('suppliers', 'supply_histories.supplier_id', '=', 'suppliers.id')
             ->select(
                 'supply_histories.weight',
                 'supply_histories.created_at',
 
-                'ingredients.image as ingredient_image',
-                'ingredients.name as ingredient_name',
+                'suppliers.name as supplier_name',
             )
             ->where('supply_histories.created_at', '>=', Carbon::now()->subMonth())
             ->orderBy('supply_histories.created_at', 'desc');
@@ -43,11 +42,11 @@ class SupplyHistoryList extends Component
         }
 
         if ($this->page === 0) {
-            $this->supplyHistories = $query;
+            $this->refillStockHistories = $query;
         } else {
-            $this->supplyHistories = [...$this->supplyHistories, ...$query];
+            $this->refillStockHistories = [...$this->refillStockHistories, ...$query];
         }
 
-        return view('livewire.admin.supplier.supply-history-list');
+        return view('livewire.admin.ingredient.refill-stock-history-list');
     }
 }

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('supply_histories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('ingredient_id')->constrained();
+            $table->foreignId('supplier_id')->constrained();
             $table->decimal('weight', 8, 2);
             $table->timestamps();
         });

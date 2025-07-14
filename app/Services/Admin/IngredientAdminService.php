@@ -11,16 +11,10 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
-/**
- * IngredientAdminService Class
- * This service handles CRUD operations for ingredients, including file uploads and low stock management.
- */
 class IngredientAdminService extends Service
 {
-
     private $_ingredientRepository;
     private $_supplyHistoryRepository;
-
 
     public function __construct(IngredientRepository $ingredientRepository, SupplyHistoryRepository $supplyHistoryRepository)
     {
@@ -37,8 +31,8 @@ class IngredientAdminService extends Service
                 'ingredient_category_id' => 'required|exists:ingredient_categories,id',
                 'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
                 'name' => 'required|string|max:255',
-                'weight' => 'nullable|numeric',
-                'alarm_weight' => 'required|numeric',
+                'weight' => 'nullable|numeric|min:0',
+                'alarm_weight' => 'required|numeric|min:0',
                 'description' => 'nullable|string|max:16777215',
             ]);
 
@@ -100,7 +94,7 @@ class IngredientAdminService extends Service
                 'ingredient_category_id' => 'required|exists:ingredient_categories,id',
                 'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
                 'name' => 'required|string|max:255',
-                'alarm_weight' => 'required|numeric',
+                'alarm_weight' => 'required|numeric|min:0',
                 'description' => 'nullable|string|max:16777215',
             ]);
 
@@ -136,44 +130,6 @@ class IngredientAdminService extends Service
             return $ingredient;
         } catch (Exception $e) {
             array_push($this->_errorMessage, "Fail to update ingredient detail.");
-
-            DB::rollBack();
-            return null;
-        }
-    }
-
-    public function updateWeight($data)
-    {
-        DB::beginTransaction();
-
-        try {
-            $validator = Validator::make($data, [
-                'ingredient_id' => 'required|exists:ingredients,id',
-                'supplier_id' => 'required|exists:suppliers,id',
-                'weight' => 'required|numeric',
-            ]);
-
-            if ($validator->fails()) {
-                foreach ($validator->errors()->all() as $error) {
-                    array_push($this->_errorMessage, $error);
-                }
-                return null;
-            }
-
-            $supplier = $this->_supplyHistoryRepository->save($data);
-
-            $id = $data['ingredient_id'];
-
-            $ingredient = $this->_ingredientRepository->getById($id);
-
-            $data['weight'] = $ingredient['weight'] += $data['weight'];
-
-            $ingredient = $this->_ingredientRepository->update($id, $data);
-
-            DB::commit();
-            return $ingredient;
-        } catch (Exception $e) {
-            array_push($this->_errorMessage, "Fail to refill stock.");
 
             DB::rollBack();
             return null;
@@ -223,6 +179,49 @@ class IngredientAdminService extends Service
             array_push($this->_errorMessage, "Currently the list didnt have this ingredient.");
             DB::rollBack();
 
+            return null;
+        }
+    }
+
+    public function refillStock($data)
+    {
+        DB::beginTransaction();
+
+        try {
+            $validator = Validator::make($data, [
+                'ingredient_id' => 'required|exists:ingredients,id',
+                'supplier_id' => 'required|exists:suppliers,id',
+                'weight' => 'required|numeric|min:0',
+            ]);
+
+            if ($validator->fails()) {
+                foreach ($validator->errors()->all() as $error) {
+                    array_push($this->_errorMessage, $error);
+                }
+                return null;
+            }
+
+            $id = $data['ingredient_id'];
+            $ingredient = $this->_ingredientRepository->getById($id);
+            $totalWeight = $ingredient['weight'] + $data['weight'];
+
+            if ($totalWeight < 0) {
+                array_push($this->_errorMessage, "Resulting weight cannot be less than 0.");
+                return null;
+            }
+
+            $supplyHistory = $this->_supplyHistoryRepository->save($data);
+
+            $data['weight'] = $ingredient['weight'] += $data['weight'];
+
+            $ingredient = $this->_ingredientRepository->update($id, $data);
+
+            DB::commit();
+            return $ingredient;
+        } catch (Exception $e) {
+            array_push($this->_errorMessage, "Fail to refill stock.");
+
+            DB::rollBack();
             return null;
         }
     }

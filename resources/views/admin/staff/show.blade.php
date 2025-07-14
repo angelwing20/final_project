@@ -14,16 +14,20 @@
                 <a href="{{ route('admin.staff.index') }}" class="btn btn-secondary">
                     <i class="fa-solid fa-arrow-left"></i> Back
                 </a>
-                <form action="{{ route('admin.staff.destroy', ['id' => $staff->id]) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger" onclick="deleteConfirmation(event)">
-                        <i class="fa-solid fa-trash"></i> Delete
+
+                @role('Superadmin')
+                    <form action="{{ route('admin.staff.destroy', ['id' => $staff->id]) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger" onclick="deleteConfirmation(event)">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </button>
+                    </form>
+
+                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editStaffModal">
+                        <i class="fa-solid fa-pen-to-square"></i> Edit
                     </button>
-                </form>
-                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editStaffModal">
-                    <i class="fa-solid fa-pen-to-square"></i> Edit
-                </button>
+                @endrole
             </div>
         </div>
     </div>
@@ -140,16 +144,18 @@
                 </div>
 
                 <div class="col col-md-6">
-                    <label class="fw-bold text-muted">Password</label>
+                    <label class="fw-bold text-muted">Password:</label>
                     <div class="fs-5">************</div>
                 </div>
 
-                <div class="col-auto">
-                    <button class="btn btn-outline-warning text-dark" data-bs-toggle="modal"
-                        data-bs-target="#changePasswordModal">
-                        <i class="fa-solid fa-lock me-2"></i> Change Password
-                    </button>
-                </div>
+                @role('Superadmin')
+                    <div class="col-auto">
+                        <button class="btn btn-outline-warning text-dark" data-bs-toggle="modal"
+                            data-bs-target="#changePasswordModal">
+                            <i class="fa-solid fa-lock me-2"></i> Change Password
+                        </button>
+                    </div>
+                @endrole
             </div>
         </div>
     </div>

@@ -101,7 +101,7 @@ class IngredientAdminController extends Controller
         return $results;
     }
 
-    public function updateWeight(Request $request)
+    public function refillStock(Request $request)
     {
         $data = $request->only([
             'ingredient_id',
@@ -109,7 +109,7 @@ class IngredientAdminController extends Controller
             'weight',
         ]);
 
-        $result = $this->_ingredientAdminService->updateWeight($data);
+        $result = $this->_ingredientAdminService->refillStock($data);
 
         if ($result == null) {
             $errorMessage = implode("<br>", $this->_ingredientAdminService->_errorMessage);

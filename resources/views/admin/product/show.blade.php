@@ -114,7 +114,7 @@
                 </div>
                 <div class="col-12">
                     <div class="fw-bold">
-                        Product Category :
+                        Product Category:
                     </div>
                     <div>
                         <a class="text-decoration-none"

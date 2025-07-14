@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <form id="refill-form" action="{{ route('admin.ingredient.update_weight') }}" method="POST">
+                    <form id="refill-form" action="{{ route('admin.ingredient.refill_stock') }}" method="POST">
                         @csrf
                         @method('PATCH')
 
@@ -60,7 +60,7 @@
                                 <div class="form-group mb-3">
                                     <label for="Weight" class="form-label">Weight (kg)</label>
                                     <input type="number" class="form-control" name="weight" id="weight" step="0.01"
-                                        placeholder="Weight" required>
+                                        min="0.01" placeholder="Weight" required>
                                 </div>
                             </div>
 
@@ -128,7 +128,7 @@
                                 <div class="form-group mb-3">
                                     <label for="Weight" class="form-label">Weight (kg)</label>
                                     <input type="number" class="form-control" name="weight" id="weight"
-                                        step="0.01" placeholder="Weight">
+                                        step="0.01" min="0.01" placeholder="Weight">
                                 </div>
                             </div>
 
@@ -136,7 +136,7 @@
                                 <div class="form-group mb-3">
                                     <label for="Alarm_weight" class="form-label">Alarm Weight (kg)</label>
                                     <input type="number" class="form-control" name="alarm_weight" id="alarm_weight"
-                                        step="0.01" placeholder="Alarm weight" required>
+                                        step="0.01" min="0.01" placeholder="Alarm weight" required>
                                 </div>
                             </div>
 

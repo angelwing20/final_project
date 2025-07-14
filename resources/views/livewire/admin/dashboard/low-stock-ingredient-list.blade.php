@@ -1,4 +1,5 @@
 <div>
+    <h4 class="fw-bold mb-4">Low Stock Ingredients</h4>
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle">
             <thead class="table-dark">

@@ -69,7 +69,7 @@ Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
         Route::post('store', [IngredientAdminController::class, 'store'])->name('store');
         Route::get('select-search', [IngredientAdminController::class, 'selectOption'])->name('select_search');
         Route::get('{id}', [IngredientAdminController::class, 'show'])->name('show');
-        Route::patch('update-weight', [IngredientAdminController::class, 'updateWeight'])->name('update_weight');
+        Route::patch('refill-stock', [IngredientAdminController::class, 'refillStock'])->name('refill_stock');
         Route::patch('{id}', [IngredientAdminController::class, 'update'])->name('update');
         Route::delete('{id}', [IngredientAdminController::class, 'destroy'])->name('destroy');
     });

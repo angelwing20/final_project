@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\Ingredient;
+namespace App\Livewire\Admin\Dashboard;
 
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -50,6 +50,6 @@ class LowStockIngredientList extends Component
             $this->lowStockIngredients = [...$this->lowStockIngredients, ...$query];
         }
 
-        return view('livewire.admin.ingredient.low-stock-ingredient-list');
+        return view('livewire.admin.dashboard.low-stock-ingredient-list');
     }
 }

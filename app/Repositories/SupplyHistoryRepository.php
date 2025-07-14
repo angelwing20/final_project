@@ -17,6 +17,7 @@ class SupplyHistoryRepository extends Repository
     {
         $model = new SupplyHistory();
         $model->ingredient_id = $data['ingredient_id'];
+        $model->supplier_id = $data['supplier_id'];
         $model->weight = $data['weight'];
 
         $model->save();
@@ -27,6 +28,7 @@ class SupplyHistoryRepository extends Repository
     {
         $model = $this->_db->find($id);
         $model->ingredient_id = $data['ingredient_id'] ?? $model->ingredient_id;
+        $model->supplier_id = $data['supplier_id'] ?? $model->supplier_id;
         $model->weight = $data['weight'] ?? $model->weight;
 
         $model->update();
