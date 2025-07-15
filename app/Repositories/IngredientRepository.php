@@ -109,4 +109,9 @@ class IngredientRepository extends Repository
 
         return $totalCount;
     }
+
+    public function find($id)
+    {
+        return $this->_db->find($id);
+    }
 }

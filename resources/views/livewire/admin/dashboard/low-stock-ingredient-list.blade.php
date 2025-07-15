@@ -32,20 +32,19 @@
                 @endforeach
             </tbody>
         </table>
-    </div>
-
-    @if (!$noMoreData)
-        <div x-intersect.full="$wire.loadMore()"></div>
-        <div class="d-flex justify-content-center align-items-center my-4" wire:loading>
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
+        @if (!$noMoreData)
+            <div x-intersect.full="$wire.loadMore()"></div>
+            <div class="d-flex justify-content-center align-items-center my-4" wire:loading>
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
             </div>
-        </div>
-    @endif
+        @endif
 
-    @if (empty($lowStockIngredients))
-        <div class="text-center my-4" wire:loading.remove>
-            <div class="text-muted">No data found</div>
-        </div>
-    @endif
+        @if (empty($lowStockIngredients))
+            <div class="text-center my-4" wire:loading.remove>
+                <div class="text-muted">No data found</div>
+            </div>
+        @endif
+    </div>
 </div>

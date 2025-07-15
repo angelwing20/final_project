@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardAdminController;
+use App\Http\Controllers\Admin\ImportDailySalesAdminController;
 use App\Http\Controllers\Admin\ProductAdminController;
 use App\Http\Controllers\Admin\ProductCategoryAdminController;
 use App\Http\Controllers\Admin\IngredientAdminController;
@@ -25,6 +26,7 @@ Route::middleware("auth")->group(function () {
 
 Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
     Route::get('/', [DashboardAdminController::class, 'index'])->name('dashboard');
+    Route::post('/', [ImportDailySalesAdminController::class, 'importDailySales'])->name('import_daily_sales');
 
     Route::name("account.")->prefix("account")->group(function () {
         Route::get('/', [ProfileAdminController::class, 'index'])->name('profile');

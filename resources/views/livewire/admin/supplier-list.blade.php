@@ -16,7 +16,7 @@
 
     <!-- Filter Modal -->
     <div class="modal fade" id="filterModal" tabindex="-1" wire:ignore.self>
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Filter</h5>
@@ -24,21 +24,21 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-12 col-lg-6">
+                        <div class="col-12">
                             <div class="mb-3">
                                 <label for="filterName" class="form-label">Name</label>
                                 <input type="text" id="filterName" class="form-control" placeholder="Name"
                                     wire:model="filter.name">
                             </div>
                         </div>
-                        <div class="col-12 col-lg-6">
+                        <div class="col-12">
                             <div class="mb-3">
                                 <label for="filterEmail" class="form-label">Email</label>
                                 <input type="text" id="filterEmail" class="form-control" placeholder="Email"
                                     wire:model="filter.email">
                             </div>
                         </div>
-                        <div class="col-12 col-lg-6">
+                        <div class="col-12">
                             <div class="mb-3">
                                 <label for="filterPhone" class="form-label">Phone Number</label>
                                 <input type="text" id="filterPhone" class="form-control" placeholder="Phone number"

@@ -34,4 +34,9 @@ class ProductIngredientRepository extends Repository
         $model->update();
         return $model;
     }
+
+    public function getByProductId($productId)
+    {
+        return $this->_db->where('product_id', $productId)->get();
+    }
 }

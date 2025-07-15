@@ -24,16 +24,17 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-12">
+                            <div class="mb-3" wire:ignore>
+                                <label for="filterIngredientCategory" class="form-label">Ingredient Category</label>
+                                <select class="form-control" id="filterIngredientCategory" style="width: 100%"></select>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
                             <div class="mb-3">
                                 <label for="filterName" class="form-label">Name</label>
                                 <input type="text" id="filterName" class="form-control" placeholder="Name"
                                     wire:model="filter.name">
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="mb-3" wire:ignore>
-                                <label for="filterIngredientCategory" class="form-label">Ingredient Category</label>
-                                <select class="form-control" id="filterIngredientCategory" style="width: 100%"></select>
                             </div>
                         </div>
                     </div>

@@ -38,4 +38,9 @@ class ProductRepository extends Repository
         $model->update();
         return $model;
     }
+
+    public function getByName($name)
+    {
+        return $this->_db->where('name', $name)->first();
+    }
 }
