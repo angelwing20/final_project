@@ -14,13 +14,12 @@
         </div>
     </div>
 
-    <!-- Filter Modal -->
     <div class="modal fade" id="filterModal" tabindex="-1" wire:ignore.self>
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Filter</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -31,25 +30,11 @@
                                     wire:model="filter.name">
                             </div>
                         </div>
-                        <div class="col-12">
-                            <div class="mb-3">
-                                <label for="filterEmail" class="form-label">Email</label>
-                                <input type="text" id="filterEmail" class="form-control" placeholder="Email"
-                                    wire:model="filter.email">
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="mb-3">
-                                <label for="filterPhone" class="form-label">Phone Number</label>
-                                <input type="text" id="filterPhone" class="form-control" placeholder="Phone number"
-                                    wire:model="filter.phone">
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" wire:click="resetFilter"
-                        data-bs-dismiss="modal">Reset</button>
+                    <button type="button" class="btn btn-danger" wire:click="resetFilter" data-bs-dismiss="modal"
+                        onclick="resetFilterForm('#filterModal')">Reset</button>
                     <button type="button" class="btn btn-warning" wire:click="applyFilter"
                         data-bs-dismiss="modal">Apply</button>
                 </div>
@@ -58,23 +43,28 @@
     </div>
 
     <div class="row g-3">
-        @foreach ($suppliers as $supplier)
+        @foreach ($products as $product)
             <div class="col-12">
-                <a href="{{ route('admin.supplier.show', ['id' => $supplier->id]) }}" class="text-decoration-none">
+                <a href="{{ route('admin.product.show', ['id' => $product->id]) }}" class="text-decoration-none">
                     <div class="card card-shadow card-hover border-0 bg-white">
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-auto">
-                                    <div class="fw-bold">
-                                        {{ $supplier->name }}
-                                    </div>
-                                    <div class="text-muted">
-                                        {{ $supplier->email ?? '-' }}
+                                    <div class="default-image-wrapper">
+                                        <img class="img-thumbnail"
+                                            src="{{ $product->image ? asset('storage/product/' . $product->image) : asset('img/default-image.png') }}"
+                                            onerror="this.onerror=null;this.src='{{ asset('img/default-image.png') }}'"
+                                            style="width: 100px; height: 100px; object-fit: cover;">
                                     </div>
                                 </div>
+
                                 <div class="col">
                                     <div class="fw-bold">
-                                        {{ $supplier->phone ?? '' }}
+                                        {{ $product->name }}
+
+                                        <div>
+                                            Price: {{ $product->price }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -87,7 +77,6 @@
 
     @if (!$noMoreData)
         <div x-intersect.full="$wire.loadMore()"></div>
-
         <div class="d-flex justify-content-center align-items-center my-4" wire:loading>
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -95,9 +84,17 @@
         </div>
     @endif
 
-    @if (empty($suppliers))
+    @if (empty($products))
         <div class="text-center my-4" wire:loading.remove>
             <div class="text-muted">No data found</div>
         </div>
     @endif
 </div>
+
+@section('scripts')
+    <script>
+        $(function() {
+
+        })
+    </script>
+@endsection

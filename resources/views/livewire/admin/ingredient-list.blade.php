@@ -37,6 +37,17 @@
                                     wire:model="filter.name">
                             </div>
                         </div>
+
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="filterStockStatus" class="form-label">Stock Status</label>
+                                <select class="form-select" id="filterStockStatus" wire:model="filter.stock_status">
+                                    <option value="">All stock status</option>
+                                    <option value="1">Low stock</option>
+                                    <option value="0">Normal stock</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -58,32 +69,42 @@
                             <div class="row align-items-center">
                                 <div class="col-auto">
                                     <div class="default-image-wrapper">
-                                        <img src="{{ $ingredient->image ? asset('storage/ingredient/' . $ingredient->image) : asset('img/default-image.png') }}"
+                                        <img class="img-thumbnail"
+                                            src="{{ $ingredient->image ? asset('storage/ingredient/' . $ingredient->image) : asset('img/default-image.png') }}"
                                             onerror="this.onerror=null;this.src='{{ asset('img/default-image.png') }}'"
                                             style="width: 100px; height: 100px; object-fit: cover;">
                                     </div>
                                 </div>
+
                                 <div class="col">
                                     <div class="fw-bold">
                                         {{ $ingredient->name }}
-                                    </div>
-                                    <div class="fw-bold">
-                                        <span
-                                            class="badge rounded-pill text-bg-warning">{{ $ingredient->ingredient_category_name }}</span>
+
+                                        <div>
+                                            Price: {{ $ingredient->price }}
+                                        </div>
+
+                                        <div>
+                                            <span
+                                                class="badge rounded-pill text-bg-warning">{{ $ingredient->ingredient_category_name }}</span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-auto">
-                                    <div class="fw-bold">
-                                        Weight: {{ $ingredient->weight }} kg
-                                    </div>
-                                    @if (
-                                        $ingredient->weight !== null &&
-                                            $ingredient->alarm_weight !== null &&
-                                            $ingredient->weight <= $ingredient->alarm_weight)
-                                        <div class="badge bg-danger mt-2" style="padding: 5px; font-size: 0.9em;">
-                                            Low stock
+
+                                <div class="col-12 col-sm-auto">
+                                    <div class="d-flex flex-column fw-bold text-center">
+                                        <div>
+                                            Weight: {{ $ingredient->weight }} kg
                                         </div>
-                                    @endif
+                                        @if (
+                                            $ingredient->weight !== null &&
+                                                $ingredient->alarm_weight !== null &&
+                                                $ingredient->weight <= $ingredient->alarm_weight)
+                                            <span class="badge bg-danger mt-1">
+                                                Low stock
+                                            </span>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>

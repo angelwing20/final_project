@@ -40,27 +40,18 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="ingredient_id" class="form-label">Ingredient</label>
-                                    <select class="form-select" name="ingredient_id" id="ingredient_id" style="width: 100%"
-                                        required>
+                                    <label for="refill-ingredient_id" class="form-label">Ingredient</label>
+                                    <select class="form-select" name="ingredient_id" id="refill-ingredient_id"
+                                        style="width: 100%" required>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="supplier_id" class="form-label">Supplier</label>
-                                    <select class="form-select" name="supplier_id" id="supplier_id" style="width: 100%"
-                                        required>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="form-group mb-3">
-                                    <label for="Weight" class="form-label">Weight (kg)</label>
-                                    <input type="number" class="form-control" name="weight" id="weight" step="0.01"
-                                        min="0.01" placeholder="Weight" required>
+                                    <label for="refill-weight" class="form-label">Weight (kg)</label>
+                                    <input type="number" class="form-control" name="weight" id="refill-weight"
+                                        step="0.01" min="0.01" placeholder="Weight" required>
                                 </div>
                             </div>
 
@@ -76,7 +67,7 @@
         </div>
     </div>
 
-    <!-- Modal for Add Product -->
+    <!-- Modal for Add Ingredient -->
     <div class="modal fade" id="addIngredientModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -126,7 +117,7 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="Weight" class="form-label">Weight (kg)</label>
+                                    <label for="weight" class="form-label">Weight (kg)</label>
                                     <input type="number" class="form-control" name="weight" id="weight"
                                         step="0.01" min="0.01" placeholder="Weight">
                                 </div>
@@ -134,7 +125,7 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="Alarm_weight" class="form-label">Alarm Weight (kg)</label>
+                                    <label for="alarm_weight" class="form-label">Alarm Weight (kg)</label>
                                     <input type="number" class="form-control" name="alarm_weight" id="alarm_weight"
                                         step="0.01" min="0.01" placeholder="Alarm weight" required>
                                 </div>
@@ -142,8 +133,9 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="description" class="form-label">Description</label>
-                                    <textarea name="description" class="form-control" id="description" rows="3" placeholder="Description"></textarea>
+                                    <label for="price" class="form-label">Price</label>
+                                    <input type="number" class="form-control" name="price" id="price"
+                                        step="0.01" placeholder="Price" required>
                                 </div>
                             </div>
 
@@ -187,6 +179,7 @@
             })
 
             $('#refill-form').validate({
+                ignore: [],
                 errorElement: 'span',
                 errorClass: 'invalid-feedback',
                 errorPlacement: function(error, element) {
@@ -223,40 +216,7 @@
                 }
             });
 
-            $('#ingredient_category_id').select2({
-                theme: 'bootstrap-5',
-                allowClear: true,
-                dropdownParent: $('#addIngredientModal .modal-content'),
-                placeholder: 'Select ingredient category',
-
-                ajax: {
-                    url: "{{ route('admin.ingredient_category.select_search') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        var query = {
-                            search_term: params.term,
-                            page: params.page,
-                        }
-                        return query;
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.results, function(item) {
-                                return {
-                                    text: item.name,
-                                    id: item.id,
-                                }
-                            }),
-                            pagination: {
-                                more: data.pagination.more
-                            }
-                        };
-                    },
-                }
-            });
-
-            $('#ingredient_id').select2({
+            $('#refill-ingredient_id').select2({
                 theme: 'bootstrap-5',
                 allowClear: true,
                 dropdownParent: $('#refillStockModal .modal-content'),
@@ -289,14 +249,14 @@
                 }
             });
 
-            $('#supplier_id').select2({
+            $('#ingredient_category_id').select2({
                 theme: 'bootstrap-5',
                 allowClear: true,
-                dropdownParent: $('#refillStockModal .modal-content'),
-                placeholder: 'Select supplier',
+                dropdownParent: $('#addIngredientModal .modal-content'),
+                placeholder: 'Select ingredient category',
 
                 ajax: {
-                    url: "{{ route('admin.supplier.select_search') }}",
+                    url: "{{ route('admin.ingredient_category.select_search') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function(params) {

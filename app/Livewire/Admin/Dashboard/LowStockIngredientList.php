@@ -28,6 +28,7 @@ class LowStockIngredientList extends Component
                 'ingredients.name',
                 'ingredients.weight',
                 'ingredients.alarm_weight',
+                'ingredients.price',
 
                 'ingredient_categories.name as ingredient_category_name'
             )

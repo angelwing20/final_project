@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('supply_histories', function (Blueprint $table) {
+        Schema::create('refill_stock_histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('ingredient_id')->constrained();
-            $table->foreignId('supplier_id')->constrained();
+            $table->foreignId('ingredient_id')->constrained('ingredients');
+            $table->foreignId('staff_id')->constrained('users');
             $table->decimal('weight', 8, 2);
             $table->timestamps();
         });
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('supply_histories');
+        Schema::dropIfExists('refill_stock_histories');
     }
 };

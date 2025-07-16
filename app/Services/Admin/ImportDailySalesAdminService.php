@@ -99,21 +99,4 @@ class ImportDailySalesAdminService extends Service
             return null;
         }
     }
-
-    public function deleteById($id)
-    {
-        DB::beginTransaction();
-
-        try {
-            $ingredient = $this->_ingredientRepository->deleteById($id);
-
-            DB::commit();
-            return $ingredient;
-        } catch (Exception $e) {
-            array_push($this->_errorMessage, "Fail to delete ingredient.");
-
-            DB::rollBack();
-            return null;
-        }
-    }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 

@@ -28,7 +28,7 @@ class IngredientAdminController extends Controller
             'name',
             'weight',
             'alarm_weight',
-            'description',
+            'price',
         ]);
 
         $result = $this->_ingredientAdminService->createIngredient($data);
@@ -64,7 +64,7 @@ class IngredientAdminController extends Controller
             'image',
             'name',
             'alarm_weight',
-            'description',
+            'price',
         ]);
 
         $result = $this->_ingredientAdminService->update($id, $data);
@@ -89,23 +89,10 @@ class IngredientAdminController extends Controller
         return redirect()->route('admin.ingredient.index')->with('success', 'ingredient deleted successfully.');
     }
 
-    public function selectOption(Request $request)
-    {
-        $data = [
-            "search_term" => $request->search_term ?? null,
-            "page" => $request->page ?? 1,
-            "exclude_product_id" => $request->exclude_product_id ?? null,
-        ];
-
-        $results = $this->_ingredientAdminService->getSelectOption($data);
-        return $results;
-    }
-
     public function refillStock(Request $request)
     {
         $data = $request->only([
             'ingredient_id',
-            'supplier_id',
             'weight',
         ]);
 
@@ -117,5 +104,17 @@ class IngredientAdminController extends Controller
         }
 
         return back()->with('success', 'Stock refill successfully.');
+    }
+
+    public function selectOption(Request $request)
+    {
+        $data = [
+            "search_term" => $request->search_term ?? null,
+            "page" => $request->page ?? 1,
+            "exclude_product_id" => $request->exclude_product_id ?? null,
+        ];
+
+        $results = $this->_ingredientAdminService->getSelectOption($data);
+        return $results;
     }
 }

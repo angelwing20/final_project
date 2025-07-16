@@ -17,15 +17,17 @@ class ImportDailySalesAdminController extends Controller
 
     public function importDailySales(Request $request)
     {
-        $data = $request->only([
-            'excel_file',
-        ]);
+        $files = $request->file('excel_file');
 
-        $result = $this->_importDailySalesAdminService->import($data);
+        $files = is_array($files) ? $files : [$files];
 
-        if ($result == null) {
-            $errorMessage = implode("<br>", $this->_importDailySalesAdminService->_errorMessage);
-            return back()->with('error', $errorMessage)->withInput();
+        foreach ($files as $file) {
+            $result = $this->_importDailySalesAdminService->import(['excel_file' => $file]);
+
+            if ($result === null) {
+                $errorMessage = implode("<br>", $this->_importDailySalesAdminService->_errorMessage);
+                return back()->with('error', $errorMessage)->withInput();
+            }
         }
 
         return back()->with('success', 'Daily sales file upload successfully.');

@@ -32,7 +32,63 @@
         </div>
     </div>
 
-    <!-- Modal for Edit Product -->
+    <div class="card card-shadow border-0 bg-white">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-12 mb-3 text-center">
+                    <div class="default-avatar-wrapper mb-3">
+                        <img src="{{ $staff->image ? asset('storage/profile/' . $staff->image) : asset('img/default-avatar-light.png') }}"
+                            onerror="this.onerror=null; this.src='{{ $staff->image ? asset('storage/profile/' . $staff->image) : asset('img/default-avatar-light.png') }}'">
+                    </div>
+                    @foreach ($staff->roles as $role)
+                        <span class="badge rounded-pill text-bg-warning">{{ $role->name }}</span>
+                    @endforeach
+                </div>
+
+                <div class="col-12">
+                    <div class="fw-bold">
+                        Name:
+                    </div>
+                    <div>
+                        {{ $staff->name }}
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <hr class="text-muted">
+                </div>
+
+                <div class="col-12">
+                    <div class="fw-bold">
+                        Email Address:
+                    </div>
+                    <div>
+                        {{ $staff->email }}
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <hr class="text-muted">
+                </div>
+
+                <div class="col col-md-6">
+                    <label class="fw-bold text-muted">Password:</label>
+                    <div class="fs-5">************</div>
+                </div>
+
+                @role('Superadmin')
+                    <div class="col-auto">
+                        <button class="btn btn-outline-warning text-dark" data-bs-toggle="modal"
+                            data-bs-target="#changePasswordModal">
+                            <i class="fa-solid fa-lock me-2"></i> Change Password
+                        </button>
+                    </div>
+                @endrole
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Edit Staff Detail -->
     <div class="modal fade" id="editStaffModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -110,56 +166,7 @@
         </div>
     </div>
 
-    <div class="card card-shadow border-0 bg-white">
-        <div class="card-body">
-            <div class="row align-items-center">
-                <div class="col-12 mb-3 text-center">
-                    <div class="default-avatar-wrapper mb-3">
-                        <img src="{{ $staff->image ? asset('storage/profile/' . $staff->image) : asset('img/default-avatar-light.png') }}"
-                            onerror="this.onerror=null; this.src='{{ $staff->image ? asset('storage/profile/' . $staff->image) : asset('img/default-avatar-light.png') }}'">
-                    </div>
-                    @foreach ($staff->roles as $role)
-                        <span class="badge rounded-pill text-bg-warning">{{ $role->name }}</span>
-                    @endforeach
-                </div>
-
-                <div class="col-12">
-                    <div class="fw-bold">
-                        Name:
-                    </div>
-                    <div>
-                        {{ $staff->name }}
-                    </div>
-                    <hr class="text-muted">
-                </div>
-
-                <div class="col-12">
-                    <div class="fw-bold">
-                        Email Address:
-                    </div>
-                    <div>
-                        {{ $staff->email }}
-                    </div>
-                    <hr class="text-muted">
-                </div>
-
-                <div class="col col-md-6">
-                    <label class="fw-bold text-muted">Password:</label>
-                    <div class="fs-5">************</div>
-                </div>
-
-                @role('Superadmin')
-                    <div class="col-auto">
-                        <button class="btn btn-outline-warning text-dark" data-bs-toggle="modal"
-                            data-bs-target="#changePasswordModal">
-                            <i class="fa-solid fa-lock me-2"></i> Change Password
-                        </button>
-                    </div>
-                @endrole
-            </div>
-        </div>
-    </div>
-
+    <!-- Modal for Change Password -->
     <div class="modal fade" id="changePasswordModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">

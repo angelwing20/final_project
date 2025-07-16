@@ -1,50 +1,69 @@
 <div>
-    <h4 class="fw-bold mb-4">Low Stock Ingredients</h4>
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">Image</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Weight</th>
-                    <th scope="col">Alarm Weight</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($lowStockIngredients as $ingredient)
-                    <tr>
-                        <td style="width: 100px;">
-                            <img src="{{ $ingredient->image ? asset('storage/ingredient/' . $ingredient->image) : asset('img/default-image.png') }}"
-                                onerror="this.onerror=null;this.src='{{ asset('img/default-image.png') }}'"
-                                alt="Ingredient Image" class="img-thumbnail"
-                                style="width: 80px; height: 80px; object-fit: cover;">
-                        </td>
-                        <td class="fw-bold">{{ $ingredient->name }}</td>
-                        <td>
-                            <span class="badge rounded-pill text-bg-warning">
-                                {{ $ingredient->ingredient_category_name }}
-                            </span>
-                        </td>
-                        <td>{{ $ingredient->weight }} kg</td>
-                        <td>{{ $ingredient->alarm_weight }} kg</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-        @if (!$noMoreData)
-            <div x-intersect.full="$wire.loadMore()"></div>
-            <div class="d-flex justify-content-center align-items-center my-4" wire:loading>
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            </div>
-        @endif
+    <h4 class="fw-bold mb-3">Low Stock Ingredients</h4>
 
-        @if (empty($lowStockIngredients))
-            <div class="text-center my-4" wire:loading.remove>
-                <div class="text-muted">No data found</div>
+    <div class="row g-3">
+        @foreach ($lowStockIngredients as $ingredient)
+            <div class="col-12">
+                <a href="{{ route('admin.ingredient.show', ['id' => $ingredient->id]) }}" class="text-decoration-none">
+                    <div class="card card-shadow card-hover border-0 bg-white">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <div class="default-image-wrapper">
+                                        <img src="{{ $ingredient->image ? asset('storage/ingredient/' . $ingredient->image) : asset('img/default-image.png') }}"
+                                            onerror="this.onerror=null;this.src='{{ asset('img/default-image.png') }}'"
+                                            alt="Ingredient Image" class="img-thumbnail"
+                                            style="width: 80px; height: 80px; object-fit: cover;">
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <div class="fw-bold">
+                                        {{ $ingredient->name }}
+
+                                        <div>
+                                            Price: {{ $ingredient->price }}
+                                        </div>
+
+                                        <div>
+                                            <span class="badge rounded-pill text-bg-warning">
+                                                {{ $ingredient->ingredient_category_name }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-auto">
+                                    <div class="d-flex flex-column fw-semibold align-items-end">
+                                        <div>
+                                            Weight: {{ $ingredient->weight }} kg
+                                        </div>
+
+                                        <div>
+                                            Alarm Weight: {{ $ingredient->alarm_weight }} kg
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
             </div>
-        @endif
+        @endforeach
     </div>
+
+    @if (!$noMoreData)
+        <div x-intersect.full="$wire.loadMore()"></div>
+        <div class="d-flex justify-content-center align-items-center my-4" wire:loading>
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    @endif
+
+    @if (empty($lowStockIngredients))
+        <div class="text-center my-4" wire:loading.remove>
+            <div class="text-muted">No data found</div>
+        </div>
+    @endif
 </div>

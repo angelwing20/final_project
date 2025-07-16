@@ -1,6 +1,6 @@
 @extends('admin.layout.layout')
 
-@section('page_title', 'Supplier')
+@section('page_title', 'Product Category')
 
 @section('content')
 
@@ -10,7 +10,7 @@
         </div>
         <div class="col-12 col-md-auto">
             <div class="d-flex gap-2 align-items-center float-end">
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSupplierModal">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addProductCategoryModal">
                     <i class="fa-solid fa-plus"></i> Add
                 </button>
             </div>
@@ -20,8 +20,8 @@
     {{-- livewire --}}
     @livewire('admin.product-category-list')
 
-    <!-- Modal for Add Supplier -->
-    <div class="modal fade" id="addSupplierModal" tabindex="-1">
+    <!-- Modal for Add Product Category -->
+    <div class="modal fade" id="addProductCategoryModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">

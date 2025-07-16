@@ -68,9 +68,9 @@ class ProductAdminService extends Service
     public function getById($id)
     {
         try {
-            $supplier = $this->_productRepository->getById($id);
+            $product = $this->_productRepository->getById($id);
 
-            return $supplier;
+            return $product;
         } catch (Exception $e) {
             array_push($this->_errorMessage, "Fail to get product.");
 

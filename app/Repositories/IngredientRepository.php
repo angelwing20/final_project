@@ -22,7 +22,7 @@ class IngredientRepository extends Repository
         $model->name = $data['name'];
         $model->weight = $data['weight'] ?? null;
         $model->alarm_weight = $data['alarm_weight'];
-        $model->description = $data['description'] ?? null;
+        $model->price = $data['price'];
 
 
         $model->save();
@@ -37,7 +37,7 @@ class IngredientRepository extends Repository
         $model->name = $data['name'] ?? $model->name;
         $model->weight = array_key_exists('weight', $data) ? $data['weight'] : $model->weight;
         $model->alarm_weight = $data['alarm_weight'] ?? $model->alarm_weight;
-        $model->description = array_key_exists('description', $data) ? $data['description'] : $model->description;
+        $model->price = $data['price'] ?? $model->price;
 
 
         $model->update();

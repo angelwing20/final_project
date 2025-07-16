@@ -46,17 +46,22 @@
     <div class="row g-3">
         @foreach ($ingredientCategories as $ingredientCategory)
             <div class="col-12">
-                <a href="{{ route('admin.ingredient_category.show', ['id' => $ingredientCategory->id]) }}" class="text-decoration-none">
+                <a href="{{ route('admin.ingredient_category.show', ['id' => $ingredientCategory->id]) }}"
+                    class="text-decoration-none">
                     <div class="card card-shadow card-hover border-0 bg-white">
                         <div class="card-body">
                             <div class="row align-items-center">
-                                <div class="col-auto">
+                                <div class="col">
                                     <div class="fw-bold">
                                         {{ $ingredientCategory->name }}
                                     </div>
-
                                 </div>
 
+                                <div class="col-auto">
+                                    <div class="fw-semibold text-muted">
+                                        {{ $ingredientCategory->total_ingredient }} Ingredients
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

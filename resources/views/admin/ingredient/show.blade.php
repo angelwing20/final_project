@@ -29,7 +29,97 @@
         </div>
     </div>
 
-    <!-- Modal for Edit Product -->
+    <div class="card card-shadow border-0 bg-white">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 mb-3 text-center">
+                    <img src="{{ $ingredient->image ? asset('storage/ingredient/' . $ingredient->image) : asset('img/default-image.png') }}"
+                        onerror="this.onerror=null;this.src='{{ asset('img/default-image.png') }}'" alt="Ingredient Image"
+                        style="width: 200px; height: 200px; object-fit: cover; border: 1px solid #ccc; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); display: block; margin: 0 auto;">
+                </div>
+
+                <div class="col-12">
+                    <div class="fw-bold">
+                        Ingredient Category:
+                    </div>
+                    <div>
+                        <a class="text-decoration-none"
+                            href="{{ route('admin.ingredient_category.show', ['id' => $ingredient->ingredient_category_id]) }}"><span
+                                class="badge rounded-pill text-bg-warning">{{ $ingredient->ingredientCategory->name }}</span></a>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <hr class="text-muted">
+                </div>
+
+                <div class="col-12">
+                    <div class="fw-bold">
+                        Name:
+                    </div>
+                    <div>
+                        {{ $ingredient->name }}
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <hr class="text-muted">
+                </div>
+
+                <div class="col-12">
+                    <div class="fw-bold">
+                        Weight: @if (
+                            $ingredient->weight !== null &&
+                                $ingredient->alarm_weight !== null &&
+                                $ingredient->weight <= $ingredient->alarm_weight)
+                            <span class="badge bg-danger mt-1">
+                                Low stock
+                            </span>
+                        @endif
+                    </div>
+                    <div>
+                        {{ $ingredient->weight }} kg
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <hr class="text-muted">
+                </div>
+
+                <div class="col-12">
+                    <div class="fw-bold">
+                        Alarm Weight:
+                    </div>
+                    <div>
+                        {{ $ingredient->alarm_weight }} kg
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <hr class="text-muted">
+                </div>
+
+                <div class="col-12">
+                    <div class="fw-bold">
+                        Price:
+                    </div>
+                    <div>
+                        {{ $ingredient->price }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 mb-3">
+        <div class="col">
+            <h2 class="fw-bold">Refill Stock History</h2>
+        </div>
+    </div>
+
+    @livewire('admin.ingredient.refill-stock-history-list', ['ingredientId' => $ingredient->id])
+
+    <!-- Modal for Edit Ingredient Detail -->
     <div class="modal fade" id="editIngredientModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -86,17 +176,17 @@
                             <div class="col-12">
                                 <div class="form-group mb-3">
                                     <label for="alarm_weight" class="form-label">Alarm Weight (kg)</label>
-                                    <input type="text" class="form-control" name="alarm_weight" id="alarm_weight"
-                                        value="{{ $ingredient->alarm_weight }}" min="0.01" placeholder="Alarm Weight"
-                                        required>
+                                    <input type="number" class="form-control" name="alarm_weight" id="alarm_weight"
+                                        value="{{ $ingredient->alarm_weight }}" min="0.01" step="0.01"
+                                        placeholder="Alarm Weight" required>
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="description" class="form-label">Description</label>
-                                    <input type="text" class="form-control" name="description" id="description"
-                                        value="{{ $ingredient->description }}" placeholder="Description">
+                                    <label for="price" class="form-label">Price</label>
+                                    <input type="number" class="form-control" name="price" id="price"
+                                        value="{{ $ingredient->price }}" placeholder="Price">
                                 </div>
                             </div>
 
@@ -111,85 +201,6 @@
             </div>
         </div>
     </div>
-
-    <div class="card card-shadow border-0 bg-white">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-12 mb-3 text-center">
-                    <img src="{{ $ingredient->image ? asset('storage/ingredient/' . $ingredient->image) : asset('img/default-image.png') }}"
-                        onerror="this.onerror=null;this.src='{{ asset('img/default-image.png') }}'"
-                        alt="Ingredient Image"
-                        style="width: 200px; height: 200px; object-fit: cover; border: 1px solid #ccc; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); display: block; margin: 0 auto;">
-                </div>
-
-                <div class="col-12">
-                    <div class="fw-bold">
-                        Ingredient Category:
-                    </div>
-                    <div>
-                        <a class="text-decoration-none"
-                            href="{{ route('admin.ingredient_category.show', ['id' => $ingredient->ingredient_category_id]) }}"><span
-                                class="badge rounded-pill text-bg-warning">{{ $ingredient->ingredientCategory->name }}</span></a>
-                    </div>
-                    <hr class="text-muted">
-                </div>
-
-                <div class="col-12">
-                    <div class="fw-bold">
-                        Name:
-                    </div>
-                    <div>
-                        {{ $ingredient->name }}
-                    </div>
-                    <hr class="text-muted">
-                </div>
-
-                <div class="col-12">
-                    <div class="fw-bold">
-                        Weight: @if (
-                            $ingredient->weight !== null &&
-                                $ingredient->alarm_weight !== null &&
-                                $ingredient->weight <= $ingredient->alarm_weight)
-                            <div class="badge bg-danger mt-2" style="padding: 5px; font-size: 0.9em;">
-                                Low stock
-                            </div>
-                        @endif
-                    </div>
-                    <div>
-                        {{ $ingredient->weight }} kg
-                    </div>
-                    <hr class="text-muted">
-                </div>
-
-                <div class="col-12">
-                    <div class="fw-bold">
-                        Alarm_weight:
-                    </div>
-                    <div>
-                        {{ $ingredient->alarm_weight }} kg
-                    </div>
-                    <hr class="text-muted">
-                </div>
-
-                <div class="col-12">
-                    <div class="fw-bold">
-                        Description:
-                    </div>
-                    <div>
-                        {{ $ingredient->description ?? '-' }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mt-4 mb-3">
-        <div class="col">
-            <h2 class="fw-bold">Refill Stock History</h2>
-        </div>
-    </div>
-
-    @livewire('admin.ingredient.refill-stock-history-list', ['ingredientId' => $ingredient->id])
 
 @endsection
 

@@ -8,6 +8,7 @@ use Livewire\Component;
 
 class RefillStockHistoryList extends Component
 {
+    public $ingredientId;
     public $refillStockHistories;
     public $page = 0;
     public $limitDataPerPage = 10;
@@ -20,16 +21,17 @@ class RefillStockHistoryList extends Component
 
     public function render()
     {
-        $query = DB::table('supply_histories')
-            ->join('suppliers', 'supply_histories.supplier_id', '=', 'suppliers.id')
+        $query = DB::table('refill_stock_histories')
+            ->join('users', 'refill_stock_histories.staff_id', '=', 'users.id')
             ->select(
-                'supply_histories.weight',
-                'supply_histories.created_at',
+                'refill_stock_histories.weight',
+                'refill_stock_histories.created_at',
 
-                'suppliers.name as supplier_name',
+                'users.name as staff_name',
             )
-            ->where('supply_histories.created_at', '>=', Carbon::now()->subMonth())
-            ->orderBy('supply_histories.created_at', 'desc');
+            ->where('refill_stock_histories.ingredient_id', '=', $this->ingredientId)
+            ->where('refill_stock_histories.created_at', '>=', Carbon::now()->subMonth())
+            ->orderBy('refill_stock_histories.created_at', 'desc');
 
         $query = $query
             ->offset($this->page * $this->limitDataPerPage)

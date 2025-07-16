@@ -14,7 +14,7 @@
                 @csrf
 
                 <div class="form-group mb-3">
-                    <input type="file" name="excel_file" id="excel_file" class="form-control" required>
+                    <input type="file" name="excel_file[]" id="excel_file" class="form-control" multiple required>
                 </div>
 
                 <div class="text-center">

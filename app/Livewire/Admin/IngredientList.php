@@ -14,7 +14,8 @@ class IngredientList extends Component
 
     public $filter = [
         'ingredient_category_id' => null,
-        'name' => null
+        'name' => null,
+        'stock_status' => null,
     ];
 
     public function loadMore()
@@ -55,17 +56,26 @@ class IngredientList extends Component
                 'ingredients.name',
                 'ingredients.weight',
                 'ingredients.alarm_weight',
+                'ingredients.price',
 
-                'ingredient_categories.name as ingredient_category_name'
+                'ingredient_categories.name as ingredient_category_name',
             )
             ->orderBy('ingredients.name', 'asc');
+
+        if (isset($this->filter['ingredient_category_id']) && $this->filter['ingredient_category_id'] !== null) {
+            $query = $query->where('ingredients.ingredient_category_id', '=', $this->filter['ingredient_category_id']);
+        }
 
         if (isset($this->filter['name']) && $this->filter['name'] !== null) {
             $query = $query->where('ingredients.name', 'like', '%' . $this->filter['name'] . '%');
         }
 
-        if (isset($this->filter['ingredient_category_id']) && $this->filter['ingredient_category_id'] !== null) {
-            $query = $query->where('ingredients.ingredient_category_id', '=', $this->filter['ingredient_category_id']);
+        if (isset($this->filter['stock_status']) && $this->filter['stock_status'] !== "") {
+            if ($this->filter['stock_status']) {
+                $query = $query->whereColumn('ingredients.weight', '<=', 'ingredients.alarm_weight');
+            } else {
+                $query = $query->whereColumn('ingredients.weight', '>', 'ingredients.alarm_weight');
+            }
         }
 
         $query = $query

@@ -8,7 +8,6 @@ use App\Http\Controllers\Admin\IngredientAdminController;
 use App\Http\Controllers\Admin\IngredientCategoryAdminController;
 use App\Http\Controllers\Admin\ProductIngredientAdminController;
 use App\Http\Controllers\Admin\ProfileAdminController;
-use App\Http\Controllers\Admin\SupplierAdminController;
 use App\Http\Controllers\Admin\StaffAdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -32,15 +31,6 @@ Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
         Route::get('/', [ProfileAdminController::class, 'index'])->name('profile');
         Route::patch('/', [ProfileAdminController::class, 'update'])->name('update');
         Route::patch('update-password', [ProfileAdminController::class, 'updatePassword'])->name('update_password');
-    });
-
-    Route::name("supplier.")->prefix("supplier")->group(function () {
-        Route::get('/', [SupplierAdminController::class, 'index'])->name('index');
-        Route::post('/', [SupplierAdminController::class, 'store'])->name('store');
-        Route::get('select-search', [SupplierAdminController::class, 'selectOption'])->name('select_search');
-        Route::get('{id}', [SupplierAdminController::class, 'show'])->name('show');
-        Route::patch('{id}', [SupplierAdminController::class, 'update'])->name('update');
-        Route::delete('{id}', [SupplierAdminController::class, 'destroy'])->name('destroy');
     });
 
     Route::name("product.")->prefix("product")->group(function () {

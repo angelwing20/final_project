@@ -14,28 +14,31 @@
         </div>
     </div>
 
-    <!-- Filter Modal -->
     <div class="modal fade" id="filterModal" tabindex="-1" wire:ignore.self>
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Filter</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-12">
-                            <div class="mb-3" wire:ignore>
-                                <label for="filterProductCategory" class="form-label">Product Category</label>
-                                <select class="form-control" id="filterProductCategory" style="width: 100%"></select>
-                            </div>
-                        </div>
-
                         <div class="col-12">
                             <div class="mb-3">
                                 <label for="filterName" class="form-label">Name</label>
                                 <input type="text" id="filterName" class="form-control" placeholder="Name"
                                     wire:model="filter.name">
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="filterStockStatus" class="form-label">Stock Status</label>
+                                <select class="form-select" id="filterStockStatus" wire:model="filter.stock_status">
+                                    <option value="">All stock status</option>
+                                    <option value="1">Low stock</option>
+                                    <option value="0">Normal stock</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -51,31 +54,44 @@
     </div>
 
     <div class="row g-3">
-        @foreach ($products as $product)
+        @foreach ($ingredients as $ingredient)
             <div class="col-12">
-                <a href="{{ route('admin.product.show', ['id' => $product->id]) }}" class="text-decoration-none">
+                <a href="{{ route('admin.ingredient.show', ['id' => $ingredient->id]) }}" class="text-decoration-none">
                     <div class="card card-shadow card-hover border-0 bg-white">
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-auto">
                                     <div class="default-image-wrapper">
                                         <img class="img-thumbnail"
-                                            src="{{ $product->image ? asset('storage/product/' . $product->image) : asset('img/default-image.png') }}"
+                                            src="{{ $ingredient->image ? asset('storage/ingredient/' . $ingredient->image) : asset('img/default-image.png') }}"
                                             onerror="this.onerror=null;this.src='{{ asset('img/default-image.png') }}'"
-                                            alt="Product Image" style="width: 100px; height: 100px; object-fit: cover;">
+                                            style="width: 100px; height: 100px; object-fit: cover;">
                                     </div>
                                 </div>
 
                                 <div class="col">
                                     <div class="fw-bold">
-                                        {{ $product->name }}
+                                        {{ $ingredient->name }}
+
+                                        <div>
+                                            Price: {{ $ingredient->price }}
+                                        </div>
                                     </div>
-                                    <div class="fw-bold">
-                                        Price: {{ $product->price }}
-                                    </div>
-                                    <div class="fw-bold">
-                                        <span
-                                            class="badge rounded-pill text-bg-warning">{{ $product->product_category_name }}</span>
+                                </div>
+
+                                <div class="col-12 col-sm-auto">
+                                    <div class="d-flex flex-column fw-bold text-center">
+                                        <div>
+                                            Weight: {{ $ingredient->weight }} kg
+                                        </div>
+                                        @if (
+                                            $ingredient->weight !== null &&
+                                                $ingredient->alarm_weight !== null &&
+                                                $ingredient->weight <= $ingredient->alarm_weight)
+                                            <span class="badge bg-danger mt-1">
+                                                Low stock
+                                            </span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -88,7 +104,6 @@
 
     @if (!$noMoreData)
         <div x-intersect.full="$wire.loadMore()"></div>
-
         <div class="d-flex justify-content-center align-items-center my-4" wire:loading>
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -96,7 +111,7 @@
         </div>
     @endif
 
-    @if (empty($products))
+    @if (empty($ingredients))
         <div class="text-center my-4" wire:loading.remove>
             <div class="text-muted">No data found</div>
         </div>
@@ -106,41 +121,7 @@
 @section('scripts')
     <script>
         $(function() {
-            $('#filterProductCategory').select2({
-                theme: 'bootstrap-5',
-                allowClear: true,
-                dropdownParent: $('#filterModal .modal-content'),
-                placeholder: 'Product category',
 
-                ajax: {
-                    url: "{{ route('admin.product_category.select_search') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        var query = {
-                            search_term: params.term,
-                            page: params.page,
-                        }
-                        return query;
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.results, function(item) {
-                                return {
-                                    text: item.name,
-                                    id: item.id,
-                                }
-                            }),
-                            pagination: {
-                                more: data.pagination.more
-                            }
-                        };
-                    },
-                }
-            }).on('change', function(e) {
-                var selectedId = $(this).val();
-                @this.set('filter.product_category_id', selectedId, false);
-            });
         })
     </script>
 @endsection

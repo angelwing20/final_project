@@ -2,22 +2,22 @@
 
 namespace App\Repositories;
 
-use App\Models\SupplyHistory;
+use App\Models\RefillStockHistory;
 
-class SupplyHistoryRepository extends Repository
+class RefillStockHistoryRepository extends Repository
 {
     protected $_db;
 
-    public function __construct(SupplyHistory $supplierHistory)
+    public function __construct(RefillStockHistory $refillStockHistory)
     {
-        $this->_db = $supplierHistory;
+        $this->_db = $refillStockHistory;
     }
 
     public function save($data)
     {
-        $model = new SupplyHistory();
+        $model = new RefillStockHistory();
         $model->ingredient_id = $data['ingredient_id'];
-        $model->supplier_id = $data['supplier_id'];
+        $model->staff_id = $data['staff_id'];
         $model->weight = $data['weight'];
 
         $model->save();
@@ -28,7 +28,7 @@ class SupplyHistoryRepository extends Repository
     {
         $model = $this->_db->find($id);
         $model->ingredient_id = $data['ingredient_id'] ?? $model->ingredient_id;
-        $model->supplier_id = $data['supplier_id'] ?? $model->supplier_id;
+        $model->staff_id = $data['staff_id'] ?? $model->staff_id;
         $model->weight = $data['weight'] ?? $model->weight;
 
         $model->update();

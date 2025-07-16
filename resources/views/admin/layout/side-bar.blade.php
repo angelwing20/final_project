@@ -25,12 +25,6 @@
                 Ingredient Category
             </a>
 
-            <a href="{{ route('admin.supplier.index') }}"
-                class="sidebar-link {{ Request::routeIs('admin.supplier.*') ? 'active' : '' }}">
-                <i class="fas fa-truck"></i>
-                Supplier
-            </a>
-
             <a href="{{ route('admin.product.index') }}"
                 class="sidebar-link {{ Request::routeIs('admin.product.*') ? 'active' : '' }}">
                 <i class="fas fa-layer-group"></i>
