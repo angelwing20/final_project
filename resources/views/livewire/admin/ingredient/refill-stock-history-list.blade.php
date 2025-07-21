@@ -3,6 +3,7 @@
         <table class="table table-bordered table-hover align-middle">
             <thead class="table-dark">
                 <tr>
+                    <th scope="col">Quantity</th>
                     <th scope="col">Weight</th>
                     <th scope="col">Refill by</th>
                     <th scope="col">Created at</th>
@@ -11,6 +12,7 @@
             <tbody>
                 @foreach ($refillStockHistories as $refillStockHistory)
                     <tr>
+                        <td>{{ $refillStockHistory->quantity }}</td>
                         <td>{{ $refillStockHistory->weight }} kg</td>
                         <td>{{ $refillStockHistory->staff_name }}</td>
                         <td>{{ $refillStockHistory->created_at }}</td>

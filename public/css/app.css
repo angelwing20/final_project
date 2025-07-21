@@ -12284,6 +12284,19 @@ textarea.form-control-lg {
   pointer-events: none;
 }
 
+.scrollable-ingredients {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  scrollbar-color: rgba(92, 64, 51, 0.66) transparent;
+}
+.scrollable-ingredients .ingredient-list {
+  display: flex;
+  gap: 8px;
+  padding-bottom: 8px;
+}
+
 @media (max-width: 992px) {
   .sidebar {
     left: -260px;
@@ -22847,4 +22860,9 @@ readers do not read off random characters that represent icons */
 
 .notifier-container {
   z-index: 1082;
+}
+
+.bg-custom {
+  background-color: #5C4033;
+  color: #fff;
 }

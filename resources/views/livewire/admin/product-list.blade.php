@@ -56,7 +56,7 @@
                 <a href="{{ route('admin.product.show', ['id' => $product->id]) }}" class="text-decoration-none">
                     <div class="card card-shadow card-hover border-0 bg-white">
                         <div class="card-body">
-                            <div class="row align-items-center">
+                            <div class="row g-3 align-items-center">
                                 <div class="col-auto">
                                     <div class="default-image-wrapper">
                                         <img class="img-thumbnail"
@@ -76,6 +76,23 @@
                                     <div class="fw-bold">
                                         <span
                                             class="badge rounded-pill text-bg-warning">{{ $product->product_category_name }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <div class="d-flex flex-column gap-1">
+                                        <div class="fw-bold">
+                                            Ingredients:
+                                        </div>
+
+                                        <div class="scrollable-ingredients">
+                                            <div class="ingredient-list">
+                                                @foreach (explode(',', $product->ingredient_details) as $ingredient)
+                                                    <span
+                                                        class="badge bg-custom flex-shrink-0">{{ trim($ingredient) }}</span>
+                                                @endforeach
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -48,6 +48,8 @@ class ProductList extends Component
     {
         $query = DB::table('products')
             ->join('product_categories', 'products.product_category_id', '=', 'product_categories.id')
+            ->leftJoin('product_ingredients', 'products.id', '=', 'product_ingredients.product_id')
+            ->leftJoin('ingredients', 'product_ingredients.ingredient_id', '=', 'ingredients.id')
             ->select(
                 'products.id',
                 'products.product_category_id',
@@ -55,8 +57,17 @@ class ProductList extends Component
                 'products.price',
                 'products.description',
                 'products.image',
-
-                'product_categories.name as product_category_name'
+                'product_categories.name as product_category_name',
+                DB::raw("GROUP_CONCAT(CONCAT(ingredients.name, ' (', product_ingredients.weight, 'kg)') ORDER BY ingredients.name SEPARATOR ', ') as ingredient_details")
+            )
+            ->groupBy(
+                'products.id',
+                'products.product_category_id',
+                'products.name',
+                'products.price',
+                'products.description',
+                'products.image',
+                'product_categories.name'
             )
             ->orderBy('products.name', 'asc');
 

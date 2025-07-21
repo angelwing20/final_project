@@ -14,6 +14,40 @@
         </div>
     </div>
 
+    <div class="row g-3">
+        @foreach ($staffs as $staff)
+            <div class="col-12 col-sm-6 col-md-4">
+                <a href="{{ route('admin.staff.show', ['id' => $staff->id]) }}" class="text-decoration-none">
+                    <div class="card card-shadow card-hover border-0 bg-white">
+                        <div class="card-body">
+                            <div class="row g-2 align-items-center flex-column">
+                                <div class="col-auto col-sm-12">
+                                    <div class="default-avatar-wrapper">
+                                        <img src="{{ $staff->image ? asset('storage/profile/' . $staff->image) : asset('img/default-avatar-dark.png') }}"
+                                            onerror="this.onerror=null;this.src='{{ asset('img/default-avatar-dark.png') }}'"
+                                            alt="Staff Image" style="width: 80px; height: 80px; object-fit: cover;">
+                                    </div>
+                                </div>
+
+                                <div class="col col-sm-12">
+                                    <div class="text-center">
+                                        <div class="fw-bold">
+                                            {{ $staff->name }}
+                                        </div>
+                                        <div class="fw-bold">
+                                            <span
+                                                class="badge rounded-pill text-bg-warning">{{ $staff->role_name }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        @endforeach
+    </div>
+
     <!-- Filter Modal -->
     <div class="modal fade" id="filterModal" tabindex="-1" wire:ignore.self>
         <div class="modal-dialog modal-dialog-centered">
@@ -52,37 +86,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="row g-3">
-        @foreach ($staffs as $staff)
-            <div class="col-12">
-                <a href="{{ route('admin.staff.show', ['id' => $staff->id]) }}" class="text-decoration-none">
-                    <div class="card card-shadow card-hover border-0 bg-white">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col-auto">
-                                    <div class="default-avatar-wrapper">
-                                        <img src="{{ $staff->image ? asset('storage/profile/' . $staff->image) : asset('img/default-avatar-light.png') }}"
-                                            onerror="this.onerror=null;this.src='{{ asset('img/default-avatar-light.png') }}'"
-                                            alt="Staff Image" style="width: 50px; height: 50px; object-fit: cover;">
-                                    </div>
-                                </div>
-
-                                <div class="col">
-                                    <div class="fw-bold">
-                                        {{ $staff->name }}
-                                    </div>
-                                    <div class="fw-bold">
-                                        <span class="badge rounded-pill text-bg-warning">{{ $staff->role_name }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        @endforeach
     </div>
 
     @if (!$noMoreData)

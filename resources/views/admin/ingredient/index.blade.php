@@ -37,29 +37,44 @@
                         @csrf
                         @method('PATCH')
 
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-group mb-3">
-                                    <label for="refill-ingredient_id" class="form-label">Ingredient</label>
-                                    <select class="form-select" name="ingredient_id" id="refill-ingredient_id"
-                                        style="width: 100%" required>
-                                    </select>
-                                </div>
-                            </div>
+                        <div id="refill-container">
+                            <div class="refill-group mb-3">
+                                <div class="row">
+                                    <div class="col-12 mb-2">
+                                        <div class="form-group">
+                                            <label class="form-label" for="refill-ingredient-0">Ingredient</label>
+                                            <select class="form-select ingredient-select" id="refill-ingredient-0"
+                                                name="refills[0][ingredient_id]" required></select>
+                                        </div>
+                                    </div>
 
-                            <div class="col-12">
-                                <div class="form-group mb-3">
-                                    <label for="refill-weight" class="form-label">Weight (kg)</label>
-                                    <input type="number" class="form-control" name="weight" id="refill-weight"
-                                        step="0.01" min="0.01" placeholder="Weight" required>
-                                </div>
-                            </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="refill-quantity-0">Quantity</label>
+                                            <input type="number" class="form-control" id="refill-quantity-0"
+                                                name="refills[0][quantity]" step="1" min="1"
+                                                placeholder="Quantity" required>
+                                        </div>
+                                    </div>
 
-                            <div class="col-12">
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-warning">Submit</button>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="refill-weight-0">Unit Weight (kg)</label>
+                                            <input type="number" class="form-control" id="refill-weight-0"
+                                                name="refills[0][weight]" step="0.01" min="0.01"
+                                                placeholder="Unit weight" required>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="bg-light text-center rounded p-2 mb-3" role="button" id="add-refill-btn">
+                            <i class="fa fa-plus"></i> Add another ingredient
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-warning">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -216,36 +231,34 @@
                 }
             });
 
-            $('#refill-ingredient_id').select2({
+            $('select[name="refills[0][ingredient_id]"]').select2({
                 theme: 'bootstrap-5',
                 allowClear: true,
                 dropdownParent: $('#refillStockModal .modal-content'),
                 placeholder: 'Select ingredient',
-
                 ajax: {
                     url: "{{ route('admin.ingredient.select_search') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function(params) {
-                        var query = {
+                        return {
                             search_term: params.term,
-                            page: params.page,
-                        }
-                        return query;
+                            page: params.page
+                        };
                     },
                     processResults: function(data) {
                         return {
                             results: $.map(data.results, function(item) {
                                 return {
                                     text: item.name,
-                                    id: item.id,
-                                }
+                                    id: item.id
+                                };
                             }),
                             pagination: {
                                 more: data.pagination.more
                             }
                         };
-                    },
+                    }
                 }
             });
 
@@ -294,5 +307,81 @@
             $('#image-display').attr("src", initialImage);
             $('#remove-btn').addClass('d-none');
         }
+
+        let refillIndex = 1;
+
+        $(document).on('click', '.remove-refill-group', function() {
+            $(this).closest('.refill-group').remove();
+        });
+
+        $('#add-refill-btn').on('click', function() {
+            const newGroup = `
+                <div class="refill-group mb-3 pb-3 position-relative bg-light p-3 rounded">
+                    <div class="d-flex justify-content-end mb-2">
+                        <button type="button" class="btn btn-outline-danger remove-refill-group">
+                            <i class="fa fa-trash"></i> Remove
+                        </button>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mb-2">
+                            <div class="form-group">
+                                <label class="form-label" for="refill-ingredient-${refillIndex}">Ingredient</label>
+                                <select class="form-select ingredient-select" id="refill-ingredient-${refillIndex}" name="refills[${refillIndex}][ingredient_id]" required></select>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="form-label" for="refill-quantity-${refillIndex}">Quantity</label>
+                                <input type="number" class="form-control" id="refill-quantity-${refillIndex}" name="refills[${refillIndex}][quantity]" step="1" min="1" placeholder="Quantity" required>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="form-label" for="refill-weight-${refillIndex}">Unit Weight (kg)</label>
+                                <input type="number" class="form-control" id="refill-weight-${refillIndex}" name="refills[${refillIndex}][weight]" step="0.01" min="0.01" placeholder="Unit weight" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            $('#refill-container').append(newGroup);
+
+            $(`select[name="refills[${refillIndex}][ingredient_id]"]`).select2({
+                theme: 'bootstrap-5',
+                allowClear: true,
+                dropdownParent: $('#refillStockModal .modal-content'),
+                placeholder: 'Select ingredient',
+                ajax: {
+                    url: "{{ route('admin.ingredient.select_search') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            search_term: params.term,
+                            page: params.page
+                        };
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data.results, function(item) {
+                                return {
+                                    text: item.name,
+                                    id: item.id
+                                };
+                            }),
+                            pagination: {
+                                more: data.pagination.more
+                            }
+                        };
+                    }
+                }
+            });
+
+            refillIndex++;
+
+        });
     </script>
 @endsection

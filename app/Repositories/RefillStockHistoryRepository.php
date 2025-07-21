@@ -18,6 +18,7 @@ class RefillStockHistoryRepository extends Repository
         $model = new RefillStockHistory();
         $model->ingredient_id = $data['ingredient_id'];
         $model->staff_id = $data['staff_id'];
+        $model->quantity = $data['quantity'] ?? null;
         $model->weight = $data['weight'];
 
         $model->save();
@@ -29,6 +30,7 @@ class RefillStockHistoryRepository extends Repository
         $model = $this->_db->find($id);
         $model->ingredient_id = $data['ingredient_id'] ?? $model->ingredient_id;
         $model->staff_id = $data['staff_id'] ?? $model->staff_id;
+        $model->quantity = array_key_exists('quantity', $data) ? $data['quantity'] : $model->quantity;
         $model->weight = $data['weight'] ?? $model->weight;
 
         $model->update();

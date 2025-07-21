@@ -198,6 +198,52 @@ class IngredientAdminService extends Service
         }
     }
 
+    public function bulkRefillStock(array $refills)
+    {
+        DB::beginTransaction();
+
+        try {
+            foreach ($refills as $refill) {
+                $validator = Validator::make($refill, [
+                    'ingredient_id' => 'required|exists:ingredients,id',
+                    'weight' => 'required|numeric|min:0.01',
+                    'quantity' => 'required|integer|min:1',
+                ]);
+
+                if ($validator->fails()) {
+                    foreach ($validator->errors()->all() as $error) {
+                        array_push($this->_errorMessage, $error);
+                    }
+                    return null;
+                }
+
+                $ingredient = $this->_ingredientRepository->getById($refill['ingredient_id']);
+
+                $totalWeight = $refill['weight'] * $refill['quantity'];
+                $newWeight = $ingredient->weight + $totalWeight;
+
+                $this->_refillStockHistoryRepository->save([
+                    'ingredient_id' => $refill['ingredient_id'],
+                    'staff_id' => Auth::id(),
+                    'quantity' => $refill['quantity'],
+                    'weight' => $totalWeight,
+                ]);
+
+                $this->_ingredientRepository->update($refill['ingredient_id'], [
+                    'weight' => $newWeight
+                ]);
+            }
+
+            DB::commit();
+            return true;
+        } catch (Exception $e) {
+            array_push($this->_errorMessage, "Fail to refill stock.");
+
+            DB::rollBack();
+            return null;
+        }
+    }
+
     public function getSelectOption($data)
     {
         try {

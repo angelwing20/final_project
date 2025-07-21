@@ -91,19 +91,16 @@ class IngredientAdminController extends Controller
 
     public function refillStock(Request $request)
     {
-        $data = $request->only([
-            'ingredient_id',
-            'weight',
-        ]);
+        $refills = $request->input('refills', []);
 
-        $result = $this->_ingredientAdminService->refillStock($data);
+        $result = $this->_ingredientAdminService->bulkRefillStock($refills);
 
         if ($result == null) {
             $errorMessage = implode("<br>", $this->_ingredientAdminService->_errorMessage);
             return back()->with('error', $errorMessage)->withInput();
         }
 
-        return back()->with('success', 'Stock refill successfully.');
+        return back()->with('success', 'Stock refilled successfully.');
     }
 
     public function selectOption(Request $request)

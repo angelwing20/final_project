@@ -24,6 +24,7 @@ class RefillStockHistoryList extends Component
         $query = DB::table('refill_stock_histories')
             ->join('users', 'refill_stock_histories.staff_id', '=', 'users.id')
             ->select(
+                'refill_stock_histories.quantity',
                 'refill_stock_histories.weight',
                 'refill_stock_histories.created_at',
 
