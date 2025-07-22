@@ -37,6 +37,12 @@
                 Product Category
             </a>
 
+            <a href="{{ route('admin.add_on.index') }}"
+                class="sidebar-link {{ Request::routeIs('admin.add_on.*') ? 'active' : '' }}">
+                <i class="fas fa-layer-group"></i>
+                Add-on
+            </a>
+
             <div class="sidebar-section-group {{ Request::routeIs('admin.staff.*') ? 'active' : '' }}">
                 <div class="sidebar-main-item" onclick="toggleSidebarSectionGroup(this)" role="button">
                     <a href="#" class="sidebar-link">

@@ -1,11 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\AddOnAdminController;
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\ImportDailySalesAdminController;
-use App\Http\Controllers\Admin\ProductAdminController;
-use App\Http\Controllers\Admin\ProductCategoryAdminController;
 use App\Http\Controllers\Admin\IngredientAdminController;
 use App\Http\Controllers\Admin\IngredientCategoryAdminController;
+use App\Http\Controllers\Admin\ProductAdminController;
+use App\Http\Controllers\Admin\ProductCategoryAdminController;
 use App\Http\Controllers\Admin\ProductIngredientAdminController;
 use App\Http\Controllers\Admin\ProfileAdminController;
 use App\Http\Controllers\Admin\StaffAdminController;
@@ -33,6 +34,25 @@ Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
         Route::patch('update-password', [ProfileAdminController::class, 'updatePassword'])->name('update_password');
     });
 
+    Route::name("ingredient.")->prefix("ingredient")->group(function () {
+        Route::get('/', [IngredientAdminController::class, 'index'])->name('index');
+        Route::post('store', [IngredientAdminController::class, 'store'])->name('store');
+        Route::get('select-search', [IngredientAdminController::class, 'selectOption'])->name('select_search');
+        Route::get('{id}', [IngredientAdminController::class, 'show'])->name('show');
+        Route::patch('refill-stock', [IngredientAdminController::class, 'refillStock'])->name('refill_stock');
+        Route::patch('{id}', [IngredientAdminController::class, 'update'])->name('update');
+        Route::delete('{id}', [IngredientAdminController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::name("ingredient_category.")->prefix("ingredient-category")->group(function () {
+        Route::get('/', [IngredientCategoryAdminController::class, 'index'])->name('index');
+        Route::post('store', [IngredientCategoryAdminController::class, 'store'])->name('store');
+        Route::get('select-search', [IngredientCategoryAdminController::class, 'selectOption'])->name('select_search');
+        Route::get('{id}', [IngredientCategoryAdminController::class, 'show'])->name('show');
+        Route::patch('{id}', [IngredientCategoryAdminController::class, 'update'])->name('update');
+        Route::delete('{id}', [IngredientCategoryAdminController::class, 'destroy'])->name('destroy');
+    });
+
     Route::name("product.")->prefix("product")->group(function () {
         Route::get('/', [ProductAdminController::class, 'index'])->name('index');
         Route::post('/', [ProductAdminController::class, 'store'])->name('store');
@@ -56,23 +76,13 @@ Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
         Route::delete('{id}', [ProductCategoryAdminController::class, 'destroy'])->name('destroy');
     });
 
-    Route::name("ingredient.")->prefix("ingredient")->group(function () {
-        Route::get('/', [IngredientAdminController::class, 'index'])->name('index');
-        Route::post('store', [IngredientAdminController::class, 'store'])->name('store');
-        Route::get('select-search', [IngredientAdminController::class, 'selectOption'])->name('select_search');
-        Route::get('{id}', [IngredientAdminController::class, 'show'])->name('show');
-        Route::patch('refill-stock', [IngredientAdminController::class, 'refillStock'])->name('refill_stock');
-        Route::patch('{id}', [IngredientAdminController::class, 'update'])->name('update');
-        Route::delete('{id}', [IngredientAdminController::class, 'destroy'])->name('destroy');
-    });
-
-    Route::name("ingredient_category.")->prefix("ingredient-category")->group(function () {
-        Route::get('/', [IngredientCategoryAdminController::class, 'index'])->name('index');
-        Route::post('store', [IngredientCategoryAdminController::class, 'store'])->name('store');
-        Route::get('select-search', [IngredientCategoryAdminController::class, 'selectOption'])->name('select_search');
-        Route::get('{id}', [IngredientCategoryAdminController::class, 'show'])->name('show');
-        Route::patch('{id}', [IngredientCategoryAdminController::class, 'update'])->name('update');
-        Route::delete('{id}', [IngredientCategoryAdminController::class, 'destroy'])->name('destroy');
+    Route::name("add_on.")->prefix("add-on")->group(function () {
+        Route::get('/', [AddOnAdminController::class, 'index'])->name('index');
+        Route::post('store', [AddOnAdminController::class, 'store'])->name('store');
+        Route::get('select-search', [AddOnAdminController::class, 'selectOption'])->name('select_search');
+        Route::get('{id}', [AddOnAdminController::class, 'show'])->name('show');
+        Route::patch('{id}/update', [AddOnAdminController::class, 'update'])->name('update');
+        Route::delete('{id}', [AddOnAdminController::class, 'destroy'])->name('destroy');
     });
 
     Route::name("staff.")->prefix("staff")->group(function () {

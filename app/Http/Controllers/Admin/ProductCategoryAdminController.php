@@ -39,18 +39,18 @@ class ProductCategoryAdminController extends Controller
 
     public function show($id)
     {
-        $productCategories = $this->_productCategoryAdminService->getById($id);
+        $productCategory = $this->_productCategoryAdminService->getById($id);
 
-        if ($productCategories == false) {
+        if ($productCategory == false) {
             abort(404);
         }
 
-        if ($productCategories == null) {
+        if ($productCategory == null) {
             $errorMessage = implode("<br>", $this->_productCategoryAdminService->_errorMessage);
             return back()->with('error', $errorMessage);
         }
 
-        return view('admin.product_category.show', compact('productCategories'));
+        return view('admin.product_category.show', compact('productCategory'));
     }
 
     public function update(Request $request, $id)

@@ -12,9 +12,9 @@ class ProductCategoryAdminService extends Service
 {
     private $_productCategoriesRepository;
 
-    public function __construct(ProductCategoriesRepository $productCategoriesrRepository)
+    public function __construct(ProductCategoriesRepository $productCategoriesRepository)
     {
-        $this->_productCategoriesRepository = $productCategoriesrRepository;
+        $this->_productCategoriesRepository = $productCategoriesRepository;
     }
 
     public function createProductCategory($data)

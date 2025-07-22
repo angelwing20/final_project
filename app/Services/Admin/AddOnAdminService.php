@@ -2,7 +2,7 @@
 
 namespace App\Services\Admin;
 
-use App\Repositories\ProductRepository;
+use App\Repositories\AddOnRepository;
 use Exception;
 use App\Services\Service;
 use Illuminate\Support\Facades\DB;
@@ -10,30 +10,29 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
-class ProductAdminService extends Service
+class AddOnAdminService extends Service
 {
-    private $_productRepository;
+    private $_addOnRepository;
 
-    public function __construct(ProductRepository $productRepository)
+    public function __construct(AddOnRepository $addOnRepository)
     {
-        $this->_productRepository = $productRepository;
+        $this->_addOnRepository = $addOnRepository;
     }
 
-    public function createProduct($data)
+    public function createAddOn($data)
     {
         DB::beginTransaction();
 
         try {
             $validator = Validator::make($data, [
-                'product_category_id' => 'required|exists:product_categories,id',
+                'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
                 'name' => 'required|string|max:255',
                 'price' => 'required|numeric',
-                'description' => 'nullable|string|max:16777215',
-                'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
             ]);
 
             if ($validator->fails()) {
                 foreach ($validator->errors()->all() as $error) {
+                    $validator->errors()->all();
                     array_push($this->_errorMessage, $error);
                 }
                 return null;
@@ -44,22 +43,22 @@ class ProductAdminService extends Service
                 $fileExtension = $data['image']->extension();
                 $fileName = $fileName . '.' . $fileExtension;
 
-                $data['image']->storeAs('product', $fileName, 'public');
+                $data['image']->storeAs('add_on', $fileName, 'public');
 
                 $data['image'] = $fileName;
             }
 
-            $product = $this->_productRepository->save($data);
+            $addOn = $this->_addOnRepository->save($data);
 
             DB::commit();
-            return $product;
+            return $addOn;
         } catch (Exception $e) {
-            array_push($this->_errorMessage, "Fail to add product.");
-
+            array_push($this->_errorMessage, "Fail to add add-on.");
             DB::rollBack();
             return null;
         }
     }
+
     public function generateFileName()
     {
         return Str::random(5) . Str::uuid() . Str::random(5);
@@ -68,11 +67,11 @@ class ProductAdminService extends Service
     public function getById($id)
     {
         try {
-            $product = $this->_productRepository->getById($id);
+            $addOn = $this->_addOnRepository->getById($id);
 
-            return $product;
+            return $addOn;
         } catch (Exception $e) {
-            array_push($this->_errorMessage, "Fail to get product.");
+            array_push($this->_errorMessage, "Fail to get add-on.");
 
             return null;
         }
@@ -84,11 +83,9 @@ class ProductAdminService extends Service
 
         try {
             $validator = Validator::make($data, [
-                'product_category_id' => 'required|exists:product_categories,id',
+                'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
                 'name' => 'required|string|max:255',
                 'price' => 'required|numeric',
-                'description' => 'nullable|string|max:16777215',
-                'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
             ]);
 
             if ($validator->fails()) {
@@ -98,31 +95,31 @@ class ProductAdminService extends Service
                 return null;
             }
 
-            $product = $this->_productRepository->getById($id);
+            $addOn = $this->_addOnRepository->getById($id);
 
-            if ($product == null) {
+            if ($addOn == null) {
                 throw new Exception();
             }
 
             if (!empty($data['image'])) {
-                if ($product['image'] != null && Storage::disk('public')->exists('product/' . $product['image'])) {
-                    Storage::disk('public')->delete('product/' . $product['image']);
+                if ($addOn['image'] != null && Storage::disk('public')->exists('add_on/' . $addOn['image'])) {
+                    Storage::disk('public')->delete('add_on/' . $addOn['image']);
                 }
 
                 $fileName = $this->generateFileName();
                 $fileExtension = $data['image']->extension();
                 $fileName = $fileName . '.' . $fileExtension;
 
-                $data['image']->storeAs('product', $fileName, 'public');
+                $data['image']->storeAs('add_on', $fileName, 'public');
                 $data['image'] = $fileName;
             }
 
-            $product = $this->_productRepository->update($id, $data);
+            $addOn = $this->_addOnRepository->update($id, $data);
 
             DB::commit();
-            return $product;
+            return $addOn;
         } catch (Exception $e) {
-            array_push($this->_errorMessage, "Fail to update product detail.");
+            array_push($this->_errorMessage, "Fail to update add-on detail.");
 
             DB::rollBack();
             return null;
@@ -134,14 +131,41 @@ class ProductAdminService extends Service
         DB::beginTransaction();
 
         try {
-            $product = $this->_productRepository->deleteById($id);
+            $addOn = $this->_addOnRepository->deleteById($id);
 
             DB::commit();
-            return $product;
+            return $addOn;
         } catch (Exception $e) {
-            array_push($this->_errorMessage, "Fail to delete product.");
+            array_push($this->_errorMessage, "Fail to delete add-on.");
 
             DB::rollBack();
+            return null;
+        }
+    }
+
+    public function getSelectOption($data)
+    {
+        try {
+            $data['result_count'] = 50;
+            $data['offset'] = ($data['page'] - 1) * $data['result_count'];
+
+
+            $addOns = $this->_addOnRepository->getAllBySearchTerm($data);
+
+            $totalCount = $this->_addOnRepository->getTotalCountBySearchTerm($data);
+
+            $results = array(
+                "results" => $addOns->toArray(),
+                "pagination" => array(
+                    "more" => $totalCount < $data['offset'] + $data['result_count'] ? false : true
+                )
+            );
+
+            return $results;
+        } catch (Exception $e) {
+            array_push($this->_errorMessage, "Currently the list didnt have this add-on.");
+            DB::rollBack();
+
             return null;
         }
     }

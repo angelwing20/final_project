@@ -13,7 +13,7 @@
                 <a href="{{ route('admin.product_category.index') }}" class="btn btn-secondary">
                     <i class="fa-solid fa-arrow-left"></i> Back
                 </a>
-                <form action="{{ route('admin.product_category.destroy', ['id' => $productCategories->id]) }}" method="POST">
+                <form action="{{ route('admin.product_category.destroy', ['id' => $productCategory->id]) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger" onclick="deleteConfirmation(event)">
@@ -35,7 +35,7 @@
                         Name:
                     </div>
                     <div>
-                        {{ $productCategories->name }}
+                        {{ $productCategory->name }}
                     </div>
                 </div>
             </div>
@@ -55,7 +55,7 @@
         </div>
     </div>
 
-    @livewire('admin.product-category.product-list', ['productCategoryId' => $productCategories->id])
+    @livewire('admin.product-category.product-list', ['productCategoryId' => $productCategory->id])
 
     <!-- Modal for Edit Product Category -->
     <div class="modal fade" id="editProductCategoryModal" tabindex="-1">
@@ -68,7 +68,7 @@
 
                 <div class="modal-body">
                     <form id="form"
-                        action="{{ route('admin.product_category.update', ['id' => $productCategories->id]) }}"
+                        action="{{ route('admin.product_category.update', ['id' => $productCategory->id]) }}"
                         method="POST">
                         @csrf
                         @method('PATCH')
@@ -78,7 +78,7 @@
                                 <div class="form-group mb-3">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" class="form-control" name="name" id="name"
-                                        value="{{ $productCategories->name }}" placeholder="Name" required>
+                                        value="{{ $productCategory->name }}" placeholder="Name" required>
                                 </div>
                             </div>
                             <div class="row">
@@ -127,7 +127,7 @@
                                 </div>
                             </div>
 
-                            <input type="text" name="product_category_id" value="{{ $productCategories->id }}" hidden>
+                            <input type="text" name="product_category_id" value="{{ $productCategory->id }}" hidden>
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
