@@ -22,7 +22,7 @@ class IngredientRepository extends Repository
         $model->name = $data['name'];
         $model->weight = $data['weight'] ?? null;
         $model->alarm_weight = $data['alarm_weight'];
-        $model->price = $data['price'];
+        $model->unit_price = $data['unit_price'];
 
 
         $model->save();
@@ -37,7 +37,7 @@ class IngredientRepository extends Repository
         $model->name = $data['name'] ?? $model->name;
         $model->weight = array_key_exists('weight', $data) ? $data['weight'] : $model->weight;
         $model->alarm_weight = $data['alarm_weight'] ?? $model->alarm_weight;
-        $model->price = $data['price'] ?? $model->price;
+        $model->unit_price = $data['unit_price'] ?? $model->unit_price;
 
 
         $model->update();
@@ -110,8 +110,59 @@ class IngredientRepository extends Repository
         return $totalCount;
     }
 
+    public function getAllBySearchTermAndExcludeAddOn($data, $exclude_add_on_id)
+    {
+
+        $name = $data['search_term'] ?? '';
+
+        $data = $this->_db->select('id', 'name')
+            ->whereNotIn('id', function ($sub) use ($exclude_add_on_id) {
+                $sub->select('ingredient_id')
+                    ->from('add_on_ingredients')
+                    ->where('add_on_id', $exclude_add_on_id);
+            })
+            ->where('name', 'LIKE', "%$name%")
+            ->skip($data['offset'])->take($data['result_count'])
+            ->get();
+
+        if (empty($data)) {
+            return null;
+        }
+        return $data;
+    }
+
+    public function getTotalCountBySearchTermAndExcludeAddOn($data, $exclude_add_on_id)
+    {
+
+        $name = $data['search_term'] ?? '';
+
+        $totalCount = $this->_db
+            ->whereNotIn('id', function ($sub) use ($exclude_add_on_id) {
+                $sub->select('ingredient_id')
+                    ->from('add_on_ingredients')
+                    ->where('add_on_id', $exclude_add_on_id);
+            })
+            ->where('name', 'LIKE', "%$name%")
+            ->count();
+
+        return $totalCount;
+    }
+
     public function find($id)
     {
         return $this->_db->find($id);
+    }
+
+    public function updateWeight($id, $newWeight)
+    {
+        $ingredient = $this->_db->find($id);
+        if (!$ingredient) {
+            return null;
+        }
+
+        $ingredient->weight = max(0, $newWeight);
+        $ingredient->save();
+
+        return $ingredient->fresh();
     }
 }

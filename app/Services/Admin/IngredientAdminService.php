@@ -34,7 +34,7 @@ class IngredientAdminService extends Service
                 'name' => 'required|string|max:255',
                 'weight' => 'nullable|numeric|min:0',
                 'alarm_weight' => 'required|numeric|min:0',
-                'price' => 'required|numeric|min:0',
+                'unit_price' => 'required|numeric|min:0.01',
             ]);
 
             if ($validator->fails()) {
@@ -96,7 +96,7 @@ class IngredientAdminService extends Service
                 'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
                 'name' => 'required|string|max:255',
                 'alarm_weight' => 'required|numeric|min:0',
-                'price' => 'required|numeric|min:0',
+                'unit_price' => 'required|numeric|min:0.01',
             ]);
 
             if ($validator->fails()) {
@@ -250,12 +250,15 @@ class IngredientAdminService extends Service
             $data['result_count'] = 50;
             $data['offset'] = ($data['page'] - 1) * $data['result_count'];
 
-            if ($data['exclude_product_id'] == null) {
+            if ($data['exclude_product_id'] == null && $data['exclude_add_on_id'] == null) {
                 $ingredients = $this->_ingredientRepository->getAllBySearchTerm($data);
                 $totalCount = $this->_ingredientRepository->getTotalCountBySearchTerm($data);
-            } else {
+            } elseif ($data['exclude_product_id'] != null) {
                 $ingredients = $this->_ingredientRepository->getAllBySearchTermAndExcludeProduct($data, $data['exclude_product_id']);
                 $totalCount = $this->_ingredientRepository->getTotalCountBySearchTermAndExcludeProduct($data, $data['exclude_product_id']);
+            } else {
+                $ingredients = $this->_ingredientRepository->getAllBySearchTermAndExcludeAddOn($data, $data['exclude_add_on_id']);
+                $totalCount = $this->_ingredientRepository->getTotalCountBySearchTermAndExcludeAddOn($data, $data['exclude_add_on_id']);
             }
 
             $results = array(

@@ -162,9 +162,10 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="ingredient-price" class="form-label">Price</label>
-                                    <input type="number" class="form-control" name="price" id="ingredient-price"
-                                        step="0.01" placeholder="Price" required>
+                                    <label for="ingredient-unit-price" class="form-label">Unit Price</label>
+                                    <input type="number" class="form-control" name="unit_price"
+                                        id="ingredient-unit-price" step="0.01" min="0.01"
+                                        placeholder="Unit price" required>
                                 </div>
                             </div>
 

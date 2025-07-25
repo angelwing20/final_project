@@ -54,7 +54,7 @@ class IngredientList extends Component
                 'name',
                 'weight',
                 'alarm_weight',
-                'price',
+                'unit_price',
             )
             ->where('ingredient_category_id', '=', $this->ingredientCategoryId)
             ->orderBy('name', 'asc');

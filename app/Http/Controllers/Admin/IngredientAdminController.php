@@ -28,7 +28,7 @@ class IngredientAdminController extends Controller
             'name',
             'weight',
             'alarm_weight',
-            'price',
+            'unit_price',
         ]);
 
         $result = $this->_ingredientAdminService->createIngredient($data);
@@ -64,7 +64,7 @@ class IngredientAdminController extends Controller
             'image',
             'name',
             'alarm_weight',
-            'price',
+            'unit_price',
         ]);
 
         $result = $this->_ingredientAdminService->update($id, $data);
@@ -109,6 +109,7 @@ class IngredientAdminController extends Controller
             "search_term" => $request->search_term ?? null,
             "page" => $request->page ?? 1,
             "exclude_product_id" => $request->exclude_product_id ?? null,
+            "exclude_add_on_id" => $request->exclude_add_on_id ?? null,
         ];
 
         $results = $this->_ingredientAdminService->getSelectOption($data);

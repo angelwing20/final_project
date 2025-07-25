@@ -103,4 +103,15 @@ class StaffAdminController extends Controller
 
         return back()->with('success', 'Staff password updated successfully.');
     }
+
+    public function selectOption(Request $request)
+    {
+        $data = [
+            "search_term" => $request->search_term ?? null,
+            "page" => $request->page ?? 1,
+        ];
+
+        $results = $this->_staffAdminService->getSelectOption($data);
+        return $results;
+    }
 }

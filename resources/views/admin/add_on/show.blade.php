@@ -65,6 +65,22 @@
         </div>
     </div>
 
+    <div class="row mt-4 mb-3">
+        <div class="col">
+            <h2 class="fw-bold">Add-on Ingredient</h2>
+        </div>
+
+        <div class="col-12 col-md-auto">
+            <div class="d-flex gap-2 align-items-center float-end">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addAddOnIngredientModal">
+                    <i class="fa-solid fa-plus"></i> Add
+                </button>
+            </div>
+        </div>
+    </div>
+
+    @livewire('admin.add-on.add-on-ingredient-list', ['addOnId' => $addOn->id])
+
     <!-- Modal for Edit Add-on Detail -->
     <div class="modal fade" id="editAddOnModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
@@ -110,8 +126,54 @@
                             <div class="col-12">
                                 <div class="form-group mb-3">
                                     <label for="price" class="form-label">Price</label>
-                                    <input type="number" class="form-control" name="price" id="price"
-                                        value="{{ $addOn->price }}" placeholder="Price" required>
+                                    <input type="number" class="form-control" name="price" id="price" step="0.01"
+                                        min="0.01" value="{{ $addOn->price }}" placeholder="Price" required>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-warning">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Add Add-on Ingredient -->
+    <div class="modal fade" id="addAddOnIngredientModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Add Add-on Ingredient</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="add-add-on-ingredient-form" action="{{ route('admin.add_on.ingredient.store') }}"
+                        method="POST">
+                        @csrf
+
+                        <div class="row">
+                            <input type="text" name="add_on_id" value="{{ $addOn->id }}" hidden>
+
+                            <div class="col-12">
+                                <div class="form-group mb-3">
+                                    <label for="ingredient_id" class="form-label">Ingredient</label>
+                                    <select class="form-select" name="ingredient_id" id="ingredient_id"
+                                        style="width: 100%" required>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-group mb-3">
+                                    <label for="weight" class="form-label">Weight (kg)</label>
+                                    <input type="number" class="form-control" name="weight" id="weight"
+                                        step="0.01" min="0.01" placeholder="Weight" required>
                                 </div>
                             </div>
 
@@ -153,6 +215,28 @@
                 },
             })
 
+            $('#add-add-on-ingredient-form').validate({
+                ignore: [],
+                errorElement: 'span',
+                errorClass: 'invalid-feedback',
+                errorPlacement: function(error, element) {
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                },
+                invalidHandler: function(form, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        notifier.show('Error!', 'Please ensure all inputs are correct.', 'warning', '',
+                            4000);
+                    }
+                },
+            })
+
             $('.image-input').change(function(e) {
                 const file = e.target.files[0];
                 if (file) {
@@ -166,6 +250,40 @@
                     var initialImage = $('#image-display').data('initial-image');
                     $('#image-display').attr("src", initialImage);
                     $('#remove-btn').addClass('d-none');
+                }
+            });
+
+            $('#ingredient_id').select2({
+                theme: 'bootstrap-5',
+                allowClear: true,
+                dropdownParent: $('#addAddOnIngredientModal .modal-content'),
+                placeholder: 'Select ingredient',
+
+                ajax: {
+                    url: "{{ route('admin.ingredient.select_search') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        var query = {
+                            search_term: params.term,
+                            page: params.page,
+                            exclude_add_on_id: "{{ $addOn->id }}",
+                        }
+                        return query;
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data.results, function(item) {
+                                return {
+                                    text: item.name,
+                                    id: item.id,
+                                }
+                            }),
+                            pagination: {
+                                more: data.pagination.more
+                            }
+                        };
+                    },
                 }
             });
         })

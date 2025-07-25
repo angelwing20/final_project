@@ -104,7 +104,7 @@
                         Price:
                     </div>
                     <div>
-                        {{ $ingredient->price }}
+                        {{ $ingredient->unit_price }}
                     </div>
                 </div>
             </div>
@@ -184,9 +184,10 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="price" class="form-label">Price</label>
-                                    <input type="number" class="form-control" name="price" id="price"
-                                        value="{{ $ingredient->price }}" placeholder="Price">
+                                    <label for="unit_price" class="form-label">Unit Price</label>
+                                    <input type="number" class="form-control" name="unit_price" id="unit_price"
+                                        step="0.01" min="0.01" value="{{ $ingredient->unit_price }}"
+                                        placeholder="Unit price">
                                 </div>
                             </div>
 

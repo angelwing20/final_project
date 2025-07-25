@@ -180,4 +180,30 @@ class StaffAdminService extends Service
             return null;
         }
     }
+
+    public function getSelectOption($data)
+    {
+        try {
+            $data['result_count'] = 50;
+            $data['offset'] = ($data['page'] - 1) * $data['result_count'];
+
+            $staffs = $this->_userRepository->getAllBySearchTerm($data);
+
+            $totalCount = $this->_userRepository->getTotalCountBySearchTerm($data);
+
+            $results = array(
+                "results" => $staffs->toArray(),
+                "pagination" => array(
+                    "more" => $totalCount < $data['offset'] + $data['result_count'] ? false : true
+                )
+            );
+
+            return $results;
+        } catch (Exception $e) {
+            array_push($this->_errorMessage, "Currently the list didnt have this staff.");
+            DB::rollBack();
+
+            return null;
+        }
+    }
 }

@@ -74,7 +74,7 @@
                                         {{ $ingredient->name }}
 
                                         <div>
-                                            Price: {{ $ingredient->price }}
+                                            Unit Price: {{ $ingredient->unit_price }}
                                         </div>
                                     </div>
                                 </div>

@@ -169,7 +169,8 @@
                                 <div class="form-group mb-3">
                                     <label for="price" class="form-label">Price</label>
                                     <input type="number" class="form-control" name="price" id="price"
-                                        value="{{ $product->price }}" placeholder="Price" required>
+                                        step="0.01" min="0.01" value="{{ $product->price }}" placeholder="Price"
+                                        required>
                                 </div>
                             </div>
 
@@ -222,7 +223,7 @@
                                 <div class="form-group mb-3">
                                     <label for="weight" class="form-label">Weight (kg)</label>
                                     <input type="number" class="form-control" name="weight" id="weight"
-                                        step="0.01" placeholder="Weight" required>
+                                        step="0.01" min="0.01" placeholder="Weight" required>
                                 </div>
                             </div>
 

@@ -37,4 +37,32 @@ class UserRepository extends Repository
         $model->update();
         return $model;
     }
+
+    public function getAllBySearchTerm($data)
+    {
+
+        $name = $data['search_term'] ?? '';
+
+        $data = $this->_db->select('id', 'name')
+            ->where('name', 'LIKE', "%$name%")
+            ->skip($data['offset'])->take($data['result_count'])
+            ->get();
+
+        if (empty($data)) {
+            return null;
+        }
+        return $data;
+    }
+
+    public function getTotalCountBySearchTerm($data)
+    {
+
+        $name = $data['search_term'] ?? '';
+
+        $totalCount = $this->_db
+            ->where('name', 'LIKE', "%$name%")
+            ->count();
+
+        return $totalCount;
+    }
 }

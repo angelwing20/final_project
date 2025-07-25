@@ -141,7 +141,7 @@
                                 <div class="form-group mb-3">
                                     <label for="product-price" class="form-label">Price</label>
                                     <input type="number" class="form-control" name="price" id="product-price"
-                                        step="0.01" placeholder="Price" required>
+                                        step="0.01" min="0.01" placeholder="Price" required>
                                 </div>
                             </div>
 

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->decimal('weight', 8, 2)->nullable()->default('0');
             $table->decimal('alarm_weight', 8, 2);
-            $table->decimal('price', 13, 2);
+            $table->decimal('unit_price', 13, 2);
             $table->timestamps();
         });
     }

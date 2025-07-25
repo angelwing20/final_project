@@ -27,7 +27,7 @@ class ProductAdminService extends Service
             $validator = Validator::make($data, [
                 'product_category_id' => 'required|exists:product_categories,id',
                 'name' => 'required|string|max:255',
-                'price' => 'required|numeric',
+                'price' => 'required|numeric|min:0.01',
                 'description' => 'nullable|string|max:16777215',
                 'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
             ]);
@@ -86,7 +86,7 @@ class ProductAdminService extends Service
             $validator = Validator::make($data, [
                 'product_category_id' => 'required|exists:product_categories,id',
                 'name' => 'required|string|max:255',
-                'price' => 'required|numeric',
+                'price' => 'required|numeric|min:0.01',
                 'description' => 'nullable|string|max:16777215',
                 'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
             ]);

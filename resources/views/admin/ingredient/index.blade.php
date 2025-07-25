@@ -148,9 +148,9 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="price" class="form-label">Price</label>
-                                    <input type="number" class="form-control" name="price" id="price"
-                                        step="0.01" placeholder="Price" required>
+                                    <label for="unit_price" class="form-label">Unit Price</label>
+                                    <input type="number" class="form-control" name="unit_price" id="unit_price"
+                                        step="0.01" min="0.01" placeholder="Unit price" required>
                                 </div>
                             </div>
 

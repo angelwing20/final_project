@@ -43,7 +43,8 @@
                 Add-on
             </a>
 
-            <div class="sidebar-section-group {{ Request::routeIs('admin.staff.*') ? 'active' : '' }}">
+            <div
+                class="sidebar-section-group {{ Request::routeIs('admin.staff.*') || Request::routeIs('admin.daily_sales.*') ? 'active' : '' }}">
                 <div class="sidebar-main-item" onclick="toggleSidebarSectionGroup(this)" role="button">
                     <a href="#" class="sidebar-link">
                         <div class="sidebar-link-icon">
@@ -51,6 +52,13 @@
                         </div>
                         <div class="sidebar-link-title">Setting</div>
                         <i class="fas fa-angle-down rotate-icon ms-auto"></i>
+                    </a>
+                </div>
+
+                <div class="sidebar-sub-item">
+                    <a href="{{ route('admin.daily_sales.index') }}"
+                        class="sidebar-link {{ Request::routeIs('admin.daily_sales.*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-calendar-days"></i> Daily Sales
                     </a>
                 </div>
 

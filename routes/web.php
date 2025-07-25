@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\AddOnAdminController;
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\ImportDailySalesAdminController;
 use App\Http\Controllers\Admin\IngredientAdminController;
@@ -8,7 +7,11 @@ use App\Http\Controllers\Admin\IngredientCategoryAdminController;
 use App\Http\Controllers\Admin\ProductAdminController;
 use App\Http\Controllers\Admin\ProductCategoryAdminController;
 use App\Http\Controllers\Admin\ProductIngredientAdminController;
+use App\Http\Controllers\Admin\AddOnAdminController;
+use App\Http\Controllers\Admin\AddOnIngredientAdminController;
 use App\Http\Controllers\Admin\ProfileAdminController;
+use App\Http\Controllers\Admin\DailySalesAdminController;
+use App\Http\Controllers\Admin\DailySalesItemAdminController;
 use App\Http\Controllers\Admin\StaffAdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -79,15 +82,34 @@ Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
     Route::name("add_on.")->prefix("add-on")->group(function () {
         Route::get('/', [AddOnAdminController::class, 'index'])->name('index');
         Route::post('store', [AddOnAdminController::class, 'store'])->name('store');
-        Route::get('select-search', [AddOnAdminController::class, 'selectOption'])->name('select_search');
         Route::get('{id}', [AddOnAdminController::class, 'show'])->name('show');
         Route::patch('{id}/update', [AddOnAdminController::class, 'update'])->name('update');
         Route::delete('{id}', [AddOnAdminController::class, 'destroy'])->name('destroy');
+
+        Route::name("ingredient.")->prefix("ingredient")->group(function () {
+            Route::post('/', [AddOnIngredientAdminController::class, 'store'])->name('store');
+            Route::patch('{id}', [AddOnIngredientAdminController::class, 'update'])->name('update');
+            Route::delete('{id}', [AddOnIngredientAdminController::class, 'destroy'])->name('destroy');
+        });
+    });
+
+    Route::name("daily_sales.")->prefix("daily-sales")->group(function () {
+        Route::get('/', [DailySalesAdminController::class, "index"])->name("index");
+
+        Route::get('create', [DailySalesItemAdminController::class, "create"])->name("create");
+        Route::get('edit/{id}', [DailySalesItemAdminController::class, "edit"])->name("edit");
+
+        Route::get('{id}', [DailySalesAdminController::class, "show"])->name("show");
+
+        Route::post('/', [DailySalesItemAdminController::class, "store"])->name("store");
+        Route::patch('{id}', [DailySalesItemAdminController::class, "update"])->name("update");
+        Route::delete('{id}', [DailySalesItemAdminController::class, "destroy"])->name("destroy");
     });
 
     Route::name("staff.")->prefix("staff")->group(function () {
         Route::get('/', [StaffAdminController::class, "index"])->name("index");
         Route::post('/', [StaffAdminController::class, "store"])->name("store");
+        Route::get('select-search', [StaffAdminController::class, 'selectOption'])->name('select_search');
         Route::get('{id}', [StaffAdminController::class, "show"])->name("show");
         Route::patch('update-password/{id}', [StaffAdminController::class, 'updatePassword'])->name('update_password');
         Route::patch('{id}', [StaffAdminController::class, "update"])->name("update");

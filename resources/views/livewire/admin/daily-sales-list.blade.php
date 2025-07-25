@@ -1,10 +1,25 @@
+@php
+    use Carbon\Carbon;
+@endphp
+
 <div>
-    <div class="row align-items-center mb-4">
+    <div class="row align-items-center g-3 mb-4">
         <div class="col">
-            <div class="search-group">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" class="form-control ps-5 py-2" placeholder="Search name"
-                    wire:keydown.debounce.300ms="search($event.target.value)" wire:model="filter.name">
+            <div class="row g-3">
+                <div class="col-12 col-sm-6">
+                    <div class="search-group">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <input type="date" style="padding-left: 40px" class="form-control" placeholder="Date from"
+                            wire:change="filterField('date_from',$event.target.value)" wire:model="filter.date_from">
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                    <div class="search-group">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <input type="date" style="padding-left: 40px" class="form-control" placeholder="Date to"
+                            wire:change="filterField('date_to',$event.target.value)" wire:model="filter.date_to">
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-auto">
@@ -23,29 +38,26 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-12">
-                            <div class="mb-3" wire:ignore>
-                                <label for="filterIngredientCategory" class="form-label">Ingredient Category</label>
-                                <select class="form-control" id="filterIngredientCategory" style="width: 100%"></select>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="filterDateFrom">Date From</label>
+                                <input type="date" class="form-control" id="filterDateFrom"
+                                    wire:model="filter.date_from" placeholder="Date from">
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="filterDateTo">Date To</label>
+                                <input type="date" class="form-control" id="filterDateTo" wire:model="filter.date_to"
+                                    placeholder="Date to">
                             </div>
                         </div>
 
                         <div class="col-12">
-                            <div class="mb-3">
-                                <label for="filterName" class="form-label">Name</label>
-                                <input type="text" id="filterName" class="form-control" placeholder="Name"
-                                    wire:model="filter.name">
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="mb-3">
-                                <label for="filterStockStatus" class="form-label">Stock Status</label>
-                                <select class="form-select" id="filterStockStatus" wire:model="filter.stock_status">
-                                    <option value="">All stock status</option>
-                                    <option value="1">Low stock</option>
-                                    <option value="0">Normal stock</option>
-                                </select>
+                            <div class="form-group mb-3" wire:ignore>
+                                <label class="form-label" for="filterStaffId">Staff</label>
+                                <select class="form-control" id="filterStaffId" style="width: 100%"></select>
                             </div>
                         </div>
                     </div>
@@ -61,49 +73,33 @@
     </div>
 
     <div class="row g-3">
-        @foreach ($ingredients as $ingredient)
+        @foreach ($dailySales as $dailySale)
             <div class="col-12">
-                <a href="{{ route('admin.ingredient.show', ['id' => $ingredient->id]) }}" class="text-decoration-none">
+                <a href="{{ route('admin.daily_sales.show', ['id' => $dailySale->id]) }}" class="text-decoration-none">
                     <div class="card card-shadow card-hover border-0 bg-white">
                         <div class="card-body">
                             <div class="row align-items-center">
-                                <div class="col-auto">
-                                    <div class="default-image-wrapper">
-                                        <img class="img-thumbnail"
-                                            src="{{ $ingredient->image ? asset('storage/ingredient/' . $ingredient->image) : asset('img/default-image.png') }}"
-                                            onerror="this.onerror=null;this.src='{{ asset('img/default-image.png') }}'"
-                                            style="width: 100px; height: 100px; object-fit: cover;">
-                                    </div>
-                                </div>
-
                                 <div class="col">
-                                    <div class="fw-bold">
-                                        {{ $ingredient->name }}
+                                    <div>
+                                        <h3 class="fw-bold">
+                                            {{ Carbon::parse($dailySale->created_at)->format('d M Y') }}
+                                        </h3>
 
-                                        <div>
-                                            Unit Price: {{ $ingredient->unit_price }}
+                                        <div class="fw-semibold text-muted">
+                                            Total Quantity: {{ $dailySale->total_quantity }}
                                         </div>
 
-                                        <div>
-                                            <span
-                                                class="badge rounded-pill text-bg-warning">{{ $ingredient->ingredient_category_name }}</span>
+                                        <div class="fw-semibold text-muted">
+                                            Total Price: {{ $dailySale->total_amount }}
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-sm-auto">
-                                    <div class="d-flex flex-column fw-bold text-center">
-                                        <div>
-                                            Weight: {{ $ingredient->weight }} kg
+                                    <div class="col-auto">
+                                        <div class="fw-bold text-end text-muted">
+                                            PIC: {{ $dailySale->staff_name }}
                                         </div>
-                                        @if (
-                                            $ingredient->weight !== null &&
-                                                $ingredient->alarm_weight !== null &&
-                                                $ingredient->weight <= $ingredient->alarm_weight)
-                                            <span class="badge bg-danger mt-1">
-                                                Low stock
-                                            </span>
-                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -123,7 +119,7 @@
         </div>
     @endif
 
-    @if (empty($ingredients))
+    @if (empty($dailySales))
         <div class="text-center my-4" wire:loading.remove>
             <div class="text-muted">No data found</div>
         </div>
@@ -133,14 +129,14 @@
 @section('scripts')
     <script>
         $(function() {
-            $('#filterIngredientCategory').select2({
+            $('#filterStaffId').select2({
                 theme: 'bootstrap-5',
                 allowClear: true,
                 dropdownParent: $('#filterModal .modal-content'),
-                placeholder: 'Ingredient category',
+                placeholder: 'Staff',
 
                 ajax: {
-                    url: "{{ route('admin.ingredient_category.select_search') }}",
+                    url: "{{ route('admin.staff.select_search') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function(params) {
@@ -166,7 +162,7 @@
                 }
             }).on('change', function(e) {
                 var selectedId = $(this).val();
-                @this.set('filter.ingredient_category_id', selectedId, false);
+                @this.set('filter.staff_id', selectedId, false);
             });
         })
     </script>
