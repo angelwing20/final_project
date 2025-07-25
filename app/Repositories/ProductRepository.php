@@ -43,4 +43,9 @@ class ProductRepository extends Repository
     {
         return $this->_db->where('name', $name)->first();
     }
+
+    public function getAll()
+    {
+        return Product::with(['ingredients.ingredient'])->get();
+    }
 }

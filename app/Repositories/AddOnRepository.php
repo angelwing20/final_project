@@ -62,4 +62,9 @@ class AddOnRepository extends Repository
 
         return $totalCount;
     }
+
+    public function getAll()
+    {
+        return AddOn::with(['ingredients.ingredient'])->get();
+    }
 }

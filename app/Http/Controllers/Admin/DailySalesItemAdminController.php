@@ -58,6 +58,7 @@ class DailySalesItemAdminController extends Controller
             'dailySalesItems' => $data['dailySalesItems'],
             'products' => $data['products'],
             'addons' => $data['addons'],
+            'ingredientMap' => $data['ingredientMap'],
         ]);
     }
 
