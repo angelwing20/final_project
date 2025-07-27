@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\DailySalesRepository;
+use App\Services\Admin\DailySalesAdminService;
 use App\Services\Admin\DailySalesItemAdminService;
 
 class DailySalesAdminController extends Controller
 {
-    private $_dailySalesRepository;
+    private $_dailySalesAdminService;
     private $_dailySalesItemAdminService;
 
     public function __construct(
-        DailySalesRepository $dailySalesRepository,
+        DailySalesAdminService $dailySalesAdminService,
         DailySalesItemAdminService $dailySalesItemAdminService,
     ) {
-        $this->_dailySalesRepository = $dailySalesRepository;
+        $this->_dailySalesAdminService = $dailySalesAdminService;
         $this->_dailySalesItemAdminService = $dailySalesItemAdminService;
     }
 
@@ -26,7 +26,7 @@ class DailySalesAdminController extends Controller
 
     public function show($id)
     {
-        $dailySales = $this->_dailySalesRepository->getById($id);
+        $dailySales = $this->_dailySalesAdminService->getById($id);
 
         if ($dailySales == false) {
             abort(404);
@@ -39,6 +39,13 @@ class DailySalesAdminController extends Controller
             return back()->with('error', $errorMessage);
         }
 
-        return view('admin.daily_sales.show', compact('dailySales', 'dailySalesItems'));
+        $ingredientUsage = $this->_dailySalesAdminService->getIngredientUsageTableData($id);
+
+        if ($ingredientUsage == null) {
+            $errorMessage = implode("<br>", $this->_dailySalesAdminService->_errorMessage);
+            return back()->with('error', $errorMessage);
+        }
+
+        return view('admin.daily_sales.show', compact('dailySales', 'dailySalesItems', 'ingredientUsage'));
     }
 }

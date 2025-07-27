@@ -99,12 +99,13 @@
                 <tr>
                     <th>Ingredient</th>
                     <th>Current</th>
+                    <th>Change</th>
                     <th>After Edit</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="3">No ingredient usage yet. Adjust quantities above to preview.</td>
+                    <td colspan="4">No ingredient usage yet. Adjust quantities above to preview.</td>
                 </tr>
             </tbody>
         </table>
@@ -122,24 +123,31 @@
             'addons' => $addons,
         ]);
 
+        calculateTotals();
+        updateIngredientPreview();
+
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('quantity-input')) {
+                if (parseInt(e.target.value) < 0) e.target.value = 0;
+                calculateTotals();
+                updateIngredientPreview();
+            }
+        });
+
         function calculateTotals() {
             let totalQuantity = 0;
             let totalAmount = 0;
 
-            document.querySelectorAll('tbody tr').forEach(row => {
-                const qtyInput = row.querySelector('.quantity-input');
-                const priceHidden = row.querySelector('input[type="hidden"]');
-                const subtotalCell = row.querySelector('.subtotal');
+            document.querySelectorAll('.quantity-input').forEach(input => {
+                const qty = parseFloat(input.value) || 0;
+                const price = parseFloat(input.closest('tr').querySelector('input[type="hidden"]').value) || 0;
+                const subtotalCell = input.closest('tr').querySelector('.subtotal');
 
-                if (qtyInput && priceHidden && subtotalCell) {
-                    const qty = parseFloat(qtyInput.value) || 0;
-                    const price = parseFloat(priceHidden.value) || 0;
-                    const subtotal = qty * price;
+                const subtotal = qty * price;
+                subtotalCell.textContent = subtotal.toFixed(2);
 
-                    subtotalCell.textContent = subtotal.toFixed(2);
-                    totalQuantity += qty;
-                    totalAmount += subtotal;
-                }
+                totalQuantity += qty;
+                totalAmount += subtotal;
             });
 
             document.getElementById('total-quantity').textContent = totalQuantity;
@@ -150,17 +158,17 @@
             let usage = {};
 
             document.querySelectorAll('.quantity-input').forEach(input => {
-                let newQty = parseInt(input.value) || 0;
-                let oldQty = parseInt(input.dataset.old) || 0;
-                let diffQty = newQty - oldQty;
-                let type = input.dataset.type;
-                let id = input.dataset.id;
+                const newQty = parseInt(input.value) || 0;
+                const oldQty = parseInt(input.dataset.old) || 0;
+                const diffQty = newQty - oldQty;
+                const type = input.dataset.type;
+                const id = input.dataset.id;
 
                 if (diffQty !== 0) {
-                    let item = ingredientData[type + 's'].find(i => i.id == id);
+                    const item = ingredientData[type + 's'].find(i => i.id == id);
                     if (item && item.ingredients) {
                         item.ingredients.forEach(i => {
-                            let ingId = i.ingredient.id;
+                            const ingId = i.ingredient.id;
                             if (!usage[ingId]) {
                                 usage[ingId] = {
                                     name: i.ingredient.name,
@@ -168,40 +176,40 @@
                                     change: 0
                                 };
                             }
-                            usage[ingId].change += (parseFloat(i.weight) || 0) * diffQty;
+                            usage[ingId].change -= (parseFloat(i.weight) || 0) * diffQty;
                         });
                     }
                 }
             });
 
-            let tbody = document.querySelector('#ingredient-preview tbody');
+            const tbody = document.querySelector('#ingredient-preview tbody');
             tbody.innerHTML = '';
 
             if (Object.keys(usage).length === 0) {
                 tbody.innerHTML =
-                    '<tr><td colspan="3">No ingredient usage yet. Adjust quantities above to preview.</td></tr>';
-            } else {
-                Object.values(usage).forEach(ing => {
-                    let afterEdit = ing.current - ing.change;
-                    let afterClass = afterEdit < 0 ? 'text-danger fw-bold' : '';
-                    let row = `<tr>
-                        <td>${ing.name}</td>
-                        <td>${ing.current.toFixed(2)} kg</td>
-                        <td class="${afterClass}">${afterEdit.toFixed(2)} kg</td>
-                    </tr>`;
-                    tbody.innerHTML += row;
-                });
+                    '<tr><td colspan="4">No ingredient usage yet. Adjust quantities above to preview.</td></tr>';
+                return;
             }
+
+            const sortedUsage = Object.values(usage).sort((a, b) => a.name.localeCompare(b.name));
+
+            sortedUsage.forEach(ing => {
+                const afterEdit = ing.current + ing.change;
+
+                const changeClass = ing.change < 0 ? 'text-danger fw-semibold' : (ing.change > 0 ?
+                    'text-success fw-semibold' : '');
+                const afterClass = afterEdit < 0 ? 'table-danger fw-semibold' : '';
+
+                const row = `
+                <tr class="${afterClass}">
+                    <td>${ing.name}</td>
+                    <td>${ing.current.toFixed(2)} kg</td>
+                    <td class="${changeClass}">${ing.change > 0 ? '+' : ''}${ing.change.toFixed(2)} kg</td>
+                    <td>${afterEdit.toFixed(2)} kg</td>
+                </tr>
+            `;
+                tbody.innerHTML += row;
+            });
         }
-
-        calculateTotals();
-        updateIngredientPreview();
-
-        document.addEventListener('input', function(e) {
-            if (e.target.classList.contains('quantity-input')) {
-                calculateTotals();
-                updateIngredientPreview();
-            }
-        });
     </script>
 @endsection

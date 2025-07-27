@@ -149,11 +149,11 @@
                             if (!usage[ingId]) {
                                 usage[ingId] = {
                                     name: i.ingredient.name,
-                                    current: parseFloat(i.ingredient.weight) || 0, // 强制转数字
+                                    current: parseFloat(i.ingredient.weight) || 0,
                                     used: 0
                                 };
                             }
-                            usage[ingId].used += (parseFloat(i.weight) || 0) * qty; // 强制转数字
+                            usage[ingId].used += (parseFloat(i.weight) || 0) * qty;
                         });
                     }
                 }
@@ -166,14 +166,27 @@
                 tbody.innerHTML =
                     '<tr><td colspan="4">No ingredient usage yet. Adjust quantities above to preview.</td></tr>';
             } else {
-                Object.values(usage).forEach(ing => {
+                let sortedUsage = Object.values(usage).sort((a, b) => a.name.localeCompare(b.name));
+
+                sortedUsage.forEach(ing => {
                     let remaining = ing.current - ing.used;
-                    let row = `<tr ${remaining <= 0 ? 'class="table-danger"' : ''}>
-                        <td>${ing.name}</td>
-                        <td>${ing.current.toFixed(2)} kg</td>
-                        <td>${ing.used.toFixed(2)} kg</td>
-                        <td>${remaining.toFixed(2)} kg</td>
-                    </tr>`;
+                    let rowClass = '';
+
+                    if (remaining < 0) {
+                        rowClass = 'table-danger';
+                    } else if (remaining === 0) {
+                        rowClass = 'table-warning';
+                    }
+
+                    let remainingClass = remaining < 0 ? 'text-danger fw-bold' : '';
+
+                    let row = `<tr class="${rowClass}">
+                <td>${ing.name}</td>
+                <td>${ing.current.toFixed(2)} kg</td>
+                <td>${ing.used.toFixed(2)} kg</td>
+                <td class="${remainingClass}">${remaining.toFixed(2)} kg</td>
+            </tr>`;
+
                     tbody.innerHTML += row;
                 });
             }

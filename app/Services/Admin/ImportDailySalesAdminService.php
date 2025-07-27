@@ -3,11 +3,16 @@
 namespace App\Services\Admin;
 
 use App\Imports\DailySalesImport;
+use App\Repositories\AddOnIngredientRepository;
+use App\Repositories\AddOnRepository;
+use App\Repositories\DailySalesItemRepository;
+use App\Repositories\DailySalesRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\IngredientRepository;
 use App\Repositories\ProductIngredientRepository;
 use Exception;
 use App\Services\Service;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
@@ -17,15 +22,27 @@ class ImportDailySalesAdminService extends Service
     private $_productRepository;
     private $_ingredientRepository;
     private $_productIngredientRepository;
+    private $_dailySalesRepository;
+    private $_dailySalesItemRepository;
+    private $_addOnRepository;
+    private $_addOnIngredientRepository;
 
     public function __construct(
         ProductRepository $productRepository,
         IngredientRepository $ingredientRepository,
-        ProductIngredientRepository $productIngredientRepository
+        ProductIngredientRepository $productIngredientRepository,
+        DailySalesRepository $dailySalesRepository,
+        DailySalesItemRepository $dailySalesItemRepository,
+        AddOnRepository $addOnRepository,
+        AddOnIngredientRepository $addOnIngredientRepository
     ) {
         $this->_productRepository = $productRepository;
         $this->_ingredientRepository = $ingredientRepository;
         $this->_productIngredientRepository = $productIngredientRepository;
+        $this->_dailySalesRepository = $dailySalesRepository;
+        $this->_dailySalesItemRepository = $dailySalesItemRepository;
+        $this->_addOnRepository = $addOnRepository;
+        $this->_addOnIngredientRepository = $addOnIngredientRepository;
     }
 
     public function import($data)
@@ -46,42 +63,66 @@ class ImportDailySalesAdminService extends Service
 
             $import = new DailySalesImport();
             Excel::import($import, $data['excel_file']);
-
             $rows = $import->rows;
+
             if (!$rows || $rows->isEmpty()) {
                 array_push($this->_errorMessage, "No data found in file.");
                 return null;
             }
 
+            $dailySales = $this->_dailySalesRepository->save([
+                'total_quantity' => 0,
+                'total_amount' => 0,
+                'staff_id' => Auth::id()
+            ]);
+
+            $totalQty = 0;
+            $totalAmount = 0;
+
             foreach ($rows as $row) {
-                $productName = trim($row['product_name'] ?? '');
+                $itemName = trim($row['item_name'] ?? '');
+                $itemType = strtolower(trim($row['item_type'] ?? ''));
                 $quantity = (int)($row['quantity'] ?? 0);
 
-                if (!$productName || $quantity <= 0) {
-                    continue;
-                }
+                if (!$itemName || !$itemType || $quantity <= 0) continue;
 
-                $product = $this->_productRepository->getByName($productName);
-
-                if (!$product) {
-                    array_push($this->_errorMessage, "Product [$productName] not found.");
+                if ($itemType === 'product') {
+                    $item = $this->_productRepository->getByName($itemName);
+                    $ingredients = $this->_productIngredientRepository->getByProductId($item->id);
+                } elseif ($itemType === 'addon') {
+                    $item = $this->_addOnRepository->getByName($itemName);
+                    $ingredients = $this->_addOnIngredientRepository->getByAddOnId($item->id);
+                } else {
+                    array_push($this->_errorMessage, "Invalid item type [$itemType] for [$itemName].");
                     return null;
                 }
 
-                $ingredients = $this->_productIngredientRepository->getByProductId($product->id);
+                if (!$item) {
+                    array_push($this->_errorMessage, "Item [$itemName] not found.");
+                    return null;
+                }
 
-                foreach ($ingredients as $productIngredient) {
-                    $ingredient = $this->_ingredientRepository->find($productIngredient->ingredient_id);
+                $price = $item->price;
+                $amount = $price * $quantity;
 
-                    if (!$ingredient) {
-                        array_push($this->_errorMessage, "Ingredient [ID: {$productIngredient->ingredient_id}] not found.");
-                        return null;
-                    }
+                $this->_dailySalesItemRepository->save([
+                    'daily_sales_id' => $dailySales->id,
+                    'item_type' => $itemType,
+                    'item_id' => $item->id,
+                    'quantity' => $quantity,
+                    'price' => $price,
+                    'amount' => $amount,
+                ]);
 
-                    $weight = $productIngredient->weight * $quantity;
+                $totalQty += $quantity;
+                $totalAmount += $amount;
+
+                foreach ($ingredients as $ingredientLink) {
+                    $ingredient = $this->_ingredientRepository->getById($ingredientLink->ingredient_id);
+                    $weight = $ingredientLink->weight * $quantity;
 
                     if ($ingredient->weight < $weight) {
-                        array_push($this->_errorMessage, "Ingredient [{$ingredient->name}] not enough. Required: $weight, Available: {$ingredient->weight}");
+                        array_push($this->_errorMessage, "Ingredient [{$ingredient->name}] not enough.");
                         return null;
                     }
 
@@ -90,12 +131,16 @@ class ImportDailySalesAdminService extends Service
                 }
             }
 
+            $this->_dailySalesRepository->update($dailySales->id, [
+                'total_quantity' => $totalQty,
+                'total_amount' => $totalAmount,
+            ]);
+
             DB::commit();
             return true;
         } catch (Exception $e) {
-            array_push($this->_errorMessage, "Fail to upload daily sales file.");
-
             DB::rollBack();
+            array_push($this->_errorMessage, "Fail to upload daily sales file.");
             return null;
         }
     }

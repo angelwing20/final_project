@@ -63,6 +63,11 @@ class AddOnRepository extends Repository
         return $totalCount;
     }
 
+    public function getByName($name)
+    {
+        return $this->_db->where('name', $name)->first();
+    }
+
     public function getAll()
     {
         return AddOn::with(['ingredients.ingredient'])->get();

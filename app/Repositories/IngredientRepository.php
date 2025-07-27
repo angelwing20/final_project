@@ -148,14 +148,9 @@ class IngredientRepository extends Repository
         return $totalCount;
     }
 
-    public function find($id)
-    {
-        return $this->_db->find($id);
-    }
-
     public function updateWeight($id, $newWeight)
     {
-        $ingredient = $this->_db->find($id);
+        $ingredient = $this->getById($id);
         if (!$ingredient) {
             return null;
         }

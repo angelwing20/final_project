@@ -29,6 +29,10 @@ Route::middleware("auth")->group(function () {
 
 Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
     Route::get('/', [DashboardAdminController::class, 'index'])->name('dashboard');
+    Route::get('ingredient-usage', [DashboardAdminController::class, 'getIngredientUsageData'])->name('ingredient_usage');
+    Route::get('sales-trend', [DashboardAdminController::class, 'getSalesTrendData'])->name('sales_trend');
+    Route::get('stats', [DashboardAdminController::class, 'getDashboardStats'])->name('stats');
+
     Route::post('/', [ImportDailySalesAdminController::class, 'importDailySales'])->name('import_daily_sales');
 
     Route::name("account.")->prefix("account")->group(function () {
