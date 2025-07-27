@@ -28,10 +28,10 @@
 
 </html>
 
-<script>
+{{-- <script>
     @if (session('success'))
         notifier.show('Success!', '{{ session('success') }}', 'success', '', 4000);
     @elseif (session('error'))
         notifier.show('Failed!', '{{ session('error') }}', 'danger', '', 4000);
     @endif
-</script>
+</script> --}}

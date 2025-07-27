@@ -15,6 +15,8 @@ use App\Http\Controllers\Admin\DailySalesItemAdminController;
 use App\Http\Controllers\Admin\StaffAdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\PasswordResetController;
 
 Route::middleware("guest")->group(function () {
     Route::name("login.")->group(function () {
@@ -25,6 +27,16 @@ Route::middleware("guest")->group(function () {
 
 Route::middleware("auth")->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+Route::name('forgot_password.')->prefix('forgot-password')->group(function () {
+    Route::get('/', [ForgotPasswordController::class, 'index'])->name('index');
+    Route::post('/', [ForgotPasswordController::class, 'forgotPassword'])->name('request');
+});
+
+Route::name('reset_password.')->prefix('reset-password')->group(function () {
+    Route::get('{token}/{email}', [PasswordResetController::class, 'index'])->name('index');
+    Route::post('/', [PasswordResetController::class, 'passwordReset'])->name('request');
 });
 
 Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {

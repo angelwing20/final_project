@@ -65,4 +65,16 @@ class UserRepository extends Repository
 
         return $totalCount;
     }
+
+    public function getByEmail($email)
+    {
+
+        $data = $this->_db->where('email', '=', $email)->first();
+
+        if ($data == null) {
+            return null;
+        }
+
+        return $data;
+    }
 }

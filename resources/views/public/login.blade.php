@@ -6,6 +6,12 @@
 
     <h2 class="custom-title">Admin Login</h2>
 
+    @if (session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+    @elseif (session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
     <form id="form" method="POST" action="{{ route('login.submit') }}">
         @csrf
 
@@ -21,6 +27,10 @@
         </div>
 
         <button type="submit" class="btn btn-custom w-100">Login</button>
+
+        <div class="text-center mt-3">
+            <a href="{{ route('forgot_password.index') }}">Forgot password?</a>
+        </div>
     </form>
 
 @endsection
