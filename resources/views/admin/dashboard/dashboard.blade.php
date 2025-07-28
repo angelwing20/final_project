@@ -29,7 +29,6 @@
                     <form id="import-form" action="{{ route('admin.import_daily_sales') }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
-
                         <div id="dropZone" class="border border-2 rounded p-4 text-center mb-3"
                             style="border-style: dashed; background:#f8f9fa; cursor:pointer;">
                             <p class="mb-2"><i class="fa-solid fa-cloud-arrow-up fs-1 text-primary"></i></p>
@@ -37,11 +36,8 @@
                             <p class="text-muted small mb-0">or click to select .xlsx / .csv file</p>
                             <input type="file" name="excel_file" class="d-none" id="fileInput" accept=".xlsx,.csv"
                                 multiple required>
-
                         </div>
-
                         <p id="fileName" class="text-center text-muted mb-3" style="display:none;"></p>
-
                         <div class="text-center">
                             <button type="submit" class="btn btn-success w-100">
                                 <i class="fa-solid fa-upload me-1"></i> Upload File
@@ -87,8 +83,10 @@
         <div class="col-lg-6 col-12">
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-light fw-bold">Top 10 Ingredient Usage (Monthly)</div>
-                <div class="card-body chart-container" style="min-height:320px;">
-                    <canvas id="ingredientUsageChart" style="width:100%; height:100%;"></canvas>
+                <div class="card-body chart-container d-flex justify-content-center align-items-center"
+                    style="min-height:320px;">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <canvas id="ingredientUsageChart" class="d-none"></canvas>
                 </div>
             </div>
         </div>
@@ -96,8 +94,10 @@
         <div class="col-lg-6 col-12">
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-light fw-bold">Sales Trend (Last 7 Days)</div>
-                <div class="card-body chart-container" style="min-height:320px;">
-                    <canvas id="salesTrendChart" style="width:100%; height:100%;"></canvas>
+                <div class="card-body chart-container d-flex justify-content-center align-items-center"
+                    style="min-height:320px;">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <canvas id="salesTrendChart" class="d-none"></canvas>
                 </div>
             </div>
         </div>
@@ -118,48 +118,35 @@
                 errorPlacement: function(error, element) {
                     element.closest('.form-group').append(error);
                 },
-                highlight: function(element, errorClass, validClass) {
+                highlight: function(element) {
                     $(element).addClass('is-invalid');
                 },
-                unhighlight: function(element, errorClass, validClass) {
+                unhighlight: function(element) {
                     $(element).removeClass('is-invalid');
                 },
-                invalidHandler: function(form, validator) {
-                    var errors = validator.numberOfInvalids();
-                    if (errors) {
-                        notifier.show('Error!', 'Please ensure all inputs are correct.', 'warning', '',
-                            4000);
-                    }
+                invalidHandler: function() {
+                    notifier.show('Error!', 'Please ensure all inputs are correct.', 'warning', '',
+                        4000);
                 },
-            })
-
-            const dropZone = $('#dropZone');
-            const fileInput = $('#fileInput');
-            const fileName = $('#fileName');
-
-            dropZone.on('click', function() {
-                fileInput[0].click();
             });
 
+            const dropZone = $('#dropZone'),
+                fileInput = $('#fileInput'),
+                fileName = $('#fileName');
+            dropZone.on('click', () => fileInput[0].click());
             fileInput.on('change', function() {
                 let names = $.map(this.files, file => file.name);
                 fileName.html(names.join('<br>')).show();
             });
-
-            dropZone.on('dragover', function(e) {
+            dropZone.on('dragover', e => {
                 e.preventDefault();
                 dropZone.addClass('bg-light');
             });
-
-            dropZone.on('dragleave', function() {
-                dropZone.removeClass('bg-light');
-            });
-
+            dropZone.on('dragleave', () => dropZone.removeClass('bg-light'));
             dropZone.on('drop', function(e) {
                 e.preventDefault();
                 dropZone.removeClass('bg-light');
                 const files = e.originalEvent.dataTransfer.files;
-
                 if (files.length > 0) {
                     fileInput[0].files = files;
                     let names = $.map(files, file => file.name);
@@ -167,12 +154,16 @@
                 }
             });
 
-            $.get("{{ route('admin.stats') }}", function(stats) {
+            $.get("{{ route('admin.stats') }}", stats => {
                 $('#kpi-revenue').text('RM ' + parseFloat(stats.total_revenue).toFixed(2));
                 $('#kpi-low-stock').text(stats.low_stock_count);
             });
 
-            $.get("{{ route('admin.ingredient_usage') }}", function(data) {
+            $.get("{{ route('admin.ingredient_usage') }}", data => {
+                const container = $('#ingredientUsageChart').parent();
+                const canvas = $('#ingredientUsageChart');
+                container.find('.spinner-border').remove();
+
                 let combined = data.labels.map((label, index) => ({
                     label,
                     value: data.values[index]
@@ -182,7 +173,19 @@
                 let finalLabels = top10.map(item => item.label);
                 let finalValues = top10.map(item => item.value);
 
-                const ctx = $('#ingredientUsageChart')[0].getContext('2d');
+                if (finalValues.length === 0) {
+                    container.html(`
+                <div class="d-flex flex-column align-items-center justify-content-center" style="height:280px;">
+                    <i class="fa-solid fa-chart-pie text-muted" style="font-size:36px;"></i>
+                    <p class="mt-3 fw-bold text-muted">No data available</p>
+                    <small class="text-muted">Upload daily sales to see ingredient usage stats.</small>
+                </div>
+            `);
+                    return;
+                }
+
+                canvas.removeClass('d-none');
+                const ctx = canvas[0].getContext('2d');
                 const total = finalValues.reduce((sum, v) => sum + v, 0);
 
                 new Chart(ctx, {
@@ -225,17 +228,13 @@
                 });
             });
 
+            $.get("{{ route('admin.sales_trend') }}", data => {
+                const container = $('#salesTrendChart').parent();
+                const canvas = $('#salesTrendChart');
+                container.find('.spinner-border').remove();
 
-            function generateColors(count) {
-                return Array.from({
-                        length: count
-                    }, (_, i) =>
-                    `hsl(${Math.floor((i * 360) / count)}, 65%, 65%)`
-                );
-            }
-
-            $.get("{{ route('admin.sales_trend') }}", function(data) {
-                const ctx = $('#salesTrendChart')[0].getContext('2d');
+                canvas.removeClass('d-none');
+                const ctx = canvas[0].getContext('2d');
                 const gradient = ctx.createLinearGradient(0, 0, 0, 300);
                 gradient.addColorStop(0, 'rgba(54,162,235,0.3)');
                 gradient.addColorStop(1, 'rgba(54,162,235,0)');
@@ -275,6 +274,14 @@
                     }
                 });
             });
+
+            function generateColors(count) {
+                return Array.from({
+                        length: count
+                    }, (_, i) =>
+                    `hsl(${Math.floor((i * 360) / count)}, 65%, 65%)`
+                );
+            }
         });
     </script>
 @endsection
