@@ -219,7 +219,7 @@
                                     label: context => {
                                         const value = context.parsed;
                                         const percentage = ((value / total) * 100).toFixed(1);
-                                        return `${context.label}: ${percentage}%`;
+                                        return `${percentage}%`;
                                     }
                                 }
                             }
