@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('daily_sales', function (Blueprint $table) {
             $table->id();
-            $table->string('total_quantity');
+            $table->unsignedInteger('total_quantity');
             $table->decimal('total_amount', 13, 2);
             $table->foreignId('staff_id')->constrained('users');
             $table->timestamps();

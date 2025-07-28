@@ -207,7 +207,7 @@ class IngredientAdminService extends Service
                 $validator = Validator::make($refill, [
                     'ingredient_id' => 'required|exists:ingredients,id',
                     'weight' => 'required|numeric|min:0.01',
-                    'quantity' => 'required|integer|min:1',
+                    'quantity' => 'nullable|integer|min:1',
                 ]);
 
                 if ($validator->fails()) {
@@ -216,6 +216,8 @@ class IngredientAdminService extends Service
                     }
                     return null;
                 }
+
+                $refill['quantity'] = $refill['quantity'] ?? 1;
 
                 $ingredient = $this->_ingredientRepository->getById($refill['ingredient_id']);
 

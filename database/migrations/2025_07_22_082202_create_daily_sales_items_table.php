@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('daily_sales_id')->constrained('daily_sales');
             $table->enum('item_type', ['product', 'addon']);
             $table->unsignedBigInteger('item_id');
-            $table->string('quantity');
+            $table->unsignedInteger('quantity');
             $table->decimal('price', 13, 2);
             $table->decimal('amount', 13, 2);
             $table->timestamps();

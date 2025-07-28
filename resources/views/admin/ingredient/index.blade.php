@@ -53,7 +53,7 @@
                                             <label class="form-label" for="refill-quantity-0">Quantity</label>
                                             <input type="number" class="form-control" id="refill-quantity-0"
                                                 name="refills[0][quantity]" step="1" min="1"
-                                                placeholder="Quantity" required>
+                                                placeholder="Quantity">
                                         </div>
                                     </div>
 

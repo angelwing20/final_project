@@ -76,17 +76,4 @@ class DailySalesItemAdminController extends Controller
         return redirect()->route('admin.daily_sales.show', ['id' => $id])
             ->with('success', 'Daily sales detail updated successfully.');
     }
-
-
-    // public function destroy($id)
-    // {
-    //     $result = $this->_dailySalesItemAdminService->deleteById($id);
-
-    //     if ($result == null) {
-    //         $errorMessage = implode("<br>", $this->_dailySalesItemAdminService->_errorMessage);
-    //         return back()->with('error', $errorMessage);
-    //     }
-
-    //     return redirect()->route('admin.product.index')->with('success', 'Product deleted successfully.');
-    // }
 }
