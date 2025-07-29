@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('staff_id')->constrained('users');
             $table->unsignedInteger('quantity')->nullable();
             $table->decimal('weight', 8, 2);
+            $table->decimal('amount', 13, 2);
             $table->timestamps();
         });
     }

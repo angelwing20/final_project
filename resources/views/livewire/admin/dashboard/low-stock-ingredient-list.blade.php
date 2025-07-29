@@ -22,7 +22,8 @@
                                         {{ $ingredient->name }}
 
                                         <div>
-                                            Unit Price: {{ $ingredient->unit_price }}
+                                            Price: RM {{ $ingredient->price_per_weight_unit }} /
+                                            {{ $ingredient->weight_unit }} kg
                                         </div>
 
                                         <div>
@@ -36,7 +37,7 @@
                                 <div class="col-12 col-sm-auto">
                                     <div class="d-flex flex-column fw-semibold align-items-end">
                                         <div>
-                                            Weight: {{ $ingredient->weight }} kg
+                                            Stock: {{ $ingredient->stock_weight }} kg
                                         </div>
 
                                         <div>

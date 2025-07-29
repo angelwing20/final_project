@@ -39,20 +39,20 @@
                             ->where('item_type', 'product')
                             ->where('item_id', $product->id)
                             ->first();
-                        $qty = $currentItem ? $currentItem->quantity : 0;
+                        $quantity = $currentItem ? $currentItem->quantity : 0;
                     @endphp
                     <tr>
                         <td>{{ $product->name }}</td>
                         <td>
                             <input type="number" class="form-control quantity-input"
-                                name="products[{{ $product->id }}][quantity]" min="0" value="{{ $qty }}"
-                                data-type="product" data-id="{{ $product->id }}" data-old="{{ $qty }}">
+                                name="products[{{ $product->id }}][quantity]" min="0" value="{{ $quantity }}"
+                                data-type="product" data-id="{{ $product->id }}" data-old="{{ $quantity }}">
                         </td>
                         <td class="text-end">
                             {{ number_format($product->price, 2) }}
                             <input type="hidden" name="products[{{ $product->id }}][price]" value="{{ $product->price }}">
                         </td>
-                        <td class="text-end subtotal">{{ number_format($qty * $product->price, 2) }}</td>
+                        <td class="text-end subtotal">{{ number_format($quantity * $product->price, 2) }}</td>
                     </tr>
                 @endforeach
 
@@ -65,27 +65,27 @@
                             ->where('item_type', 'addon')
                             ->where('item_id', $addon->id)
                             ->first();
-                        $qty = $currentItem ? $currentItem->quantity : 0;
+                        $quantity = $currentItem ? $currentItem->quantity : 0;
                     @endphp
                     <tr>
                         <td>{{ $addon->name }}</td>
                         <td>
                             <input type="number" class="form-control quantity-input"
-                                name="addons[{{ $addon->id }}][quantity]" min="0" value="{{ $qty }}"
-                                data-type="addon" data-id="{{ $addon->id }}" data-old="{{ $qty }}">
+                                name="addons[{{ $addon->id }}][quantity]" min="0" value="{{ $quantity }}"
+                                data-type="addon" data-id="{{ $addon->id }}" data-old="{{ $quantity }}">
                         </td>
                         <td class="text-end">
                             {{ number_format($addon->price, 2) }}
                             <input type="hidden" name="addons[{{ $addon->id }}][price]" value="{{ $addon->price }}">
                         </td>
-                        <td class="text-end subtotal">{{ number_format($qty * $addon->price, 2) }}</td>
+                        <td class="text-end subtotal">{{ number_format($quantity * $addon->price, 2) }}</td>
                     </tr>
                 @endforeach
 
                 <tr class="table-warning fw-bold">
                     <td class="text-end">TOTAL</td>
                     <td class="text-end" id="total-quantity">0</td>
-                    <td colspan="2" class="text-end" id="total-amount">0.00</td>
+                    <td colspan="2" class="text-end">RM <span id="total-amount">0.00</span></td>
                 </tr>
             </tbody>
         </table>
@@ -98,14 +98,14 @@
             <thead class="table-light">
                 <tr>
                     <th>Ingredient</th>
-                    <th>Current</th>
+                    <th>Current Stock</th>
                     <th>Change</th>
                     <th>After Edit</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td colspan="4">No ingredient usage yet. Adjust quantities above to preview.</td>
+                    <td colspan="4" class="text-center">No ingredient usage yet. Adjust quantities above to preview.</td>
                 </tr>
             </tbody>
         </table>
@@ -126,9 +126,9 @@
         calculateTotals();
         updateIngredientPreview();
 
-        document.addEventListener('input', function(e) {
-            if (e.target.classList.contains('quantity-input')) {
-                if (parseInt(e.target.value) < 0) e.target.value = 0;
+        document.addEventListener('input', function(event) {
+            if (event.target.classList.contains('quantity-input')) {
+                if (parseInt(event.target.value) < 0) event.target.value = 0;
                 calculateTotals();
                 updateIngredientPreview();
             }
@@ -138,15 +138,15 @@
             let totalQuantity = 0;
             let totalAmount = 0;
 
-            document.querySelectorAll('.quantity-input').forEach(input => {
-                const qty = parseFloat(input.value) || 0;
+            document.querySelectorAll('.quantity-input').forEach(function(input) {
+                const quantity = parseFloat(input.value) || 0;
                 const price = parseFloat(input.closest('tr').querySelector('input[type="hidden"]').value) || 0;
-                const subtotalCell = input.closest('tr').querySelector('.subtotal');
+                const subtotalCellElement = input.closest('tr').querySelector('.subtotal');
 
-                const subtotal = qty * price;
-                subtotalCell.textContent = subtotal.toFixed(2);
+                const subtotal = quantity * price;
+                subtotalCellElement.textContent = subtotal.toFixed(2);
 
-                totalQuantity += qty;
+                totalQuantity += quantity;
                 totalAmount += subtotal;
             });
 
@@ -155,60 +155,73 @@
         }
 
         function updateIngredientPreview() {
-            let usage = {};
+            let ingredientUsage = {};
 
-            document.querySelectorAll('.quantity-input').forEach(input => {
-                const newQty = parseInt(input.value) || 0;
-                const oldQty = parseInt(input.dataset.old) || 0;
-                const diffQty = newQty - oldQty;
+            document.querySelectorAll('.quantity-input').forEach(function(input) {
+                const newQuantity = parseInt(input.value) || 0;
+                const oldQuantity = parseInt(input.dataset.old) || 0;
+                const quantityDifference = newQuantity - oldQuantity;
                 const type = input.dataset.type;
                 const id = input.dataset.id;
 
-                if (diffQty !== 0) {
-                    const item = ingredientData[type + 's'].find(i => i.id == id);
+                if (quantityDifference !== 0) {
+                    const item = ingredientData[type + 's'].find(function(i) {
+                        return i.id == id;
+                    });
+
                     if (item && item.ingredients) {
-                        item.ingredients.forEach(i => {
-                            const ingId = i.ingredient.id;
-                            if (!usage[ingId]) {
-                                usage[ingId] = {
+                        item.ingredients.forEach(function(i) {
+                            const ingredientId = i.ingredient.id;
+                            if (!ingredientUsage[ingredientId]) {
+                                ingredientUsage[ingredientId] = {
                                     name: i.ingredient.name,
-                                    current: parseFloat(i.ingredient.weight) || 0,
+                                    currentStock: parseFloat(i.ingredient.stock_weight) || 0,
                                     change: 0
                                 };
                             }
-                            usage[ingId].change -= (parseFloat(i.weight) || 0) * diffQty;
+                            ingredientUsage[ingredientId].change -= (parseFloat(i.weight) || 0) *
+                                quantityDifference;
                         });
                     }
                 }
             });
 
-            const tbody = document.querySelector('#ingredient-preview tbody');
-            tbody.innerHTML = '';
+            const ingredientTableBody = document.querySelector('#ingredient-preview tbody');
+            ingredientTableBody.innerHTML = '';
 
-            if (Object.keys(usage).length === 0) {
-                tbody.innerHTML =
-                    '<tr><td colspan="4">No ingredient usage yet. Adjust quantities above to preview.</td></tr>';
+            if (Object.keys(ingredientUsage).length === 0) {
+                ingredientTableBody.innerHTML =
+                    '<tr><td colspan="4" class="text-center">No ingredient usage yet. Adjust quantities above to preview.</td></tr>';
                 return;
             }
 
-            const sortedUsage = Object.values(usage).sort((a, b) => a.name.localeCompare(b.name));
+            const sortedUsage = Object.values(ingredientUsage).sort(function(a, b) {
+                return a.name.localeCompare(b.name);
+            });
 
-            sortedUsage.forEach(ing => {
-                const afterEdit = ing.current + ing.change;
+            sortedUsage.forEach(function(ingredient) {
+                const afterEditStock = ingredient.currentStock + ingredient.change;
 
-                const changeClass = ing.change < 0 ? 'text-danger fw-semibold' : (ing.change > 0 ?
-                    'text-success fw-semibold' : '');
-                const afterClass = afterEdit < 0 ? 'table-danger fw-semibold' : '';
+                const changeClass = ingredient.change < 0 ? 'text-danger fw-semibold' :
+                    (ingredient.change > 0 ? 'text-success fw-semibold' : '');
+
+                let afterEditClass = '';
+
+                if (afterEditStock < 0) {
+                    afterEditClass = 'table-danger';
+                } else if (afterEditStock === 0) {
+                    afterEditClass = 'table-warning';
+                }
 
                 const row = `
-                <tr class="${afterClass}">
-                    <td>${ing.name}</td>
-                    <td>${ing.current.toFixed(2)} kg</td>
-                    <td class="${changeClass}">${ing.change > 0 ? '+' : ''}${ing.change.toFixed(2)} kg</td>
-                    <td>${afterEdit.toFixed(2)} kg</td>
+                <tr class="${afterEditClass}">
+                    <td>${ingredient.name}</td>
+                    <td>${ingredient.currentStock.toFixed(2)} kg</td>
+                    <td class="${changeClass}">${ingredient.change > 0 ? '+' : ''}${ingredient.change.toFixed(2)} kg</td>
+                    <td>${afterEditStock.toFixed(2)} kg</td>
                 </tr>
             `;
-                tbody.innerHTML += row;
+                ingredientTableBody.innerHTML += row;
             });
         }
     </script>

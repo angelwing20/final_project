@@ -9,13 +9,29 @@ class AddOnIngredientList extends Component
 {
     public $addOnId;
     public $addOnIngredients;
+    public $totalCost = 0;
     public $page = 0;
     public $limitDataPerPage = 30;
     public $noMoreData = false;
 
+    public function mount($addOnId)
+    {
+        $this->addOnId = $addOnId;
+        $this->calculateTotalCost();
+    }
+
     public function loadMore()
     {
         $this->page++;
+    }
+
+    public function calculateTotalCost()
+    {
+        $this->totalCost = DB::table('add_on_ingredients')
+            ->join('ingredients', 'add_on_ingredients.ingredient_id', '=', 'ingredients.id')
+            ->where('add_on_ingredients.add_on_id', $this->addOnId)
+            ->selectRaw('SUM(add_on_ingredients.weight * (ingredients.price_per_weight_unit / ingredients.weight_unit)) as total')
+            ->value('total') ?? 0;
     }
 
     public function render()
@@ -27,9 +43,9 @@ class AddOnIngredientList extends Component
                 'add_on_ingredients.add_on_id',
                 'add_on_ingredients.weight',
 
-                'ingredients.image',
                 'ingredients.id as ingredient_id',
-                'ingredients.name as ingredient_name'
+                'ingredients.name as ingredient_name',
+                DB::raw('(add_on_ingredients.weight * (ingredients.price_per_weight_unit / ingredients.weight_unit)) as cost')
             )
             ->where('add_on_ingredients.add_on_id', '=', $this->addOnId)
             ->orderBy('ingredients.name', 'asc');

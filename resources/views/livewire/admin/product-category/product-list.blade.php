@@ -63,7 +63,24 @@
                                         {{ $product->name }}
 
                                         <div>
-                                            Price: {{ $product->price }}
+                                            Price: RM {{ $product->price }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <div class="d-flex flex-column gap-1">
+                                        <div class="fw-bold">
+                                            Ingredients:
+                                        </div>
+
+                                        <div class="scrollable-ingredients">
+                                            <div class="ingredient-list">
+                                                @foreach (explode(',', $product->ingredient_details) as $ingredient)
+                                                    <span
+                                                        class="badge bg-custom flex-shrink-0">{{ trim($ingredient) }}</span>
+                                                @endforeach
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

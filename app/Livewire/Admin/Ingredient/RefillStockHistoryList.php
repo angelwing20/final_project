@@ -26,6 +26,7 @@ class RefillStockHistoryList extends Component
             ->select(
                 'refill_stock_histories.quantity',
                 'refill_stock_histories.weight',
+                'refill_stock_histories.amount',
                 'refill_stock_histories.created_at',
 
                 'users.name as staff_name',

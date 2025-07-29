@@ -58,7 +58,7 @@
                     </div>
 
                     <div>
-                        {{ $addOn->price }}
+                        RM {{ $addOn->price }}
                     </div>
                 </div>
             </div>

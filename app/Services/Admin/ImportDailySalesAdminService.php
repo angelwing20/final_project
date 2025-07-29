@@ -121,13 +121,13 @@ class ImportDailySalesAdminService extends Service
                     $ingredient = $this->_ingredientRepository->getById($ingredientLink->ingredient_id);
                     $weight = $ingredientLink->weight * $quantity;
 
-                    if ($ingredient->weight < $weight) {
+                    if ($ingredient->stock_weight < $weight) {
                         array_push($this->_errorMessage, "Ingredient [{$ingredient->name}] not enough.");
                         return null;
                     }
 
-                    $ingredient->weight -= $weight;
-                    $this->_ingredientRepository->update($ingredient->id, ['weight' => $ingredient->weight]);
+                    $ingredient->stock_weight -= $weight;
+                    $this->_ingredientRepository->update($ingredient->id, ['stock_weight' => $ingredient->stock_weight]);
                 }
             }
 

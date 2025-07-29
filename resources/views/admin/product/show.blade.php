@@ -74,7 +74,7 @@
                     </div>
 
                     <div>
-                        {{ $product->price }}
+                        RM {{ $product->price }}
                     </div>
                 </div>
 

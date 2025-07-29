@@ -45,8 +45,12 @@ class DashboardAdminService extends Service
         $stats = $this->_dailySalesRepository->getDashboardStats();
 
         return [
-            'total_revenue' => (float)$stats['total_revenue'],
-            'low_stock_count' => (int)$stats['low_stock_count']
+            'total_revenue' => (float)($stats['total_revenue'] ?? 0),
+            'low_stock_count' => (int)($stats['low_stock_count'] ?? 0),
+            'total_refill_amount' => (float)($stats['total_refill_amount'] ?? 0),
+            'last_daily_sales_upload' => !empty($stats['last_daily_sales_upload'])
+                ? date('d M Y', strtotime($stats['last_daily_sales_upload']))
+                : '--'
         ];
     }
 }

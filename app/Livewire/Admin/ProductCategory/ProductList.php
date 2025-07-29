@@ -47,14 +47,19 @@ class ProductList extends Component
     public function render()
     {
         $query = DB::table('products')
+            ->join('product_categories', 'products.product_category_id', '=', 'product_categories.id')
+            ->leftJoin('product_ingredients', 'products.id', '=', 'product_ingredients.product_id')
+            ->leftJoin('ingredients', 'product_ingredients.ingredient_id', '=', 'ingredients.id')
             ->select(
-                'id',
-                'image',
-                'name',
-                'price',
+                'products.id',
+                'products.image',
+                'products.name',
+                'products.price',
+                DB::raw("GROUP_CONCAT(CONCAT(ingredients.name, ' (', product_ingredients.weight, 'kg)') ORDER BY ingredients.name SEPARATOR ', ') as ingredient_details")
             )
-            ->where('product_category_id', '=', $this->productCategoryId)
-            ->orderBy('name', 'asc');
+            ->where('products.product_category_id', '=', $this->productCategoryId)
+            ->groupBy('products.id', 'products.image', 'products.name', 'products.price')
+            ->orderBy('products.name', 'asc');
 
         if (isset($this->filter['name']) && $this->filter['name'] !== null) {
             $query = $query->where('name', 'like', '%' . $this->filter['name'] . '%');

@@ -20,6 +20,7 @@ class RefillStockHistoryRepository extends Repository
         $model->staff_id = $data['staff_id'];
         $model->quantity = $data['quantity'] ?? null;
         $model->weight = $data['weight'];
+        $model->amount = $data['amount'];
 
         $model->save();
         return $model->fresh();
@@ -32,6 +33,7 @@ class RefillStockHistoryRepository extends Repository
         $model->staff_id = $data['staff_id'] ?? $model->staff_id;
         $model->quantity = array_key_exists('quantity', $data) ? $data['quantity'] : $model->quantity;
         $model->weight = $data['weight'] ?? $model->weight;
+        $model->amount = $data['amount'] ?? $model->amount;
 
         $model->update();
         return $model;

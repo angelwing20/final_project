@@ -26,9 +26,10 @@ class IngredientAdminController extends Controller
             'ingredient_category_id',
             'image',
             'name',
-            'weight',
+            'stock_weight',
             'alarm_weight',
-            'unit_price',
+            'weight_unit',
+            'price_per_weight_unit',
         ]);
 
         $result = $this->_ingredientAdminService->createIngredient($data);
@@ -64,7 +65,8 @@ class IngredientAdminController extends Controller
             'image',
             'name',
             'alarm_weight',
-            'unit_price',
+            'weight_unit',
+            'price_per_weight_unit',
         ]);
 
         $result = $this->_ingredientAdminService->update($id, $data);

@@ -94,12 +94,20 @@ class DailySalesRepository extends Repository
             ->sum('total_amount');
 
         $lowStockCount = DB::table('ingredients')
-            ->whereColumn('weight', '<=', 'alarm_weight')
+            ->whereColumn('stock_weight', '<=', 'alarm_weight')
             ->count();
+
+        $totalRefillAmount = DB::table('refill_stock_histories')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('amount');
+
+        $lastDailySalesUpload = DB::table('daily_sales')->max('created_at');
 
         return [
             'total_revenue' => $totalRevenue,
-            'low_stock_count' => $lowStockCount
+            'low_stock_count' => $lowStockCount,
+            'total_refill_amount' => $totalRefillAmount,
+            'last_daily_sales_upload' => $lastDailySalesUpload
         ];
     }
 
@@ -120,13 +128,14 @@ class DailySalesRepository extends Repository
             })
             ->select(
                 'ingredients.name as ingredient_name',
-                'ingredients.unit_price as ingredient_unit_price',
+                'ingredients.price_per_weight_unit',
+                'ingredients.weight_unit',
                 DB::raw('SUM((COALESCE(product_ingredients.weight, add_on_ingredients.weight) * daily_sales_items.quantity)) as total_weight'),
-                DB::raw('SUM((COALESCE(product_ingredients.weight, add_on_ingredients.weight) * daily_sales_items.quantity) * ingredients.unit_price) as total_amount')
+                DB::raw('SUM(((COALESCE(product_ingredients.weight, add_on_ingredients.weight) * daily_sales_items.quantity) / ingredients.weight_unit) * ingredients.price_per_weight_unit) as total_amount')
             )
             ->where('daily_sales_items.daily_sales_id', $dailySalesId)
             ->whereNotNull('ingredients.name')
-            ->groupBy('ingredients.name', 'ingredients.unit_price')
+            ->groupBy('ingredients.name', 'ingredients.price_per_weight_unit', 'ingredients.weight_unit')
             ->orderBy('ingredients.name', 'asc')
             ->get();
     }

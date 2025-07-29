@@ -145,9 +145,10 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="ingredient-weight" class="form-label">Weight (kg)</label>
-                                    <input type="number" class="form-control" name="weight" id="ingredient-weight"
-                                        step="0.01" min="0.01" placeholder="Weight">
+                                    <label for="ingredient-stock-weight" class="form-label">Stock Weight (kg)</label>
+                                    <input type="number" class="form-control" name="stock_weight"
+                                        id="ingredient-stock-weight" step="0.01" min="0.01"
+                                        placeholder="Stock weight">
                                 </div>
                             </div>
 
@@ -162,10 +163,20 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="ingredient-unit-price" class="form-label">Unit Price</label>
-                                    <input type="number" class="form-control" name="unit_price"
-                                        id="ingredient-unit-price" step="0.01" min="0.01"
-                                        placeholder="Unit price" required>
+                                    <label for="ingredient-weight-unit" class="form-label">Weight Unit (kg)</label>
+                                    <input type="number" class="form-control" name="weight_unit"
+                                        id="ingredient-weight-unit" step="0.01" min="0.01"
+                                        placeholder="Weight unit" required>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-group mb-3">
+                                    <label for="ingredient-price-per-weight-unit" class="form-label">Price Per Weight
+                                        Unit</label>
+                                    <input type="number" class="form-control" name="price_per_weight_unit"
+                                        id="ingredient-price-per-weight-unit" step="0.01" min="0.01"
+                                        placeholder="Price per weight unit" required>
                                 </div>
                             </div>
 

@@ -23,7 +23,6 @@
                 <a href="{{ route('admin.daily_sales.index') }}" class="btn btn-secondary">
                     <i class="fa-solid fa-arrow-left"></i> Back
                 </a>
-
                 <a href="{{ route('admin.daily_sales.edit', ['id' => $dailySales->id]) }}" class="btn btn-warning">
                     <i class="fa-solid fa-edit"></i> Edit
                 </a>
@@ -35,53 +34,52 @@
         $totalQuantity = 0;
         $totalAmount = 0;
 
-        $products = $dailySalesItems->where('item_type', 'product');
-        $addons = $dailySalesItems->where('item_type', 'addon');
+        $productSalesItems = $dailySalesItems->where('item_type', 'product');
+        $addonSalesItems = $dailySalesItems->where('item_type', 'addon');
     @endphp
 
-    <!-- Sales Table -->
     <table class="table table-bordered">
         <thead class="table-light">
             <tr>
                 <th style="width: 40%">Name</th>
                 <th style="width: 20%" class="text-end">Quantity</th>
                 <th style="width: 20%" class="text-end">Price</th>
-                <th style="width: 20%" class="text-end">Amount</th>
+                <th style="width: 20%" class="text-end">Subtotal</th>
             </tr>
         </thead>
         <tbody>
-            @if ($products->count() > 0)
+            @if ($productSalesItems->isNotEmpty())
                 <tr class="table-secondary">
                     <td colspan="4" class="fw-bold">Products</td>
                 </tr>
-                @foreach ($products as $item)
+                @foreach ($productSalesItems as $salesItem)
                     @php
-                        $totalQuantity += $item->quantity;
-                        $totalAmount += $item->amount;
+                        $totalQuantity += $salesItem->quantity;
+                        $totalAmount += $salesItem->amount;
                     @endphp
                     <tr>
-                        <td>{{ $item->name }}</td>
-                        <td class="text-end">{{ $item->quantity }}</td>
-                        <td class="text-end">{{ number_format($item->price, 2) }}</td>
-                        <td class="text-end">{{ number_format($item->amount, 2) }}</td>
+                        <td>{{ $salesItem->name }}</td>
+                        <td class="text-end">{{ $salesItem->quantity }}</td>
+                        <td class="text-end">{{ number_format($salesItem->price, 2) }}</td>
+                        <td class="text-end">{{ number_format($salesItem->amount, 2) }}</td>
                     </tr>
                 @endforeach
             @endif
 
-            @if ($addons->count() > 0)
+            @if ($addonSalesItems->isNotEmpty())
                 <tr class="table-secondary">
                     <td colspan="4" class="fw-bold">Add-ons</td>
                 </tr>
-                @foreach ($addons as $item)
+                @foreach ($addonSalesItems as $salesItem)
                     @php
-                        $totalQuantity += $item->quantity;
-                        $totalAmount += $item->amount;
+                        $totalQuantity += $salesItem->quantity;
+                        $totalAmount += $salesItem->amount;
                     @endphp
                     <tr>
-                        <td>{{ $item->name }}</td>
-                        <td class="text-end">{{ $item->quantity }}</td>
-                        <td class="text-end">{{ number_format($item->price, 2) }}</td>
-                        <td class="text-end">{{ number_format($item->amount, 2) }}</td>
+                        <td>{{ $salesItem->name }}</td>
+                        <td class="text-end">{{ $salesItem->quantity }}</td>
+                        <td class="text-end">{{ number_format($salesItem->price, 2) }}</td>
+                        <td class="text-end">{{ number_format($salesItem->amount, 2) }}</td>
                     </tr>
                 @endforeach
             @endif
@@ -89,7 +87,7 @@
             <tr class="table-warning fw-bold">
                 <td class="text-end">TOTAL</td>
                 <td class="text-end">{{ $totalQuantity }}</td>
-                <td colspan="2" class="text-end">{{ number_format($totalAmount, 2) }}</td>
+                <td colspan="2" class="text-end">RM {{ number_format($totalAmount, 2) }}</td>
             </tr>
         </tbody>
     </table>
@@ -102,17 +100,17 @@
         <thead class="table-light">
             <tr>
                 <th>Ingredient</th>
-                <th class="text-end">Total Used (kg)</th>
-                <th class="text-end">Amount (RM)</th>
+                <th class="text-end">Weight (kg)</th>
+                <th class="text-end">Cost (RM)</th>
             </tr>
         </thead>
         <tbody>
-            @if (count($ingredientUsage['ingredients']) > 0)
-                @foreach ($ingredientUsage['ingredients'] as $ingredient)
+            @if (!empty($ingredientUsage['ingredients']))
+                @foreach ($ingredientUsage['ingredients'] as $ingredientData)
                     <tr>
-                        <td>{{ $ingredient['name'] }}</td>
-                        <td class="text-end">{{ number_format($ingredient['weight'], 2) }}</td>
-                        <td class="text-end">{{ number_format($ingredient['amount'], 2) }}</td>
+                        <td>{{ $ingredientData['name'] }}</td>
+                        <td class="text-end">{{ number_format($ingredientData['weight'], 2) }}</td>
+                        <td class="text-end">{{ number_format($ingredientData['amount'], 2) }}</td>
                     </tr>
                 @endforeach
             @else
@@ -122,8 +120,8 @@
             @endif
 
             <tr class="table-warning fw-bold">
-                <td colspan="2" class="text-end">Total Ingredient Cost</td>
-                <td class="text-end">{{ number_format($ingredientUsage['total_amount'], 2) }}</td>
+                <td class="text-end">TOTAL</td>
+                <td colspan="2" class="text-end">RM {{ number_format($ingredientUsage['total_amount'], 2) }}</td>
             </tr>
         </tbody>
     </table>

@@ -52,9 +52,10 @@ class IngredientList extends Component
                 'id',
                 'image',
                 'name',
-                'weight',
+                'stock_weight',
                 'alarm_weight',
-                'unit_price',
+                'weight_unit',
+                'price_per_weight_unit',
             )
             ->where('ingredient_category_id', '=', $this->ingredientCategoryId)
             ->orderBy('name', 'asc');
@@ -65,9 +66,9 @@ class IngredientList extends Component
 
         if (isset($this->filter['stock_status']) && $this->filter['stock_status'] !== "") {
             if ($this->filter['stock_status']) {
-                $query = $query->whereColumn('weight', '<=', 'alarm_weight');
+                $query = $query->whereColumn('stock_weight', '<=', 'alarm_weight');
             } else {
-                $query = $query->whereColumn('weight', '>', 'alarm_weight');
+                $query = $query->whereColumn('stock_weight', '>', 'alarm_weight');
             }
         }
 

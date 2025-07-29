@@ -1,25 +1,24 @@
 <div>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="fw-bold">Total Cost: <span class="text-success">RM {{ number_format($totalCost, 2) }}</span></h5>
+    </div>
+
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle">
             <thead class="table-dark">
                 <tr>
-                    <th scope="col">Image</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Weight</th>
-                    <th scope="col">Action</th>
+                    <th scope="col" style="white-space: nowrap;">Ingredient</th>
+                    <th scope="col" style="white-space: nowrap;">Usage (kg)</th>
+                    <th scope="col" style="white-space: nowrap;">Cost (RM)</th>
+                    <th scope="col" style="width: 10px">Action</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($productIngredients as $productIngredient)
                     <tr>
-                        <td style="width: 100px;">
-                            <img src="{{ $productIngredient->image ? asset('storage/ingredient/' . $productIngredient->image) : asset('img/default-image.png') }}"
-                                onerror="this.onerror=null;this.src='{{ asset('img/default-image.png') }}'"
-                                alt="Ingredient Image" class="img-thumbnail"
-                                style="width: 80px; height: 80px; object-fit: cover;">
-                        </td>
                         <td class="fw-bold">{{ $productIngredient->ingredient_name }}</td>
-                        <td>{{ $productIngredient->weight }} kg</td>
+                        <td>{{ $productIngredient->weight }}</td>
+                        <td>{{ number_format($productIngredient->cost, 2) }}</td>
                         <td>
                             <div class="d-flex gap-2">
                                 <form
@@ -28,12 +27,12 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger" onclick="deleteConfirmation(event)">
-                                        <i class="fa-solid fa-trash"></i> Delete
+                                        <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </form>
                                 <button class="btn btn-warning" data-bs-toggle="modal"
                                     data-bs-target="#editProductIngredientModal-{{ $productIngredient->id }}">
-                                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                                    <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
                             </div>
                         </td>

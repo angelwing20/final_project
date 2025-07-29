@@ -68,17 +68,17 @@
 
                 <div class="col-12">
                     <div class="fw-bold">
-                        Weight: @if (
-                            $ingredient->weight !== null &&
+                        Stock: @if (
+                            $ingredient->stock_weight !== null &&
                                 $ingredient->alarm_weight !== null &&
-                                $ingredient->weight <= $ingredient->alarm_weight)
+                                $ingredient->stock_weight <= $ingredient->alarm_weight)
                             <span class="badge bg-danger mt-1">
                                 Low stock
                             </span>
                         @endif
                     </div>
                     <div>
-                        {{ $ingredient->weight }} kg
+                        {{ $ingredient->stock_weight }} kg
                     </div>
                 </div>
 
@@ -104,7 +104,7 @@
                         Price:
                     </div>
                     <div>
-                        {{ $ingredient->unit_price }}
+                        RM {{ $ingredient->price_per_weight_unit }} / {{ $ingredient->weight_unit }} kg
                     </div>
                 </div>
             </div>
@@ -184,10 +184,20 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="unit_price" class="form-label">Unit Price</label>
-                                    <input type="number" class="form-control" name="unit_price" id="unit_price"
-                                        step="0.01" min="0.01" value="{{ $ingredient->unit_price }}"
-                                        placeholder="Unit price">
+                                    <label for="weight_unit" class="form-label">Weight Unit (kg)</label>
+                                    <input type="number" class="form-control" name="weight_unit" id="weight_unit"
+                                        step="0.01" min="0.01" value="{{ $ingredient->weight_unit }}"
+                                        placeholder="Weight unit" required>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-group mb-3">
+                                    <label for="price_per_weight_unit" class="form-label">Price Per Weight Unit</label>
+                                    <input type="number" class="form-control" name="price_per_weight_unit"
+                                        id="price_per_weight_unit" step="0.01" min="0.01"
+                                        value="{{ $ingredient->price_per_weight_unit }}"
+                                        placeholder="Price per weight unit" required>
                                 </div>
                             </div>
 

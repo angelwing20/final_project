@@ -20,9 +20,10 @@ class IngredientRepository extends Repository
         $model->ingredient_category_id = $data['ingredient_category_id'];
         $model->image = $data['image'] ?? null;
         $model->name = $data['name'];
-        $model->weight = $data['weight'] ?? null;
+        $model->stock_weight = $data['stock_weight'] ?? null;
         $model->alarm_weight = $data['alarm_weight'];
-        $model->unit_price = $data['unit_price'];
+        $model->weight_unit = $data['weight_unit'];
+        $model->price_per_weight_unit = $data['price_per_weight_unit'];
 
 
         $model->save();
@@ -35,9 +36,10 @@ class IngredientRepository extends Repository
         $model->ingredient_category_id = $data['ingredient_category_id'] ?? $model->ingredient_category_id;
         $model->image = array_key_exists('image', $data) ? $data['image'] : $model->image;
         $model->name = $data['name'] ?? $model->name;
-        $model->weight = array_key_exists('weight', $data) ? $data['weight'] : $model->weight;
+        $model->stock_weight = array_key_exists('stock_weight', $data) ? $data['stock_weight'] : $model->stock_weight;
         $model->alarm_weight = $data['alarm_weight'] ?? $model->alarm_weight;
-        $model->unit_price = $data['unit_price'] ?? $model->unit_price;
+        $model->weight_unit = $data['weight_unit'] ?? $model->weight_unit;
+        $model->price_per_weight_unit = $data['price_per_weight_unit'] ?? $model->price_per_weight_unit;
 
 
         $model->update();
@@ -155,7 +157,7 @@ class IngredientRepository extends Repository
             return null;
         }
 
-        $ingredient->weight = max(0, $newWeight);
+        $ingredient->stock_weight = max(0, $newWeight);
         $ingredient->save();
 
         return $ingredient->fresh();

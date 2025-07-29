@@ -74,7 +74,8 @@
                                         {{ $ingredient->name }}
 
                                         <div>
-                                            Unit Price: {{ $ingredient->unit_price }}
+                                            Price: RM {{ $ingredient->price_per_weight_unit }} /
+                                            {{ $ingredient->weight_unit }} kg
                                         </div>
                                     </div>
                                 </div>
@@ -82,12 +83,12 @@
                                 <div class="col-12 col-sm-auto">
                                     <div class="d-flex flex-column fw-bold text-center">
                                         <div>
-                                            Weight: {{ $ingredient->weight }} kg
+                                            Stock: {{ $ingredient->stock_weight }} kg
                                         </div>
                                         @if (
-                                            $ingredient->weight !== null &&
+                                            $ingredient->stock_weight !== null &&
                                                 $ingredient->alarm_weight !== null &&
-                                                $ingredient->weight <= $ingredient->alarm_weight)
+                                                $ingredient->stock_weight <= $ingredient->alarm_weight)
                                             <span class="badge bg-danger mt-1">
                                                 Low stock
                                             </span>

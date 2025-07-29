@@ -93,7 +93,7 @@
                                         </div>
 
                                         <div class="fw-semibold text-muted">
-                                            Total Price: {{ $dailySale->total_amount }}
+                                            Total Amount: RM {{ $dailySale->total_amount }}
                                         </div>
                                     </div>
                                 </div>

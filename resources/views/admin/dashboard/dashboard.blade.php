@@ -10,7 +10,7 @@
         </div>
         <div class="col-12 col-md-auto">
             <div class="d-flex gap-2 align-items-center float-end">
-                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importDailySalesModal">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importDailySalesModal">
                     <i class="fa-solid fa-upload"></i> Import Daily Sales
                 </button>
             </div>
@@ -39,7 +39,7 @@
                         </div>
                         <p id="fileName" class="text-center text-muted mb-3" style="display:none;"></p>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-success w-100">
+                            <button type="submit" class="btn btn-primary w-100">
                                 <i class="fa-solid fa-upload me-1"></i> Upload File
                             </button>
                         </div>
@@ -54,11 +54,25 @@
             <div class="card shadow-sm border-0" style="background-color:#DDFFE7;">
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <div>
-                        <p class="text-muted mb-1">This Month Revenue</p>
+                        <p class="text-muted mb-1">This Month's Revenue</p>
                         <h2 class="fw-bold mb-0 text-success" id="kpi-revenue">RM 0.00</h2>
                     </div>
                     <div class="rounded-circle bg-white p-3 shadow-sm">
                         <i class="fa-solid fa-coins text-success fs-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0" style="background-color:#FFF3E0;">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted mb-1">This Month's Total Refill Amount</p>
+                        <h2 class="fw-bold mb-0 text-warning" id="kpi-refill">RM 0.00</h2>
+                    </div>
+                    <div class="rounded-circle bg-white p-3 shadow-sm">
+                        <i class="fa-solid fa-coins text-warning fs-3"></i>
                     </div>
                 </div>
             </div>
@@ -73,6 +87,20 @@
                     </div>
                     <div class="rounded-circle bg-white p-3 shadow-sm">
                         <i class="fa-solid fa-exclamation-triangle text-danger fs-3"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0" style="background-color:#F5F5F5;">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="text-muted mb-1">Last Daily Sales Upload</p>
+                        <h2 class="fw-bold mb-0 text-secondary" id="kpi-last-update">--</h2>
+                    </div>
+                    <div class="rounded-circle bg-white p-3 shadow-sm">
+                        <i class="fa-solid fa-clock text-secondary fs-3"></i>
                     </div>
                 </div>
             </div>
@@ -155,8 +183,10 @@
             });
 
             $.get("{{ route('admin.stats') }}", stats => {
-                $('#kpi-revenue').text('RM ' + parseFloat(stats.total_revenue).toFixed(2));
-                $('#kpi-low-stock').text(stats.low_stock_count);
+                $('#kpi-revenue').text('RM ' + (stats.total_revenue ?? 0).toFixed(2));
+                $('#kpi-low-stock').text(stats.low_stock_count ?? 0);
+                $('#kpi-refill').text('RM ' + (stats.total_refill_amount ?? 0).toFixed(2));
+                $('#kpi-last-update').text(stats.last_daily_sales_upload);
             });
 
             $.get("{{ route('admin.ingredient_usage') }}", data => {

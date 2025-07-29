@@ -71,7 +71,7 @@
                                         {{ $product->name }}
                                     </div>
                                     <div class="fw-bold">
-                                        Price: {{ $product->price }}
+                                        Price: RM{{ $product->price }}
                                     </div>
                                     <div class="fw-bold">
                                         <span

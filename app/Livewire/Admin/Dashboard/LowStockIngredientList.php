@@ -26,14 +26,15 @@ class LowStockIngredientList extends Component
                 'ingredients.ingredient_category_id',
                 'ingredients.image',
                 'ingredients.name',
-                'ingredients.weight',
+                'ingredients.stock_weight',
                 'ingredients.alarm_weight',
-                'ingredients.unit_price',
+                'ingredients.weight_unit',
+                'ingredients.price_per_weight_unit',
 
                 'ingredient_categories.name as ingredient_category_name'
             )
-            ->whereColumn('ingredients.weight', '<=', 'ingredients.alarm_weight')
-            ->orderBy('ingredients.weight', 'asc');
+            ->whereColumn('ingredients.stock_weight', '<=', 'ingredients.alarm_weight')
+            ->orderBy('ingredients.stock_weight', 'asc');
 
         $query = $query
             ->offset($this->page * $this->limitDataPerPage)

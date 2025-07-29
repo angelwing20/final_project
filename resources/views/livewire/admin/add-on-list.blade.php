@@ -32,7 +32,7 @@
                                             {{ $addOn->name }}
                                         </div>
                                         <div class="fw-bold">
-                                            Price: {{ $addOn->price }}
+                                            Price: RM {{ $addOn->price }}
                                         </div>
                                     </div>
                                 </div>

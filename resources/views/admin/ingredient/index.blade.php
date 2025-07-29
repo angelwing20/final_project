@@ -59,10 +59,10 @@
 
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <label class="form-label" for="refill-weight-0">Unit Weight (kg)</label>
+                                            <label class="form-label" for="refill-weight-0">Weight (kg)</label>
                                             <input type="number" class="form-control" id="refill-weight-0"
-                                                name="refills[0][weight]" step="0.01" min="0.01"
-                                                placeholder="Unit weight" required>
+                                                name="refills[0][weight]" step="0.01" min="0.01" placeholder="Weight"
+                                                required>
                                         </div>
                                     </div>
                                 </div>
@@ -132,9 +132,9 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="weight" class="form-label">Weight (kg)</label>
-                                    <input type="number" class="form-control" name="weight" id="weight"
-                                        step="0.01" min="0.01" placeholder="Weight">
+                                    <label for="stock_weight" class="form-label">Stock Weight (kg)</label>
+                                    <input type="number" class="form-control" name="stock_weight" id="stock_weight"
+                                        step="0.01" min="0.01" placeholder="Stock weight">
                                 </div>
                             </div>
 
@@ -148,9 +148,18 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="unit_price" class="form-label">Unit Price</label>
-                                    <input type="number" class="form-control" name="unit_price" id="unit_price"
-                                        step="0.01" min="0.01" placeholder="Unit price" required>
+                                    <label for="weight_unit" class="form-label">Weight Unit (kg)</label>
+                                    <input type="number" class="form-control" name="weight_unit" id="weight_unit"
+                                        step="0.01" min="0.01" placeholder="Weight unit" required>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-group mb-3">
+                                    <label for="price_per_weight_unit" class="form-label">Price Per Weight Unit</label>
+                                    <input type="number" class="form-control" name="price_per_weight_unit"
+                                        id="price_per_weight_unit" step="0.01" min="0.01"
+                                        placeholder="Price per weight unit" required>
                                 </div>
                             </div>
 
@@ -333,14 +342,14 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label class="form-label" for="refill-quantity-${refillIndex}">Quantity</label>
-                                <input type="number" class="form-control" id="refill-quantity-${refillIndex}" name="refills[${refillIndex}][quantity]" step="1" min="1" placeholder="Quantity" required>
+                                <input type="number" class="form-control" id="refill-quantity-${refillIndex}" name="refills[${refillIndex}][quantity]" step="1" min="1" placeholder="Quantity">
                             </div>
                         </div>
 
                         <div class="col-6">
                             <div class="form-group">
-                                <label class="form-label" for="refill-weight-${refillIndex}">Unit Weight (kg)</label>
-                                <input type="number" class="form-control" id="refill-weight-${refillIndex}" name="refills[${refillIndex}][weight]" step="0.01" min="0.01" placeholder="Unit weight" required>
+                                <label class="form-label" for="refill-weight-${refillIndex}">Weight (kg)</label>
+                                <input type="number" class="form-control" id="refill-weight-${refillIndex}" name="refills[${refillIndex}][weight]" step="0.01" min="0.01" placeholder="Weight" required>
                             </div>
                         </div>
                     </div>

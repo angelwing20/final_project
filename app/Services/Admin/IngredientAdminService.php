@@ -32,9 +32,10 @@ class IngredientAdminService extends Service
                 'ingredient_category_id' => 'required|exists:ingredient_categories,id',
                 'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
                 'name' => 'required|string|max:255',
-                'weight' => 'nullable|numeric|min:0',
-                'alarm_weight' => 'required|numeric|min:0',
-                'unit_price' => 'required|numeric|min:0.01',
+                'stock_weight' => 'nullable|numeric|min:0',
+                'alarm_weight' => 'required|numeric|min:0.01',
+                'weight_unit' => 'required|numeric|min:0.01',
+                'price_per_weight_unit' => 'required|numeric|min:0.01',
             ]);
 
             if ($validator->fails()) {
@@ -54,7 +55,7 @@ class IngredientAdminService extends Service
                 $data['image'] = $fileName;
             }
 
-            $data['weight'] = $data['weight'] ?? 0;
+            $data['stock_weight'] = $data['stock_weight'] ?? 0;
 
             $ingredient = $this->_ingredientRepository->save($data);
 
@@ -95,8 +96,9 @@ class IngredientAdminService extends Service
                 'ingredient_category_id' => 'required|exists:ingredient_categories,id',
                 'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
                 'name' => 'required|string|max:255',
-                'alarm_weight' => 'required|numeric|min:0',
-                'unit_price' => 'required|numeric|min:0.01',
+                'alarm_weight' => 'required|numeric|min:0.01',
+                'weight_unit' => 'required|numeric|min:0.01',
+                'price_per_weight_unit' => 'required|numeric|min:0.01',
             ]);
 
             if ($validator->fails()) {
@@ -154,50 +156,6 @@ class IngredientAdminService extends Service
         }
     }
 
-    public function refillStock($data)
-    {
-        DB::beginTransaction();
-
-        try {
-            $validator = Validator::make($data, [
-                'ingredient_id' => 'required|exists:ingredients,id',
-                'weight' => 'required|numeric|min:0',
-            ]);
-
-            if ($validator->fails()) {
-                foreach ($validator->errors()->all() as $error) {
-                    array_push($this->_errorMessage, $error);
-                }
-                return null;
-            }
-
-            $id = $data['ingredient_id'];
-            $ingredient = $this->_ingredientRepository->getById($id);
-            $totalWeight = $ingredient['weight'] + $data['weight'];
-
-            if ($totalWeight < 0) {
-                array_push($this->_errorMessage, "Resulting weight cannot be less than 0.");
-                return null;
-            }
-
-            $data['staff_id'] = Auth::id();
-
-            $refillHistory = $this->_refillStockHistoryRepository->save($data);
-
-            $data['weight'] = $ingredient['weight'] += $data['weight'];
-
-            $ingredient = $this->_ingredientRepository->update($id, $data);
-
-            DB::commit();
-            return $ingredient;
-        } catch (Exception $e) {
-            array_push($this->_errorMessage, "Fail to refill stock.");
-
-            DB::rollBack();
-            return null;
-        }
-    }
-
     public function bulkRefillStock(array $refills)
     {
         DB::beginTransaction();
@@ -222,17 +180,20 @@ class IngredientAdminService extends Service
                 $ingredient = $this->_ingredientRepository->getById($refill['ingredient_id']);
 
                 $totalWeight = $refill['weight'] * $refill['quantity'];
-                $newWeight = $ingredient->weight + $totalWeight;
+                $newWeight = $ingredient->stock_weight + $totalWeight;
+
+                $amount = ($totalWeight / $ingredient->weight_unit) * $ingredient->price_per_weight_unit;
 
                 $this->_refillStockHistoryRepository->save([
                     'ingredient_id' => $refill['ingredient_id'],
                     'staff_id' => Auth::id(),
                     'quantity' => $refill['quantity'],
                     'weight' => $totalWeight,
+                    'amount' => $amount
                 ]);
 
                 $this->_ingredientRepository->update($refill['ingredient_id'], [
-                    'weight' => $newWeight
+                    'stock_weight' => $newWeight
                 ]);
             }
 
