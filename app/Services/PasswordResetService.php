@@ -102,7 +102,14 @@ class PasswordResetService extends Service
             !Hash::check($token, $passwordReset->token)
         ) {
             abort(404);
-        } else if (Carbon::now()->greaterThan($passwordReset->created_at->addMinutes($this->_expiredMinutes))) {
+        }
+
+        $user = $this->_userRepository->getById($passwordReset->user_id);
+        if ($user == null || $user->email !== $email) {
+            abort(404);
+        }
+
+        if (Carbon::now()->greaterThan($passwordReset->created_at->addMinutes($this->_expiredMinutes))) {
             abort(419);
         }
 

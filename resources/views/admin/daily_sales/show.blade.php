@@ -39,7 +39,7 @@
     @endphp
 
     <table class="table table-bordered">
-        <thead class="table-light">
+        <thead class="table-dark">
             <tr>
                 <th style="width: 40%">Name</th>
                 <th style="width: 20%" class="text-end">Quantity</th>
@@ -97,7 +97,7 @@
     </div>
 
     <table class="table table-bordered">
-        <thead class="table-light">
+        <thead class="table-dark">
             <tr>
                 <th>Ingredient</th>
                 <th class="text-end">Weight (kg)</th>

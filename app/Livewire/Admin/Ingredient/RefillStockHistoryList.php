@@ -32,7 +32,6 @@ class RefillStockHistoryList extends Component
                 'users.name as staff_name',
             )
             ->where('refill_stock_histories.ingredient_id', '=', $this->ingredientId)
-            ->where('refill_stock_histories.created_at', '>=', Carbon::now()->subMonth())
             ->orderBy('refill_stock_histories.created_at', 'desc');
 
         $query = $query

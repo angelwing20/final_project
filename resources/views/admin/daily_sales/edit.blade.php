@@ -20,95 +20,104 @@
         @csrf
         @method('PATCH')
 
-        <table class="table table-bordered">
-            <thead class="table-light">
-                <tr>
-                    <th style="width: 40%">Name</th>
-                    <th style="width: 20%">Quantity</th>
-                    <th style="width: 20%">Price</th>
-                    <th style="width: 20%">Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="table-secondary">
-                    <td colspan="4" class="fw-bold">Products</td>
-                </tr>
-                @foreach ($products as $product)
-                    @php
-                        $currentItem = $dailySalesItems
-                            ->where('item_type', 'product')
-                            ->where('item_id', $product->id)
-                            ->first();
-                        $quantity = $currentItem ? $currentItem->quantity : 0;
-                    @endphp
+        <div class="table-responsive">
+            <table class="table table-bordered" style="white-space: nowrap">
+                <thead class="table-dark">
                     <tr>
-                        <td>{{ $product->name }}</td>
-                        <td>
-                            <input type="number" class="form-control quantity-input"
-                                name="products[{{ $product->id }}][quantity]" min="0" value="{{ $quantity }}"
-                                data-type="product" data-id="{{ $product->id }}" data-old="{{ $quantity }}">
-                        </td>
-                        <td class="text-end">
-                            {{ number_format($product->price, 2) }}
-                            <input type="hidden" name="products[{{ $product->id }}][price]" value="{{ $product->price }}">
-                        </td>
-                        <td class="text-end subtotal">{{ number_format($quantity * $product->price, 2) }}</td>
+                        <th style="width: 40%">Name</th>
+                        <th style="width: 20%">Quantity</th>
+                        <th style="width: 20%">Price (RM)</th>
+                        <th style="width: 20%">Subtotal (RM)</th>
                     </tr>
-                @endforeach
-
-                <tr class="table-secondary">
-                    <td colspan="4" class="fw-bold">Add-ons</td>
-                </tr>
-                @foreach ($addons as $addon)
-                    @php
-                        $currentItem = $dailySalesItems
-                            ->where('item_type', 'addon')
-                            ->where('item_id', $addon->id)
-                            ->first();
-                        $quantity = $currentItem ? $currentItem->quantity : 0;
-                    @endphp
-                    <tr>
-                        <td>{{ $addon->name }}</td>
-                        <td>
-                            <input type="number" class="form-control quantity-input"
-                                name="addons[{{ $addon->id }}][quantity]" min="0" value="{{ $quantity }}"
-                                data-type="addon" data-id="{{ $addon->id }}" data-old="{{ $quantity }}">
-                        </td>
-                        <td class="text-end">
-                            {{ number_format($addon->price, 2) }}
-                            <input type="hidden" name="addons[{{ $addon->id }}][price]" value="{{ $addon->price }}">
-                        </td>
-                        <td class="text-end subtotal">{{ number_format($quantity * $addon->price, 2) }}</td>
+                </thead>
+                <tbody>
+                    <tr class="table-secondary">
+                        <td colspan="4" class="fw-bold">Products</td>
                     </tr>
-                @endforeach
+                    @foreach ($products as $product)
+                        @php
+                            $currentItem = $dailySalesItems
+                                ->where('item_type', 'product')
+                                ->where('item_id', $product->id)
+                                ->first();
+                            $quantity = $currentItem ? $currentItem->quantity : 0;
+                        @endphp
+                        <tr>
+                            <td>{{ $product->name }}</td>
+                            <td>
+                                <input type="number" class="form-control quantity-input"
+                                    name="products[{{ $product->id }}][quantity]" min="0"
+                                    value="{{ old('products.' . $product->id . '.quantity', $quantity) }}"
+                                    data-type="product" data-id="{{ $product->id }}" data-old="{{ $quantity }}">
+                                <input type="hidden" name="products[{{ $product->id }}][price]"
+                                    value="{{ $product->price }}">
+                            </td>
+                            <td class="text-end">{{ number_format($product->price, 2) }}</td>
+                            <td class="text-end subtotal">{{ number_format($quantity * $product->price, 2) }}</td>
+                        </tr>
+                    @endforeach
 
-                <tr class="table-warning fw-bold">
-                    <td class="text-end">TOTAL</td>
-                    <td class="text-end" id="total-quantity">0</td>
-                    <td colspan="2" class="text-end">RM <span id="total-amount">0.00</span></td>
-                </tr>
-            </tbody>
-        </table>
+                    <tr class="table-secondary">
+                        <td colspan="4" class="fw-bold">Add-ons</td>
+                    </tr>
+                    @foreach ($addons as $addon)
+                        @php
+                            $currentItem = $dailySalesItems
+                                ->where('item_type', 'addon')
+                                ->where('item_id', $addon->id)
+                                ->first();
+                            $quantity = $currentItem ? $currentItem->quantity : 0;
+                        @endphp
+                        <tr>
+                            <td>{{ $addon->name }}</td>
+                            <td>
+                                <input type="number" class="form-control quantity-input"
+                                    name="addons[{{ $addon->id }}][quantity]" min="0"
+                                    value="{{ old('addons.' . $addon->id . '.quantity', $quantity) }}" data-type="addon"
+                                    data-id="{{ $addon->id }}" data-old="{{ $quantity }}">
+                                <input type="hidden" name="addons[{{ $addon->id }}][price]"
+                                    value="{{ $addon->price }}">
+                            </td>
+                            <td class="text-end">{{ number_format($addon->price, 2) }}</td>
+                            <td class="text-end subtotal">{{ number_format($quantity * $addon->price, 2) }}</td>
+                        </tr>
+                    @endforeach
+
+                    <tr class="table-warning fw-bold">
+                        <td class="text-end">TOTAL</td>
+                        <td class="text-end" id="total-quantity">0</td>
+                        <td colspan="2" class="text-end">RM <span id="total-amount">0.00</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
         <div class="mt-4 mb-3">
             <h2 class="fw-bold">Ingredient Usage Preview</h2>
         </div>
 
-        <table class="table table-bordered" id="ingredient-preview">
-            <thead class="table-light">
-                <tr>
-                    <th>Ingredient</th>
-                    <th>Current Stock</th>
-                    <th>Change</th>
-                    <th>After Edit</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colspan="4" class="text-center">No ingredient usage yet. Adjust quantities above to preview.</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="ingredient-preview" style="white-space: nowrap">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Ingredient</th>
+                        <th>Current Stock (kg)</th>
+                        <th>Change (kg)</th>
+                        <th>After Edit (kg)</th>
+                    </tr>
+                </thead>
+
+                <tbody id="ingredient-preview-body">
+                    <tr id="ingredient-loading-row">
+                        <td colspan="4" class="text-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
         <div class="text-center mt-3">
             <button type="submit" class="btn btn-warning">Update</button>
@@ -123,15 +132,17 @@
             'addons' => $addons,
         ]);
 
-        calculateTotals();
-        updateIngredientPreview();
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateTotals();
+            updateIngredientPreview();
 
-        document.addEventListener('input', function(event) {
-            if (event.target.classList.contains('quantity-input')) {
-                if (parseInt(event.target.value) < 0) event.target.value = 0;
-                calculateTotals();
-                updateIngredientPreview();
-            }
+            document.querySelectorAll('.quantity-input').forEach(input => {
+                input.addEventListener('input', function() {
+                    if (parseInt(this.value) < 0) this.value = 0;
+                    calculateTotals();
+                    updateIngredientPreview();
+                });
+            });
         });
 
         function calculateTotals() {
@@ -156,6 +167,8 @@
 
         function updateIngredientPreview() {
             let ingredientUsage = {};
+            let tableBody = document.querySelector('#ingredient-preview-body');
+            tableBody.innerHTML = '';
 
             document.querySelectorAll('.quantity-input').forEach(function(input) {
                 const newQuantity = parseInt(input.value) || 0;
@@ -186,18 +199,13 @@
                 }
             });
 
-            const ingredientTableBody = document.querySelector('#ingredient-preview tbody');
-            ingredientTableBody.innerHTML = '';
-
             if (Object.keys(ingredientUsage).length === 0) {
-                ingredientTableBody.innerHTML =
-                    '<tr><td colspan="4" class="text-center">No ingredient usage yet. Adjust quantities above to preview.</td></tr>';
+                tableBody.innerHTML =
+                    '<tr><td colspan="4" class="text-center text-muted">No ingredient usage yet. Adjust quantities above to preview.</td></tr>';
                 return;
             }
 
-            const sortedUsage = Object.values(ingredientUsage).sort(function(a, b) {
-                return a.name.localeCompare(b.name);
-            });
+            const sortedUsage = Object.values(ingredientUsage).sort((a, b) => a.name.localeCompare(b.name));
 
             sortedUsage.forEach(function(ingredient) {
                 const afterEditStock = ingredient.currentStock + ingredient.change;
@@ -206,12 +214,8 @@
                     (ingredient.change > 0 ? 'text-success fw-semibold' : '');
 
                 let afterEditClass = '';
-
-                if (afterEditStock < 0) {
-                    afterEditClass = 'table-danger';
-                } else if (afterEditStock === 0) {
-                    afterEditClass = 'table-warning';
-                }
+                if (afterEditStock < 0) afterEditClass = 'table-danger';
+                else if (afterEditStock === 0) afterEditClass = 'table-warning';
 
                 const row = `
                 <tr class="${afterEditClass}">
@@ -221,7 +225,7 @@
                     <td>${afterEditStock.toFixed(2)} kg</td>
                 </tr>
             `;
-                ingredientTableBody.innerHTML += row;
+                tableBody.innerHTML += row;
             });
         }
     </script>

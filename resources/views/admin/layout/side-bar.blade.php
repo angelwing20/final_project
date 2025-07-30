@@ -44,7 +44,7 @@
             </a>
 
             <div
-                class="sidebar-section-group {{ Request::routeIs('admin.staff.*') || Request::routeIs('admin.daily_sales.*') ? 'active' : '' }}">
+                class="sidebar-section-group {{ Request::routeIs('admin.daily_sales.*') || Request::routeIs('admin.refill_stock_history.*') || Request::routeIs('admin.staff.*') ? 'active' : '' }}">
                 <div class="sidebar-main-item" onclick="toggleSidebarSectionGroup(this)" role="button">
                     <a href="#" class="sidebar-link">
                         <div class="sidebar-link-icon">
@@ -59,6 +59,13 @@
                     <a href="{{ route('admin.daily_sales.index') }}"
                         class="sidebar-link {{ Request::routeIs('admin.daily_sales.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-calendar-days"></i> Daily Sales
+                    </a>
+                </div>
+
+                <div class="sidebar-sub-item">
+                    <a href="{{ route('admin.refill_stock_history.index') }}"
+                        class="sidebar-link {{ Request::routeIs('admin.refill_stock_history.*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-table-list"></i> Refill Stock History
                     </a>
                 </div>
 

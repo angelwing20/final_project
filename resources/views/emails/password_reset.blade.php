@@ -8,12 +8,23 @@ Hello {{ $data['name'] ?? 'User' }},
 We received a request to reset your password for your **{{ config('app.name') }}** account.
 If you initiated this request, click the button below to create a new password:
 
-@component('mail::button', [
-    'url' => route('reset_password.index', ['token' => $data['token'], 'email' => $data['email']]),
-    'color' => 'success',
-])
-    Reset Password
-@endcomponent
+{{-- 按钮居中处理 --}}
+<div style="text-align:center; margin: 20px 0;">
+    <a href="{{ route('reset_password.index', ['token' => $data['token'], 'email' => $data['email']]) }}"
+        style="display:inline-block;
+              background-color:#28a745 !important;
+              background-image:none !important;
+              color:#ffffff !important;
+              text-decoration:none;
+              padding:12px 24px;
+              border-radius:6px;
+              font-weight:bold;
+              font-size:16px;
+              font-family:Arial, sans-serif;
+              text-align:center;">
+        Reset Password
+    </a>
+</div>
 
 ---
 
@@ -26,4 +37,5 @@ Stay secure and have a great day.
 
 Regards,
 **The {{ config('app.name') }} Team**
+
 @endcomponent

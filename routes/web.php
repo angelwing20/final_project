@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\AddOnIngredientAdminController;
 use App\Http\Controllers\Admin\ProfileAdminController;
 use App\Http\Controllers\Admin\DailySalesAdminController;
 use App\Http\Controllers\Admin\DailySalesItemAdminController;
+use App\Http\Controllers\Admin\RefillStockHistoryAdminController;
 use App\Http\Controllers\Admin\StaffAdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -120,6 +121,10 @@ Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
         Route::post('/', [DailySalesItemAdminController::class, "store"])->name("store");
         Route::patch('{id}', [DailySalesItemAdminController::class, "update"])->name("update");
         Route::delete('{id}', [DailySalesItemAdminController::class, "destroy"])->name("destroy");
+    });
+
+    Route::name("refill_stock_history.")->prefix("refill-stock-history")->group(function () {
+        Route::get('/', [RefillStockHistoryAdminController::class, 'index'])->name('index');
     });
 
     Route::name("staff.")->prefix("staff")->group(function () {

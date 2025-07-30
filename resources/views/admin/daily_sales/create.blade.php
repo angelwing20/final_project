@@ -19,75 +19,85 @@
     <form id="dailySalesForm" action="{{ route('admin.daily_sales.store') }}" method="POST">
         @csrf
 
-        <table class="table table-bordered">
-            <thead class="table-light">
-                <tr>
-                    <th style="width: 40%">Name</th>
-                    <th style="width: 20%">Quantity</th>
-                    <th style="width: 20%">Price</th>
-                    <th style="width: 20%">Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="table-secondary">
-                    <td colspan="4" class="fw-bold">Products</td>
-                </tr>
-                @foreach ($products as $product)
+        <div class="table-responsive">
+            <table class="table table-bordered" style="white-space: nowrap">
+                <thead class="table-dark">
                     <tr>
-                        <td>{{ $product->name }}</td>
-                        <td>
-                            <input type="number" class="form-control quantity-input"
-                                name="products[{{ $product->id }}][quantity]" min="0" value="0"
-                                data-item-type="product" data-item-id="{{ $product->id }}">
-                        </td>
-                        <td class="text-end">{{ number_format($product->price, 2) }}</td>
-                        <td class="text-end subtotal">0.00</td>
+                        <th style="width: 40%">Name</th>
+                        <th style="width: 20%">Quantity</th>
+                        <th style="width: 20%">Price (RM)</th>
+                        <th style="width: 20%">Subtotal (RM)</th>
                     </tr>
-                @endforeach
-
-                <tr class="table-secondary">
-                    <td colspan="4" class="fw-bold">Add-ons</td>
-                </tr>
-                @foreach ($addons as $addon)
-                    <tr>
-                        <td>{{ $addon->name }}</td>
-                        <td>
-                            <input type="number" class="form-control quantity-input"
-                                name="addons[{{ $addon->id }}][quantity]" min="0" value="0"
-                                data-item-type="addon" data-item-id="{{ $addon->id }}">
-                        </td>
-                        <td class="text-end">{{ number_format($addon->price, 2) }}</td>
-                        <td class="text-end subtotal">0.00</td>
+                </thead>
+                <tbody>
+                    <tr class="table-secondary">
+                        <td colspan="4" class="fw-bold">Products</td>
                     </tr>
-                @endforeach
+                    @foreach ($products as $product)
+                        <tr>
+                            <td>{{ $product->name }}</td>
+                            <td>
+                                <input type="number" class="form-control quantity-input"
+                                    name="products[{{ $product->id }}][quantity]" min="0"
+                                    value="{{ old('products.' . $product->id . '.quantity', 0) }}" data-item-type="product"
+                                    data-item-id="{{ $product->id }}">
+                            </td>
+                            <td class="text-end">{{ number_format($product->price, 2) }}</td>
+                            <td class="text-end subtotal">0.00</td>
+                        </tr>
+                    @endforeach
 
-                <tr class="table-warning fw-bold">
-                    <td class="text-end">TOTAL</td>
-                    <td class="text-end" id="total-quantity">0</td>
-                    <td colspan="2" class="text-end">RM <span id="total-amount">0.00</span></td>
-                </tr>
-            </tbody>
-        </table>
+                    <tr class="table-secondary">
+                        <td colspan="4" class="fw-bold">Add-ons</td>
+                    </tr>
+                    @foreach ($addons as $addon)
+                        <tr>
+                            <td>{{ $addon->name }}</td>
+                            <td>
+                                <input type="number" class="form-control quantity-input"
+                                    name="addons[{{ $addon->id }}][quantity]" min="0"
+                                    value="{{ old('addons.' . $addon->id . '.quantity', 0) }}" data-item-type="addon"
+                                    data-item-id="{{ $addon->id }}">
+                            </td>
+                            <td class="text-end">{{ number_format($addon->price, 2) }}</td>
+                            <td class="text-end subtotal">0.00</td>
+                        </tr>
+                    @endforeach
+
+                    <tr class="table-warning fw-bold">
+                        <td class="text-end">TOTAL</td>
+                        <td class="text-end" id="total-quantity">0</td>
+                        <td colspan="2" class="text-end">RM <span id="total-amount">0.00</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
         <div class="mt-4 mb-3">
             <h2 class="fw-bold">Ingredient Usage Preview</h2>
         </div>
 
-        <table class="table table-bordered" id="ingredient-preview">
-            <thead class="table-light">
-                <tr>
-                    <th>Ingredient</th>
-                    <th>Current Stock</th>
-                    <th>Used</th>
-                    <th>Remaining</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colspan="4" class="text-center">No ingredient usage yet. Adjust quantities above to preview.</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="ingredient-preview" style="white-space: nowrap">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Ingredient</th>
+                        <th>Stock (kg)</th>
+                        <th>Used (kg)</th>
+                        <th>Remaining (kg)</th>
+                    </tr>
+                </thead>
+                <tbody id="ingredient-preview-body">
+                    <tr id="ingredient-loading-row">
+                        <td colspan="4" class="text-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
         <div class="text-center mt-3">
             <button type="submit" class="btn btn-warning">Submit</button>
@@ -102,10 +112,15 @@
             'addons' => $addons,
         ]);
 
-        document.querySelectorAll('.quantity-input').forEach(function(inputElement) {
-            inputElement.addEventListener('input', function() {
-                calculateTotals();
-                updateIngredientPreview();
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateTotals();
+            updateIngredientPreview();
+
+            document.querySelectorAll('.quantity-input').forEach(function(inputElement) {
+                inputElement.addEventListener('input', function() {
+                    calculateTotals();
+                    updateIngredientPreview();
+                });
             });
         });
 
@@ -135,6 +150,9 @@
 
         function updateIngredientPreview() {
             let ingredientUsage = {};
+            let tableBody = document.querySelector('#ingredient-preview-body');
+
+            tableBody.innerHTML = '';
 
             document.querySelectorAll('.quantity-input').forEach(function(inputElement) {
                 let quantity = parseInt(inputElement.value) || 0;
@@ -167,41 +185,35 @@
                 }
             });
 
-            let tableBody = document.querySelector('#ingredient-preview tbody');
-            tableBody.innerHTML = '';
-
             if (Object.keys(ingredientUsage).length === 0) {
                 tableBody.innerHTML =
-                    '<tr><td colspan="4" class="text-center">No ingredient usage yet. Adjust quantities above to preview.</td></tr>';
-            } else {
-                let sortedIngredients = Object.values(ingredientUsage).sort(function(a, b) {
-                    return a.name.localeCompare(b.name);
-                });
-
-                sortedIngredients.forEach(function(ingredient) {
-                    let remainingStock = ingredient.currentStock - ingredient.used;
-                    let rowClass = '';
-                    let remainingClass = '';
-
-                    if (remainingStock < 0) {
-                        rowClass = 'table-danger';
-                        remainingClass = 'text-danger fw-bold';
-                    } else if (remainingStock === 0) {
-                        rowClass = 'table-warning';
-                    }
-
-                    let row = `
-                    <tr class="${rowClass}">
-                        <td>${ingredient.name}</td>
-                        <td>${ingredient.currentStock.toFixed(2)} kg</td>
-                        <td>${ingredient.used.toFixed(2)} kg</td>
-                        <td class="${remainingClass}">${remainingStock.toFixed(2)} kg</td>
-                    </tr>
-                `;
-
-                    tableBody.innerHTML += row;
-                });
+                    '<tr><td colspan="4" class="text-center text-muted">No ingredient usage yet. Adjust quantities above to preview.</td></tr>';
+                return;
             }
+
+            let sortedIngredients = Object.values(ingredientUsage).sort((a, b) => a.name.localeCompare(b.name));
+            sortedIngredients.forEach(function(ingredient) {
+                let remainingStock = ingredient.currentStock - ingredient.used;
+                let rowClass = '';
+                let remainingClass = '';
+
+                if (remainingStock < 0) {
+                    rowClass = 'table-danger';
+                    remainingClass = 'text-danger fw-bold';
+                } else if (remainingStock === 0) {
+                    rowClass = 'table-warning';
+                }
+
+                let row = `
+                <tr class="${rowClass}">
+                    <td>${ingredient.name}</td>
+                    <td>${ingredient.currentStock.toFixed(2)}</td>
+                    <td>${ingredient.used.toFixed(2)}</td>
+                    <td class="${remainingClass}">${remainingStock.toFixed(2)}</td>
+                </tr>
+            `;
+                tableBody.innerHTML += row;
+            });
         }
     </script>
 @endsection
