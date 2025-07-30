@@ -60,6 +60,13 @@
                                 <select class="form-control" id="filterStaffId" style="width: 100%"></select>
                             </div>
                         </div>
+
+                        <div class="col-12">
+                            <div class="form-group mb-3" wire:ignore>
+                                <label class="form-label" for="filterIngredientId">Ingredient</label>
+                                <select class="form-control" id="filterIngredientId" style="width: 100%"></select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -164,6 +171,42 @@
             }).on('change', function(e) {
                 var selectedId = $(this).val();
                 @this.set('filter.staff_id', selectedId, false);
+            });
+
+            $('#filterIngredientId').select2({
+                theme: 'bootstrap-5',
+                allowClear: true,
+                dropdownParent: $('#filterModal .modal-content'),
+                placeholder: 'Ingredient',
+
+                ajax: {
+                    url: "{{ route('admin.ingredient.select_search') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        var query = {
+                            search_term: params.term,
+                            page: params.page,
+                        }
+                        return query;
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data.results, function(item) {
+                                return {
+                                    text: item.name,
+                                    id: item.id,
+                                }
+                            }),
+                            pagination: {
+                                more: data.pagination.more
+                            }
+                        };
+                    },
+                }
+            }).on('change', function(e) {
+                var selectedId = $(this).val();
+                @this.set('filter.ingredient_id', selectedId, false);
             });
         })
     </script>

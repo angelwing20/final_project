@@ -17,6 +17,7 @@ class RefillStockHistoryList extends Component
         'date_from' => null,
         'date_to' => null,
         'staff_id' => null,
+        'ingredient_id' => null
     ];
 
     public function loadMore()
@@ -81,6 +82,10 @@ class RefillStockHistoryList extends Component
             $query = $query->where('refill_stock_histories.staff_id', $this->filter['staff_id']);
         }
 
+        if (isset($this->filter['ingredient_id']) && $this->filter['ingredient_id'] != null) {
+            $query = $query->where('refill_stock_histories.ingredient_id', $this->filter['ingredient_id']);
+        }
+
         $records = $query
             ->offset($this->page * $this->limitDataPerPage)
             ->limit($this->limitDataPerPage)
@@ -96,6 +101,9 @@ class RefillStockHistoryList extends Component
         }
         if (isset($this->filter['staff_id']) && $this->filter['staff_id'] != null) {
             $totalQuery = $totalQuery->where('staff_id', $this->filter['staff_id']);
+        }
+        if (isset($this->filter['ingredient_id']) && $this->filter['ingredient_id'] != null) {
+            $totalQuery = $totalQuery->where('ingredient_id', $this->filter['ingredient_id']);
         }
         $this->totalAmount = $totalQuery->sum('amount');
 
