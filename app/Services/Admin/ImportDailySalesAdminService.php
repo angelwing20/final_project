@@ -45,12 +45,12 @@ class ImportDailySalesAdminService extends Service
         $this->_addOnIngredientRepository = $addOnIngredientRepository;
     }
 
-    public function import($data)
+    public function import($file)
     {
         DB::beginTransaction();
 
         try {
-            $validator = Validator::make($data, [
+            $validator = Validator::make(['excel_file' => $file], [
                 'excel_file' => 'required|file|mimes:xlsx,csv,txt,text/plain,application/vnd.ms-excel|max:20480',
             ]);
 
@@ -58,16 +58,16 @@ class ImportDailySalesAdminService extends Service
                 foreach ($validator->errors()->all() as $error) {
                     array_push($this->_errorMessage, $error);
                 }
-                return null;
+                return false;
             }
 
             $import = new DailySalesImport();
-            Excel::import($import, $data['excel_file']);
+            Excel::import($import, $file);
             $rows = $import->rows;
 
             if (!$rows || $rows->isEmpty()) {
                 array_push($this->_errorMessage, "No data found in file.");
-                return null;
+                return false;
             }
 
             $dailySales = $this->_dailySalesRepository->save([
@@ -79,27 +79,32 @@ class ImportDailySalesAdminService extends Service
             $totalQty = 0;
             $totalAmount = 0;
 
-            foreach ($rows as $row) {
+            foreach ($rows as $index => $row) {
                 $itemName = trim($row['item_name'] ?? '');
                 $itemType = strtolower(trim($row['item_type'] ?? ''));
                 $quantity = (int)($row['quantity'] ?? 0);
 
-                if (!$itemName || !$itemType || $quantity <= 0) continue;
+                if (!$itemName || !$itemType || $quantity <= 0) {
+                    array_push($this->_errorMessage, "Row " . ($index + 1) . " is invalid. [item_name, item_type, quantity required]");
+                    continue;
+                }
+
+                if (!in_array($itemType, ['product', 'addon'])) {
+                    array_push($this->_errorMessage, "Invalid item type [$itemType] for [$itemName] (row " . ($index + 1) . ")");
+                    continue;
+                }
 
                 if ($itemType === 'product') {
                     $item = $this->_productRepository->getByName($itemName);
-                    $ingredients = $this->_productIngredientRepository->getByProductId($item->id);
-                } elseif ($itemType === 'addon') {
-                    $item = $this->_addOnRepository->getByName($itemName);
-                    $ingredients = $this->_addOnIngredientRepository->getByAddOnId($item->id);
+                    $ingredients = $this->_productIngredientRepository->getByProductId($item->id ?? null);
                 } else {
-                    array_push($this->_errorMessage, "Invalid item type [$itemType] for [$itemName].");
-                    return null;
+                    $item = $this->_addOnRepository->getByName($itemName);
+                    $ingredients = $this->_addOnIngredientRepository->getByAddOnId($item->id ?? null);
                 }
 
-                if (!$item) {
-                    array_push($this->_errorMessage, "Item [$itemName] not found.");
-                    return null;
+                if (!$item || empty($item->id)) {
+                    array_push($this->_errorMessage, "Item [$itemName] with type [$itemType] not found (row " . ($index + 1) . ").");
+                    continue;
                 }
 
                 $price = $item->price;
@@ -119,16 +124,21 @@ class ImportDailySalesAdminService extends Service
 
                 foreach ($ingredients as $ingredientLink) {
                     $ingredient = $this->_ingredientRepository->getById($ingredientLink->ingredient_id);
-                    $weight = $ingredientLink->weight * $quantity;
+                    $weightNeeded = $ingredientLink->weight * $quantity;
 
-                    if ($ingredient->stock_weight < $weight) {
-                        array_push($this->_errorMessage, "Ingredient [{$ingredient->name}] not enough.");
-                        return null;
+                    if ($ingredient->stock_weight < $weightNeeded) {
+                        array_push($this->_errorMessage, "Ingredient [{$ingredient->name}] stock not enough (row " . ($index + 1) . ").");
+                        continue;
                     }
 
-                    $ingredient->stock_weight -= $weight;
+                    $ingredient->stock_weight -= $weightNeeded;
                     $this->_ingredientRepository->update($ingredient->id, ['stock_weight' => $ingredient->stock_weight]);
                 }
+            }
+
+            if (!empty($this->_errorMessage)) {
+                DB::rollBack();
+                return false;
             }
 
             $this->_dailySalesRepository->update($dailySales->id, [
@@ -140,8 +150,8 @@ class ImportDailySalesAdminService extends Service
             return true;
         } catch (Exception $e) {
             DB::rollBack();
-            array_push($this->_errorMessage, "Fail to upload daily sales file.");
-            return null;
+            array_push($this->_errorMessage, "Fail to upload daily sales file: " . $e->getMessage());
+            return false;
         }
     }
 }

@@ -4,6 +4,39 @@
 
 @section('content')
 
+    @if (session('successFiles') || session('failedFiles'))
+        <div class="mb-3">
+            @if (session('successFiles') && count(session('successFiles')) > 0)
+                <div class="alert alert-success">
+                    <strong>✅ Successfully Uploaded:</strong>
+                    <hr class="my-2">
+                    <ul class="mb-0">
+                        @foreach (session('successFiles') as $file)
+                            <li>{{ $file }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            @if (session('failedFiles') && count(session('failedFiles')) > 0)
+                <div class="alert alert-danger">
+                    <strong>❌ Failed to Upload:</strong>
+                    <hr class="my-2">
+                    @foreach (session('failedFiles') as $fail)
+                        <div>
+                            <strong>{{ $fail['file'] }}</strong>
+                            <ul class="mb-0">
+                                @foreach ($fail['errors'] as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    @endif
+
     <div class="row mb-3">
         <div class="col">
             <h2 class="fw-bold">Dashboard</h2>
@@ -34,7 +67,7 @@
                             <p class="mb-2"><i class="fa-solid fa-cloud-arrow-up fs-1 text-primary"></i></p>
                             <p class="fw-bold mb-1">Drag & Drop your file here</p>
                             <p class="text-muted small mb-0">or click to select .xlsx / .csv file</p>
-                            <input type="file" name="excel_file" class="d-none" id="fileInput" accept=".xlsx,.csv"
+                            <input type="file" name="excel_file[]" class="d-none" id="fileInput" accept=".xlsx,.csv"
                                 multiple required>
                         </div>
                         <p id="fileName" class="text-center text-muted mb-3" style="display:none;"></p>

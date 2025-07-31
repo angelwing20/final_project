@@ -19,17 +19,33 @@ class ImportDailySalesAdminController extends Controller
     {
         $files = $request->file('excel_file');
 
-        $files = is_array($files) ? $files : [$files];
-
-        foreach ($files as $file) {
-            $result = $this->_importDailySalesAdminService->import(['excel_file' => $file]);
-
-            if ($result === null) {
-                $errorMessage = implode("<br>", $this->_importDailySalesAdminService->_errorMessage);
-                return back()->with('error', $errorMessage)->withInput();
-            }
+        if (!$files) {
+            return back()->with('error', 'Please upload at least one file.');
         }
 
-        return back()->with('success', 'Daily sales file upload successfully.');
+        $files = is_array($files) ? $files : [$files];
+
+        $successFiles = [];
+        $failedFiles = [];
+
+        foreach ($files as $file) {
+            $result = $this->_importDailySalesAdminService->import($file);
+
+            if ($result) {
+                $successFiles[] = $file->getClientOriginalName();
+            } else {
+                $failedFiles[] = [
+                    'file' => $file->getClientOriginalName(),
+                    'errors' => $this->_importDailySalesAdminService->_errorMessage
+                ];
+            }
+
+            $this->_importDailySalesAdminService->_errorMessage = [];
+        }
+
+        return back()->with([
+            'successFiles' => $successFiles,
+            'failedFiles' => $failedFiles
+        ]);
     }
 }
