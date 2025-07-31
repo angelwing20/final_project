@@ -89,7 +89,7 @@
             <table class="table table-bordered table-hover align-middle" style="white-space: nowrap;">
                 <thead class="table-dark">
                     <tr>
-                        <th style="width:15%;">Created at</th>
+                        <th style="width:15%;">Date</th>
                         <th style="width:15%;">Ingredient</th>
                         <th style="width:15%;">Refill by</th>
                         <th style="width:15%;">Quantity</th>

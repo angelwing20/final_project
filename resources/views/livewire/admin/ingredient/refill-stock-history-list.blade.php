@@ -2,7 +2,7 @@
     <table class="table table-bordered table-hover align-middle" style="white-space: nowrap;">
         <thead class="table-dark">
             <tr>
-                <th style="width:20%;">Created at</th>
+                <th style="width:20%;">Date</th>
                 <th style="width:20%;">Refill by</th>
                 <th style="width:20%;">Quantity</th>
                 <th style="width:20%;">Weight (kg)</th>
