@@ -62,7 +62,7 @@ class ProductList extends Component
             ->orderBy('products.name', 'asc');
 
         if (isset($this->filter['name']) && $this->filter['name'] !== null) {
-            $query = $query->where('name', 'like', '%' . $this->filter['name'] . '%');
+            $query = $query->where('products.name', 'like', '%' . $this->filter['name'] . '%');
         }
 
         $query = $query
