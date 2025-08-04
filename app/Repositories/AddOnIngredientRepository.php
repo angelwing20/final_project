@@ -18,7 +18,7 @@ class AddOnIngredientRepository extends Repository
         $model = new AddOnIngredient();
         $model->add_on_id = $data['add_on_id'];
         $model->ingredient_id = $data['ingredient_id'];
-        $model->weight = $data['weight'];
+        $model->consumption = $data['consumption'];
 
         $model->save();
         return $model->fresh();
@@ -29,7 +29,7 @@ class AddOnIngredientRepository extends Repository
         $model = $this->_db->find($id);
         $model->add_on_id = $data['add_on_id'] ?? $model->add_on_id;
         $model->ingredient_id = $data['ingredient_id'] ?? $model->ingredient_id;
-        $model->weight = $data['weight'] ?? $model->weight;
+        $model->consumption = $data['consumption'] ?? $model->consumption;
 
         $model->update();
         return $model;

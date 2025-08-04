@@ -33,6 +33,17 @@
 
                         <div class="col-12">
                             <div class="mb-3">
+                                <label for="filterUnitType" class="form-label">Unit Type</label>
+                                <select class="form-select" id="filterUnitType" wire:model="filter.unit_type">
+                                    <option value="">All unit types</option>
+                                    <option value="weight">Weight</option>
+                                    <option value="quantity">Quantity</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="mb-3">
                                 <label for="filterStockStatus" class="form-label">Stock Status</label>
                                 <select class="form-select" id="filterStockStatus" wire:model="filter.stock_status">
                                     <option value="">All stock status</option>
@@ -74,21 +85,25 @@
                                         {{ $ingredient->name }}
 
                                         <div>
-                                            Price: RM {{ $ingredient->price_per_weight_unit }} /
-                                            {{ $ingredient->weight_unit }} kg
+                                            Price: RM {{ $ingredient->price }}
+                                            @if ($ingredient->unit_type === 'weight')
+                                                / {{ floatval(sprintf('%.2f', $ingredient->weight_unit)) }} kg
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-12 col-sm-auto">
-                                    <div class="d-flex flex-column fw-bold text-center">
+                                    <div class="d-flex flex-column align-items-sm-end fw-bold text-center">
                                         <div>
-                                            Stock: {{ $ingredient->stock_weight }} kg
+                                            Stock: @if ($ingredient->unit_type === 'weight')
+                                                {{ floatval(sprintf('%.2f', $ingredient->stock)) }} kg
+                                            @else
+                                                {{ $ingredient->stock / $ingredient->weight_unit }} qty
+                                            @endif
                                         </div>
-                                        @if (
-                                            $ingredient->stock_weight !== null &&
-                                                $ingredient->alarm_weight !== null &&
-                                                $ingredient->stock_weight <= $ingredient->alarm_weight)
+
+                                        @if ($ingredient->stock !== null && $ingredient->min_stock !== null && $ingredient->stock <= $ingredient->min_stock)
                                             <span class="badge bg-danger mt-1">
                                                 Low stock
                                             </span>
@@ -118,11 +133,3 @@
         </div>
     @endif
 </div>
-
-@section('scripts')
-    <script>
-        $(function() {
-
-        })
-    </script>
-@endsection

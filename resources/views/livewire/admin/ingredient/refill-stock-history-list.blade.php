@@ -2,11 +2,13 @@
     <table class="table table-bordered table-hover align-middle" style="white-space: nowrap;">
         <thead class="table-dark">
             <tr>
-                <th style="width:20%;">Date</th>
-                <th style="width:20%;">Refill by</th>
-                <th style="width:20%;">Quantity</th>
-                <th style="width:20%;">Weight (kg)</th>
-                <th style="width:20%;">Amount (RM)</th>
+                <th>Date</th>
+                <th>Refill by</th>
+                <th>Quantity</th>
+                @if ($unitType === 'weight')
+                    <th>Weight (kg)</th>
+                @endif
+                <th>Amount (RM)</th>
             </tr>
         </thead>
 
@@ -17,13 +19,15 @@
                         <td>{{ $refillStockHistory->created_at }}</td>
                         <td>{{ $refillStockHistory->staff_name }}</td>
                         <td>{{ $refillStockHistory->quantity }}</td>
-                        <td>{{ $refillStockHistory->weight }}</td>
+                        @if ($unitType === 'weight')
+                            <td>{{ floatval(sprintf('%.2f', $refillStockHistory->weight)) }}</td>
+                        @endif
                         <td>{{ $refillStockHistory->amount }}</td>
                     </tr>
                 @endforeach
             @else
                 <tr>
-                    <td colspan="5" class="text-center text-muted">No data found</td>
+                    <td colspan="{{ $unitType === 'weight' ? 5 : 4 }}" class="text-center text-muted">No data found</td>
                 </tr>
             @endif
         </tbody>

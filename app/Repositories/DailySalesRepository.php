@@ -37,7 +37,7 @@ class DailySalesRepository extends Repository
         return $model;
     }
 
-    public function getMonthlyIngredientUsage()
+    public function getMonthlyIngredientConsumption()
     {
         $startDate = Carbon::now()->startOfMonth();
         $endDate = Carbon::now()->endOfMonth();
@@ -60,11 +60,11 @@ class DailySalesRepository extends Repository
                 'ingredients.name as ingredient_name',
                 DB::raw('
                     COALESCE(SUM(CASE WHEN daily_sales_items.item_type = "product"
-                                      THEN product_ingredients.weight * daily_sales_items.quantity
+                                      THEN product_ingredients.consumption * daily_sales_items.quantity
                                       ELSE 0 END), 0)
                     +
                     COALESCE(SUM(CASE WHEN daily_sales_items.item_type = "addon"
-                                      THEN add_on_ingredients.weight * daily_sales_items.quantity
+                                      THEN add_on_ingredients.consumption * daily_sales_items.quantity
                                       ELSE 0 END), 0)
                     as total_used
                 ')
@@ -94,7 +94,7 @@ class DailySalesRepository extends Repository
             ->sum('total_amount');
 
         $lowStockCount = DB::table('ingredients')
-            ->whereColumn('stock_weight', '<=', 'alarm_weight')
+            ->whereColumn('stock', '<=', 'min_stock')
             ->count();
 
         $totalRefillAmount = DB::table('refill_stock_histories')
@@ -111,7 +111,7 @@ class DailySalesRepository extends Repository
         ];
     }
 
-    public function getIngredientUsageByDailySalesId($dailySalesId)
+    public function getIngredientConsumptionByDailySalesId($dailySalesId)
     {
         return DB::table('daily_sales_items as daily_sales_items')
             ->join('daily_sales as daily_sales', 'daily_sales.id', '=', 'daily_sales_items.daily_sales_id')
@@ -128,14 +128,15 @@ class DailySalesRepository extends Repository
             })
             ->select(
                 'ingredients.name as ingredient_name',
-                'ingredients.price_per_weight_unit',
+                'ingredients.unit_type',
                 'ingredients.weight_unit',
-                DB::raw('SUM((COALESCE(product_ingredients.weight, add_on_ingredients.weight) * daily_sales_items.quantity)) as total_weight'),
-                DB::raw('SUM(((COALESCE(product_ingredients.weight, add_on_ingredients.weight) * daily_sales_items.quantity) / ingredients.weight_unit) * ingredients.price_per_weight_unit) as total_amount')
+                'ingredients.price',
+                DB::raw('SUM((COALESCE(product_ingredients.consumption, add_on_ingredients.consumption) * daily_sales_items.quantity)) as total_weight'),
+                DB::raw('SUM(((COALESCE(product_ingredients.consumption, add_on_ingredients.consumption) * daily_sales_items.quantity) / ingredients.weight_unit) * ingredients.price) as total_amount')
             )
             ->where('daily_sales_items.daily_sales_id', $dailySalesId)
             ->whereNotNull('ingredients.name')
-            ->groupBy('ingredients.name', 'ingredients.price_per_weight_unit', 'ingredients.weight_unit')
+            ->groupBy('ingredients.name', 'ingredients.unit_type', 'ingredients.weight_unit', 'ingredients.price')
             ->orderBy('ingredients.name', 'asc')
             ->get();
     }

@@ -20,10 +20,11 @@ class IngredientRepository extends Repository
         $model->ingredient_category_id = $data['ingredient_category_id'];
         $model->image = $data['image'] ?? null;
         $model->name = $data['name'];
-        $model->stock_weight = $data['stock_weight'] ?? null;
-        $model->alarm_weight = $data['alarm_weight'];
+        $model->unit_type = $data['unit_type'];
+        $model->stock = $data['stock'] ?? null;
+        $model->min_stock = $data['min_stock'];
         $model->weight_unit = $data['weight_unit'];
-        $model->price_per_weight_unit = $data['price_per_weight_unit'];
+        $model->price = $data['price'];
 
 
         $model->save();
@@ -36,10 +37,11 @@ class IngredientRepository extends Repository
         $model->ingredient_category_id = $data['ingredient_category_id'] ?? $model->ingredient_category_id;
         $model->image = array_key_exists('image', $data) ? $data['image'] : $model->image;
         $model->name = $data['name'] ?? $model->name;
-        $model->stock_weight = array_key_exists('stock_weight', $data) ? $data['stock_weight'] : $model->stock_weight;
-        $model->alarm_weight = $data['alarm_weight'] ?? $model->alarm_weight;
+        $model->unit_type = $data['unit_type'] ?? $model->unit_type;
+        $model->stock = array_key_exists('stock', $data) ? $data['stock'] : $model->stock;
+        $model->min_stock = $data['min_stock'] ?? $model->min_stock;
         $model->weight_unit = $data['weight_unit'] ?? $model->weight_unit;
-        $model->price_per_weight_unit = $data['price_per_weight_unit'] ?? $model->price_per_weight_unit;
+        $model->price = $data['price'] ?? $model->price;
 
 
         $model->update();
@@ -51,7 +53,7 @@ class IngredientRepository extends Repository
 
         $name = $data['search_term'] ?? '';
 
-        $data = $this->_db->select('id', 'name')
+        $data = $this->_db->select('id', 'name', 'unit_type', 'weight_unit')
             ->where('name', 'LIKE', "%$name%")
             ->skip($data['offset'])->take($data['result_count'])
             ->get();
@@ -79,7 +81,7 @@ class IngredientRepository extends Repository
 
         $name = $data['search_term'] ?? '';
 
-        $data = $this->_db->select('id', 'name')
+        $data = $this->_db->select('id', 'name', 'unit_type', 'weight_unit')
             ->whereNotIn('id', function ($sub) use ($exclude_product_id) {
                 $sub->select('ingredient_id')
                     ->from('product_ingredients')
@@ -117,7 +119,7 @@ class IngredientRepository extends Repository
 
         $name = $data['search_term'] ?? '';
 
-        $data = $this->_db->select('id', 'name')
+        $data = $this->_db->select('id', 'name', 'unit_type', 'weight_unit')
             ->whereNotIn('id', function ($sub) use ($exclude_add_on_id) {
                 $sub->select('ingredient_id')
                     ->from('add_on_ingredients')
@@ -150,14 +152,15 @@ class IngredientRepository extends Repository
         return $totalCount;
     }
 
-    public function updateWeight($id, $newWeight)
+    public function updateStock($id, $newStock)
     {
         $ingredient = $this->getById($id);
+
         if (!$ingredient) {
             return null;
         }
 
-        $ingredient->stock_weight = max(0, $newWeight);
+        $ingredient->stock = max(0, $newStock);
         $ingredient->save();
 
         return $ingredient->fresh();

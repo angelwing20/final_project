@@ -20,7 +20,7 @@ class ProductIngredientAdminController extends Controller
         $data = $request->only([
             'product_id',
             'ingredient_id',
-            'weight',
+            'consumption',
         ]);
 
         $result = $this->_productIngredientAdminService->createProductIngredient($data);
@@ -36,7 +36,7 @@ class ProductIngredientAdminController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->only([
-            'weight',
+            'consumption',
         ]);
 
         $result = $this->_productIngredientAdminService->update($id, $data);

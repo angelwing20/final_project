@@ -9,10 +9,23 @@ use Livewire\Component;
 class RefillStockHistoryList extends Component
 {
     public $ingredientId;
+    public $unitType;
     public $refillStockHistories;
     public $page = 0;
     public $limitDataPerPage = 10;
     public $noMoreData = false;
+
+    public function mount($ingredientId)
+    {
+        $this->ingredientId = $ingredientId;
+
+        $ingredient = DB::table('ingredients')
+            ->select('unit_type')
+            ->where('id', $ingredientId)
+            ->first();
+
+        $this->unitType = $ingredient ? $ingredient->unit_type : null;
+    }
 
     public function loadMore()
     {

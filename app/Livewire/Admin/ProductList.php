@@ -58,7 +58,24 @@ class ProductList extends Component
                 'products.description',
                 'products.image',
                 'product_categories.name as product_category_name',
-                DB::raw("GROUP_CONCAT(CONCAT(ingredients.name, ' (', product_ingredients.weight, 'kg)') ORDER BY ingredients.name SEPARATOR ', ') as ingredient_details")
+                DB::raw("
+                    GROUP_CONCAT(
+                        CONCAT(
+                            ingredients.name, ' (',
+                            CASE
+                                WHEN ingredients.unit_type = 'quantity'
+                                THEN TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM FORMAT(product_ingredients.consumption / ingredients.weight_unit, 2)))
+                                ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM FORMAT(product_ingredients.consumption, 2)))
+                            END,
+                            ' ',
+                            CASE
+                                WHEN ingredients.unit_type = 'quantity' THEN 'qty' ELSE 'kg'
+                            END,
+                            ')'
+                        )
+                        ORDER BY ingredients.name SEPARATOR ', '
+                    ) as ingredient_details
+                ")
             )
             ->groupBy(
                 'products.id',
@@ -72,11 +89,11 @@ class ProductList extends Component
             ->orderBy('products.name', 'asc');
 
         if (isset($this->filter['name']) && $this->filter['name'] !== null) {
-            $query = $query->where('products.name', 'like', '%' . $this->filter['name'] . '%');
+            $query->where('products.name', 'like', '%' . $this->filter['name'] . '%');
         }
 
         if (isset($this->filter['product_category_id']) && $this->filter['product_category_id'] !== null) {
-            $query = $query->where('products.product_category_id', '=', $this->filter['product_category_id']);
+            $query->where('products.product_category_id', '=', $this->filter['product_category_id']);
         }
 
         $query = $query

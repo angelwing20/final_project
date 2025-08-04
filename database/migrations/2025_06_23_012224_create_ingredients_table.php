@@ -16,10 +16,11 @@ return new class extends Migration
             $table->foreignId('ingredient_category_id')->constrained();
             $table->string('name');
             $table->string('image')->nullable();
-            $table->decimal('stock_weight', 8, 2)->nullable()->default('0');
-            $table->decimal('alarm_weight', 8, 2);
+            $table->enum('unit_type', ['weight', 'quantity']);
+            $table->decimal('stock', 8, 2)->nullable()->default('0');
+            $table->decimal('min_stock', 8, 2);
             $table->decimal('weight_unit', 8, 2);
-            $table->decimal('price_per_weight_unit', 13, 2);
+            $table->decimal('price', 13, 2);
             $table->timestamps();
         });
     }

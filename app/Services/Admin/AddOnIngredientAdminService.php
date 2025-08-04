@@ -3,6 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Repositories\AddOnIngredientRepository;
+use App\Repositories\IngredientRepository;
 use Exception;
 use App\Services\Service;
 use Illuminate\Support\Facades\DB;
@@ -11,10 +12,12 @@ use Illuminate\Support\Facades\Validator;
 class AddOnIngredientAdminService extends Service
 {
     private $_addOnIngredientRepository;
+    private $_ingredientRepository;
 
-    public function __construct(AddOnIngredientRepository $addOnIngredientRepository)
+    public function __construct(AddOnIngredientRepository $addOnIngredientRepository, IngredientRepository $ingredientRepository)
     {
         $this->_addOnIngredientRepository = $addOnIngredientRepository;
+        $this->_ingredientRepository = $ingredientRepository;
     }
 
     public function createAddOnIngredient($data)
@@ -22,10 +25,18 @@ class AddOnIngredientAdminService extends Service
         DB::beginTransaction();
 
         try {
+            $ingredient = $this->_ingredientRepository->getById($data['ingredient_id']);
+
+            if ($ingredient == null) {
+                throw new Exception();
+            }
+
+            $min = $ingredient->unit_type === 'weight' ? 0.01 : 1;
+
             $validator = Validator::make($data, [
                 'add_on_id' => 'required|exists:add_ons,id',
                 'ingredient_id' => 'required|exists:ingredients,id',
-                'weight' => 'required|numeric|min:0',
+                'consumption' => ['required', 'numeric', "min:$min"],
             ]);
 
             if ($validator->fails()) {
@@ -33,6 +44,10 @@ class AddOnIngredientAdminService extends Service
                     array_push($this->_errorMessage, $error);
                 }
                 return null;
+            }
+
+            if ($ingredient['unit_type'] === 'quantity') {
+                $data['consumption'] = $data['consumption'] * $ingredient['weight_unit'];
             }
 
             $addOnIngredient = $this->_addOnIngredientRepository->save($data);
@@ -52,8 +67,20 @@ class AddOnIngredientAdminService extends Service
         DB::beginTransaction();
 
         try {
+            $addOnIngredient = $this->_addOnIngredientRepository->getById($id);
+            if (!$addOnIngredient) {
+                throw new Exception('Add-on Ingredient not found');
+            }
+
+            $ingredient = $this->_ingredientRepository->getById($addOnIngredient->ingredient_id);
+            if (!$ingredient) {
+                throw new Exception('Ingredient not found');
+            }
+
+            $min = $ingredient->unit_type === 'weight' ? 0.01 : 1;
+
             $validator = Validator::make($data, [
-                'weight' => 'required|numeric|min:0',
+                'consumption' => ['required', 'numeric', "min:$min"],
             ]);
 
             if ($validator->fails()) {
@@ -61,6 +88,10 @@ class AddOnIngredientAdminService extends Service
                     array_push($this->_errorMessage, $error);
                 }
                 return null;
+            }
+
+            if ($ingredient->unit_type === 'quantity') {
+                $data['consumption'] = $data['consumption'] * $ingredient->weight_unit;
             }
 
             $addOnIngredient = $this->_addOnIngredientRepository->update($id, $data);

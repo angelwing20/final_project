@@ -106,7 +106,9 @@
                                 <td>{{ $refillStockHistory->ingredient_name }}</td>
                                 <td>{{ $refillStockHistory->staff_name }}</td>
                                 <td>{{ $refillStockHistory->quantity }}</td>
-                                <td>{{ $refillStockHistory->weight }}</td>
+                                <td>
+                                    {{ $refillStockHistory->ingredient_unit_type === 'weight' ? $refillStockHistory->weight : '-' }}
+                                </td>
                                 <td>{{ $refillStockHistory->amount }}</td>
                             </tr>
                         @endforeach

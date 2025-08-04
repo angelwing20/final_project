@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('add_on_id')->constrained('add_ons');
             $table->foreignId('ingredient_id')->constrained('ingredients');
-            $table->decimal('weight', 8, 2);
+            $table->decimal('consumption', 8, 2);
             $table->timestamps();
         });
     }

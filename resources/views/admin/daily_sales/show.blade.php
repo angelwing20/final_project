@@ -95,36 +95,43 @@
     </div>
 
     <div class="mt-4 mb-3">
-        <h2 class="fw-bold">Ingredient Usage</h2>
+        <h2 class="fw-bold">Ingredient Consumption</h2>
     </div>
 
     <div class="table-responsive">
         <table class="table table-bordered" style="white-space: nowrap">
             <thead class="table-dark">
                 <tr>
-                    <th>Ingredient</th>
-                    <th class="text-end">Weight (kg)</th>
-                    <th class="text-end">Cost (RM)</th>
+                    <th style="width: 40%">Ingredient</th>
+                    <th style="width: 30%" class="text-end">Consumption</th>
+                    <th style="width: 30%" class="text-end">Cost (RM)</th>
                 </tr>
             </thead>
             <tbody>
-                @if (!empty($ingredientUsage['ingredients']))
-                    @foreach ($ingredientUsage['ingredients'] as $ingredientData)
+                @if (!empty($ingredientConsumption['ingredients']))
+                    @foreach ($ingredientConsumption['ingredients'] as $ingredientData)
                         <tr>
                             <td>{{ $ingredientData['name'] }}</td>
-                            <td class="text-end">{{ number_format($ingredientData['weight'], 2) }}</td>
+                            <td class="text-end">
+                                @if ($ingredientData['unit_type'] === 'quantity')
+                                    {{ intval(round($ingredientData['weight'] / $ingredientData['weight_unit'])) }} qty
+                                @else
+                                    {{ floatval(sprintf('%.2f', $ingredientData['weight'])) }} kg
+                                @endif
+                            </td>
                             <td class="text-end">{{ number_format($ingredientData['amount'], 2) }}</td>
                         </tr>
                     @endforeach
                 @else
                     <tr>
-                        <td colspan="3" class="text-center">No ingredient usage data.</td>
+                        <td colspan="3" class="text-center">No ingredient consumption data.</td>
                     </tr>
                 @endif
 
                 <tr class="table-warning fw-bold">
                     <td class="text-end">TOTAL</td>
-                    <td colspan="2" class="text-end">RM {{ number_format($ingredientUsage['total_amount'], 2) }}</td>
+                    <td colspan="2" class="text-end">RM {{ number_format($ingredientConsumption['total_amount'], 2) }}
+                    </td>
                 </tr>
             </tbody>
         </table>

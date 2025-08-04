@@ -39,13 +39,13 @@ class DailySalesAdminController extends Controller
             return back()->with('error', $errorMessage);
         }
 
-        $ingredientUsage = $this->_dailySalesAdminService->getIngredientUsageTableData($id);
+        $ingredientConsumption = $this->_dailySalesAdminService->getIngredientConsumptionTableData($id);
 
-        if ($ingredientUsage == null) {
+        if ($ingredientConsumption == null) {
             $errorMessage = implode("<br>", $this->_dailySalesAdminService->_errorMessage);
             return back()->with('error', $errorMessage);
         }
 
-        return view('admin.daily_sales.show', compact('dailySales', 'dailySalesItems', 'ingredientUsage'));
+        return view('admin.daily_sales.show', compact('dailySales', 'dailySalesItems', 'ingredientConsumption'));
     }
 }

@@ -22,8 +22,10 @@
                                         {{ $ingredient->name }}
 
                                         <div>
-                                            Price: RM {{ $ingredient->price_per_weight_unit }} /
-                                            {{ $ingredient->weight_unit }} kg
+                                            Price: RM {{ $ingredient->price }}
+                                            @if ($ingredient->unit_type === 'weight')
+                                                / {{ floatval(sprintf('%.2f', $ingredient->weight_unit)) }} kg
+                                            @endif
                                         </div>
 
                                         <div>
@@ -37,11 +39,19 @@
                                 <div class="col-12 col-sm-auto">
                                     <div class="d-flex flex-column fw-semibold align-items-end">
                                         <div>
-                                            Stock: {{ $ingredient->stock_weight }} kg
+                                            Stock: @if ($ingredient->unit_type === 'weight')
+                                                {{ floatval(sprintf('%.2f', $ingredient->stock)) }} kg
+                                            @else
+                                                {{ $ingredient->stock / $ingredient->weight_unit }} qty
+                                            @endif
                                         </div>
 
                                         <div>
-                                            Alarm Weight: {{ $ingredient->alarm_weight }} kg
+                                            Minimum Stock: @if ($ingredient->unit_type === 'weight')
+                                                {{ floatval(sprintf('%.2f', $ingredient->min_stock)) }} kg
+                                            @else
+                                                {{ $ingredient->min_stock / $ingredient->weight_unit }} qty
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

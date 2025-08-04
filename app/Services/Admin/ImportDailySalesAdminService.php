@@ -107,7 +107,7 @@ class ImportDailySalesAdminService extends Service
                     $ingredient = $this->_ingredientRepository->getById($ingredientLink->ingredient_id);
                     $weightNeeded = $ingredientLink->weight * $quantity;
 
-                    if ($ingredient->stock_weight < $weightNeeded) {
+                    if ($ingredient->stock < $weightNeeded) {
                         array_push($this->_errorMessage, "Ingredient [{$ingredient->name}] stock not enough (row " . ($index + 1) . ").");
                         continue 2;
                     }
@@ -142,8 +142,8 @@ class ImportDailySalesAdminService extends Service
 
                     foreach ($data['ingredients'] as $ingredientLink) {
                         $ingredient = $this->_ingredientRepository->getById($ingredientLink->ingredient_id);
-                        $ingredient->stock_weight -= $ingredientLink->weight * $data['quantity'];
-                        $this->_ingredientRepository->update($ingredient->id, ['stock_weight' => $ingredient->stock_weight]);
+                        $ingredient->stock -= $ingredientLink->weight * $data['quantity'];
+                        $this->_ingredientRepository->update($ingredient->id, ['stock' => $ingredient->stock]);
                     }
                 }
 

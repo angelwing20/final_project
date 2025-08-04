@@ -66,7 +66,8 @@ class RefillStockHistoryList extends Component
                 'refill_stock_histories.created_at',
 
                 'users.name as staff_name',
-                'ingredients.name as ingredient_name'
+                'ingredients.name as ingredient_name',
+                'ingredients.unit_type as ingredient_unit_type'
             )
             ->orderBy('refill_stock_histories.created_at', 'desc');
 

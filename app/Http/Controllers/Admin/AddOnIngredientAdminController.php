@@ -20,7 +20,7 @@ class AddOnIngredientAdminController extends Controller
         $data = $request->only([
             'add_on_id',
             'ingredient_id',
-            'weight',
+            'consumption',
         ]);
 
         $result = $this->_addOnIngredientAdminService->createAddOnIngredient($data);
@@ -36,7 +36,7 @@ class AddOnIngredientAdminController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->only([
-            'weight',
+            'consumption',
         ]);
 
         $result = $this->_addOnIngredientAdminService->update($id, $data);

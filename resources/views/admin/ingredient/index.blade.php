@@ -52,8 +52,8 @@
                                         <div class="form-group">
                                             <label class="form-label" for="refill-quantity-0">Quantity</label>
                                             <input type="number" class="form-control" id="refill-quantity-0"
-                                                name="refills[0][quantity]" step="1" min="1"
-                                                placeholder="Quantity">
+                                                name="refills[0][quantity]" step="1" min="1" value="1"
+                                                placeholder="Quantity" required>
                                         </div>
                                     </div>
 
@@ -132,17 +132,25 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="stock_weight" class="form-label">Stock Weight (kg)</label>
-                                    <input type="number" class="form-control" name="stock_weight" id="stock_weight"
-                                        step="0.01" min="0.01" placeholder="Stock weight">
+                                    <label for="unit_type" class="form-label">Unit Type</label>
+                                    <select class="form-select" name="unit_type" id="unit_type" required>
+                                        <option value="weight">Weight (kg)</option>
+                                        <option value="quantity">Quantity (qty)</option>
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="alarm_weight" class="form-label">Alarm Weight (kg)</label>
-                                    <input type="number" class="form-control" name="alarm_weight" id="alarm_weight"
-                                        step="0.01" min="0.01" placeholder="Alarm weight" required>
+                                    <label for="stock" class="form-label"></label>
+                                    <input type="number" class="form-control" name="stock" id="stock">
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-group mb-3">
+                                    <label for="min_stock" class="form-label"></label>
+                                    <input type="number" class="form-control" name="min_stock" id="min_stock" required>
                                 </div>
                             </div>
 
@@ -150,16 +158,15 @@
                                 <div class="form-group mb-3">
                                     <label for="weight_unit" class="form-label">Weight Unit (kg)</label>
                                     <input type="number" class="form-control" name="weight_unit" id="weight_unit"
-                                        step="0.01" min="0.01" placeholder="Weight unit" required>
+                                        step="0.01" min="0.01" placeholder="Weight unit (kg)" required>
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="price_per_weight_unit" class="form-label">Price Per Weight Unit</label>
-                                    <input type="number" class="form-control" name="price_per_weight_unit"
-                                        id="price_per_weight_unit" step="0.01" min="0.01"
-                                        placeholder="Price per weight unit" required>
+                                    <label for="price" class="form-label"></label>
+                                    <input type="number" class="form-control" name="price" id="price"
+                                        step="0.01" min="0.01" required>
                                 </div>
                             </div>
 
@@ -174,7 +181,6 @@
             </div>
         </div>
     </div>
-
 @endsection
 
 @section('script')
@@ -260,7 +266,11 @@
                             results: $.map(data.results, function(item) {
                                 return {
                                     text: item.name,
-                                    id: item.id
+                                    id: item.id,
+                                    data: {
+                                        unit_type: item.unit_type,
+                                        weight_unit: item.weight_unit
+                                    }
                                 };
                             }),
                             pagination: {
@@ -268,6 +278,20 @@
                             }
                         };
                     }
+                }
+            });
+
+            $('select[name="refills[0][ingredient_id]"]').on('select2:select', function(e) {
+                var selectedData = e.params.data.data;
+                var row = $(this).closest(".refill-group");
+                var weightInput = row.find('input[name^="refills"][name$="[weight]"]');
+
+                if (selectedData.unit_type === 'quantity') {
+                    weightInput.val(selectedData.weight_unit);
+                    weightInput.prop('readonly', true);
+                } else {
+                    weightInput.val('');
+                    weightInput.prop('readonly', false);
                 }
             });
 
@@ -303,6 +327,59 @@
                     },
                 }
             });
+
+            const unitTypeSelect = $('#unit_type');
+            const stockInput = $('#stock');
+            const minStockInput = $('#min_stock');
+            const priceInput = $('#price');
+
+            function updateFields() {
+                const selectedType = unitTypeSelect.val();
+
+                if (selectedType === 'weight') {
+                    $('label[for="stock"]').text('Current Stock (kg)');
+                    stockInput.attr({
+                        min: '0.01',
+                        step: '0.01',
+                        placeholder: 'Current stock (kg)'
+                    });
+
+                    $('label[for="min_stock"]').text('Minimum Stock (kg)');
+                    minStockInput.attr({
+                        min: '0.01',
+                        step: '0.01',
+                        placeholder: 'Minimum stock (kg)'
+                    });
+
+                    $('label[for="price"]').text('Price per Weight Unit (RM)');
+                    priceInput.attr('placeholder', 'Price per weight unit (RM)');
+
+                } else {
+                    $('label[for="stock"]').text('Current Stock (qty)');
+                    stockInput.attr({
+                        min: '1',
+                        step: '1',
+                        placeholder: 'Current stock (qty)'
+                    });
+
+                    $('label[for="min_stock"]').text('Minimum Stock (qty)');
+                    minStockInput.attr({
+                        min: '1',
+                        step: '1',
+                        placeholder: 'Minimum stock (qty)'
+                    });
+
+                    $('label[for="price"]').text('Price per Quantity (RM)');
+                    priceInput.attr('placeholder', 'Price per quantity (RM)');
+                }
+
+                stockInput.val('');
+                minStockInput.val('');
+            }
+
+            updateFields();
+
+            unitTypeSelect.on('change', updateFields);
         })
 
         function uploadImage() {
@@ -342,7 +419,7 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label class="form-label" for="refill-quantity-${refillIndex}">Quantity</label>
-                                <input type="number" class="form-control" id="refill-quantity-${refillIndex}" name="refills[${refillIndex}][quantity]" step="1" min="1" placeholder="Quantity">
+                                <input type="number" class="form-control" id="refill-quantity-${refillIndex}" name="refills[${refillIndex}][quantity]" step="1" min="1" value="1" placeholder="Quantity" required>
                             </div>
                         </div>
 
@@ -378,7 +455,11 @@
                             results: $.map(data.results, function(item) {
                                 return {
                                     text: item.name,
-                                    id: item.id
+                                    id: item.id,
+                                    data: {
+                                        unit_type: item.unit_type,
+                                        weight_unit: item.weight_unit
+                                    }
                                 };
                             }),
                             pagination: {
@@ -386,6 +467,20 @@
                             }
                         };
                     }
+                }
+            });
+
+            $(`select[name="refills[${refillIndex}][ingredient_id]"]`).on('select2:select', function(e) {
+                var selectedData = e.params.data.data;
+                var row = $(this).closest(".refill-group");
+                var weightInput = row.find('input[name^="refills"][name$="[weight]"]');
+
+                if (selectedData.unit_type === 'quantity') {
+                    weightInput.val(selectedData.weight_unit);
+                    weightInput.prop('readonly', true);
+                } else {
+                    weightInput.val('');
+                    weightInput.prop('readonly', false);
                 }
             });
 

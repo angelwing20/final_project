@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin;
 
+use App\Models\Ingredient;
 use App\Repositories\IngredientRepository;
 use App\Repositories\RefillStockHistoryRepository;
 use Exception;
@@ -28,14 +29,17 @@ class IngredientAdminService extends Service
         DB::beginTransaction();
 
         try {
+            $min = (isset($data['unit_type']) && $data['unit_type'] === 'quantity') ? 1 : 0.01;
+
             $validator = Validator::make($data, [
                 'ingredient_category_id' => 'required|exists:ingredient_categories,id',
                 'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
                 'name' => 'required|string|max:255',
-                'stock_weight' => 'nullable|numeric|min:0',
-                'alarm_weight' => 'required|numeric|min:0.01',
+                'unit_type' => 'required|in:weight,quantity',
+                'stock' => ['nullable', 'numeric', "min:$min"],
+                'min_stock' => ['required', 'numeric', "min:$min"],
                 'weight_unit' => 'required|numeric|min:0.01',
-                'price_per_weight_unit' => 'required|numeric|min:0.01',
+                'price' => 'required|numeric|min:0.01',
             ]);
 
             if ($validator->fails()) {
@@ -55,7 +59,16 @@ class IngredientAdminService extends Service
                 $data['image'] = $fileName;
             }
 
-            $data['stock_weight'] = $data['stock_weight'] ?? 0;
+            if ($data['unit_type'] === 'quantity') {
+                if (!empty($data['stock'])) {
+                    $data['stock'] = $data['stock'] * $data['weight_unit'];
+                } else {
+                    $data['stock'] = 0;
+                }
+                $data['min_stock'] = $data['min_stock'] * $data['weight_unit'];
+            } else {
+                $data['stock'] = $data['stock'] ?? 0;
+            }
 
             $ingredient = $this->_ingredientRepository->save($data);
 
@@ -92,13 +105,21 @@ class IngredientAdminService extends Service
         DB::beginTransaction();
 
         try {
+            $ingredient = $this->_ingredientRepository->getById($id);
+
+            if ($ingredient == null) {
+                throw new Exception();
+            }
+
+            $min = $ingredient->unit_type === 'weight' ? 0.01 : 1;
+
             $validator = Validator::make($data, [
                 'ingredient_category_id' => 'required|exists:ingredient_categories,id',
                 'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
                 'name' => 'required|string|max:255',
-                'alarm_weight' => 'required|numeric|min:0.01',
+                'min_stock' => ['required', 'numeric', "min:$min"],
                 'weight_unit' => 'required|numeric|min:0.01',
-                'price_per_weight_unit' => 'required|numeric|min:0.01',
+                'price' => 'required|numeric|min:0.01',
             ]);
 
             if ($validator->fails()) {
@@ -106,12 +127,6 @@ class IngredientAdminService extends Service
                     array_push($this->_errorMessage, $error);
                 }
                 return null;
-            }
-
-            $ingredient = $this->_ingredientRepository->getById($id);
-
-            if ($ingredient == null) {
-                throw new Exception();
             }
 
             if (!empty($data['image'])) {
@@ -125,6 +140,19 @@ class IngredientAdminService extends Service
 
                 $data['image']->storeAs('ingredient', $fileName, 'public');
                 $data['image'] = $fileName;
+            }
+
+            if ($ingredient['unit_type'] === 'quantity') {
+                if ($data['weight_unit'] != $ingredient['weight_unit']) {
+
+                    $originalQty = $ingredient['stock'] / $ingredient['weight_unit'];
+                    $originalMinQty = $ingredient['min_stock'] / $ingredient['weight_unit'];
+
+                    $data['stock'] = $originalQty * $data['weight_unit'];
+                    $data['min_stock'] = $originalMinQty * $data['weight_unit'];
+                } else {
+                    $data['min_stock'] = $data['min_stock'] * $data['weight_unit'];
+                }
             }
 
             $ingredient = $this->_ingredientRepository->update($id, $data);
@@ -164,8 +192,8 @@ class IngredientAdminService extends Service
             foreach ($refills as $refill) {
                 $validator = Validator::make($refill, [
                     'ingredient_id' => 'required|exists:ingredients,id',
+                    'quantity' => 'required|integer|min:1',
                     'weight' => 'required|numeric|min:0.01',
-                    'quantity' => 'nullable|integer|min:1',
                 ]);
 
                 if ($validator->fails()) {
@@ -179,10 +207,15 @@ class IngredientAdminService extends Service
 
                 $ingredient = $this->_ingredientRepository->getById($refill['ingredient_id']);
 
-                $totalWeight = $refill['weight'] * $refill['quantity'];
-                $newWeight = $ingredient->stock_weight + $totalWeight;
+                if ($ingredient['unit type'] === 'quantity') {
+                    $totalWeight = $refill['quantity'] * $ingredient->weight_unit;
+                } else {
+                    $totalWeight = $refill['quantity'] * $refill['weight'];
+                }
 
-                $amount = ($totalWeight / $ingredient->weight_unit) * $ingredient->price_per_weight_unit;
+                $newWeight = $ingredient->stock + $totalWeight;
+
+                $amount = ($totalWeight / $ingredient->weight_unit) * $ingredient->price;
 
                 $this->_refillStockHistoryRepository->save([
                     'ingredient_id' => $refill['ingredient_id'],
@@ -193,7 +226,7 @@ class IngredientAdminService extends Service
                 ]);
 
                 $this->_ingredientRepository->update($refill['ingredient_id'], [
-                    'stock_weight' => $newWeight
+                    'stock' => $newWeight
                 ]);
             }
 

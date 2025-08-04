@@ -8,13 +8,11 @@
         <div class="col">
             <h2 class="fw-bold">Ingredient Category Detail</h2>
         </div>
-
         <div class="col-12 col-md-auto">
             <div class="d-flex gap-2 align-items-center float-end">
                 <a href="{{ route('admin.ingredient_category.index') }}" class="btn btn-secondary">
                     <i class="fa-solid fa-arrow-left"></i> Back
                 </a>
-
                 <form action="{{ route('admin.ingredient_category.destroy', ['id' => $ingredientCategory->id]) }}"
                     method="POST">
                     @csrf
@@ -23,7 +21,6 @@
                         <i class="fa-solid fa-trash"></i> Delete
                     </button>
                 </form>
-
                 <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editIngredientCategoryModal">
                     <i class="fa-solid fa-pen-to-square"></i> Edit
                 </button>
@@ -35,12 +32,8 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-12">
-                    <div class="fw-bold">
-                        Name:
-                    </div>
-                    <div>
-                        {{ $ingredientCategory->name }}
-                    </div>
+                    <div class="fw-bold">Name:</div>
+                    <div>{{ $ingredientCategory->name }}</div>
                 </div>
             </div>
         </div>
@@ -145,38 +138,43 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="ingredient-stock-weight" class="form-label">Stock Weight (kg)</label>
-                                    <input type="number" class="form-control" name="stock_weight"
-                                        id="ingredient-stock-weight" step="0.01" min="0.01"
-                                        placeholder="Stock weight">
+                                    <label for="ingredient-unit_type" class="form-label">Unit Type</label>
+                                    <select class="form-select" name="unit_type" id="ingredient-unit_type" required>
+                                        <option value="weight" selected>Weight (kg)</option>
+                                        <option value="quantity">Quantity (qty)</option>
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="ingredient-alarm_weight" class="form-label">Alarm Weight (kg)</label>
-                                    <input type="number" class="form-control" name="alarm_weight"
-                                        id="ingredient-alarm_weight" step="0.01" min="0.01"
-                                        placeholder="Alarm weight" required>
+                                    <label for="ingredient-stock" class="form-label"></label>
+                                    <input type="number" class="form-control" name="stock" id="ingredient-stock">
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="ingredient-weight-unit" class="form-label">Weight Unit (kg)</label>
+                                    <label for="ingredient-min_stock" class="form-label"></label>
+                                    <input type="number" class="form-control" name="min_stock"
+                                        id="ingredient-min_stock" required>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-group mb-3">
+                                    <label for="ingredient-weight_unit" class="form-label">Weight Unit (kg)</label>
                                     <input type="number" class="form-control" name="weight_unit"
-                                        id="ingredient-weight-unit" step="0.01" min="0.01"
-                                        placeholder="Weight unit" required>
+                                        id="ingredient-weight_unit" step="0.01" min="0.01"
+                                        placeholder="Weight unit (kg)" required>
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="ingredient-price-per-weight-unit" class="form-label">Price Per Weight
-                                        Unit</label>
-                                    <input type="number" class="form-control" name="price_per_weight_unit"
-                                        id="ingredient-price-per-weight-unit" step="0.01" min="0.01"
-                                        placeholder="Price per weight unit" required>
+                                    <label for="ingredient-price" class="form-label"></label>
+                                    <input type="number" class="form-control" name="price" id="ingredient-price"
+                                        min="0.01" step="0.01" required>
                                 </div>
                             </div>
 
@@ -217,7 +215,7 @@
                             4000);
                     }
                 },
-            })
+            });
 
             $('#add-ingredient-form').validate({
                 ignore: [],
@@ -239,7 +237,7 @@
                             4000);
                     }
                 },
-            })
+            });
 
             $('.image-input').change(function(e) {
                 const file = e.target.files[0];
@@ -256,7 +254,60 @@
                     $('#remove-btn').addClass('d-none');
                 }
             });
-        })
+
+            const unitTypeSelect = $('#ingredient-unit_type');
+            const stockInput = $('#ingredient-stock');
+            const minStockInput = $('#ingredient-min_stock');
+            const priceInput = $('#ingredient-price');
+
+            function updateFields() {
+                const selectedType = unitTypeSelect.val();
+
+                if (selectedType === 'weight') {
+                    $('label[for="ingredient-stock"]').text('Current Stock (kg)');
+                    stockInput.attr({
+                        min: '0.01',
+                        step: '0.01',
+                        placeholder: 'Current stock (kg)'
+                    });
+
+                    $('label[for="ingredient-min_stock"]').text('Minimum Stock (kg)');
+                    minStockInput.attr({
+                        min: '0.01',
+                        step: '0.01',
+                        placeholder: 'Minimum stock (kg)'
+                    });
+
+                    $('label[for="ingredient-price"]').text('Price per Weight Unit (RM)');
+                    priceInput.attr('placeholder', 'Price per weight unit (RM)');
+
+                } else {
+                    $('label[for="ingredient-stock"]').text('Current Stock (qty)');
+                    stockInput.attr({
+                        min: '1',
+                        step: '1',
+                        placeholder: 'Current stock (qty)'
+                    });
+
+                    $('label[for="ingredient-min_stock"]').text('Minimum Stock (qty)');
+                    minStockInput.attr({
+                        min: '1',
+                        step: '1',
+                        placeholder: 'Minimum stock (qty)'
+                    });
+
+                    $('label[for="ingredient-price"]').text('Price per Quantity (RM)');
+                    priceInput.attr('placeholder', 'Price per quantity (RM)');
+                }
+
+                stockInput.val('');
+                minStockInput.val('');
+            }
+
+            updateFields();
+
+            unitTypeSelect.on('change', updateFields);
+        });
 
         function uploadImage() {
             $('#ingredient-image').click();
@@ -264,7 +315,6 @@
 
         function removeImage() {
             $('#ingredient-image').val(null);
-
             var initialImage = $('#image-display').data('initial-image');
             $('#image-display').attr("src", initialImage);
             $('#remove-btn').addClass('d-none');

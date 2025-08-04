@@ -93,20 +93,19 @@
         </div>
 
         <div class="mt-4 mb-3">
-            <h2 class="fw-bold">Ingredient Usage Preview</h2>
+            <h2 class="fw-bold">Ingredient Consumption Preview</h2>
         </div>
 
         <div class="table-responsive">
             <table class="table table-bordered" id="ingredient-preview" style="white-space: nowrap">
                 <thead class="table-dark">
                     <tr>
-                        <th>Ingredient</th>
-                        <th>Current Stock (kg)</th>
-                        <th>Change (kg)</th>
-                        <th>After Edit (kg)</th>
+                        <th style="width: 40%">Ingredient</th>
+                        <th style="width: 20%">Current Stock</th>
+                        <th style="width: 20%">Change</th>
+                        <th style="width: 20%">After Edit</th>
                     </tr>
                 </thead>
-
                 <tbody id="ingredient-preview-body">
                     <tr id="ingredient-loading-row">
                         <td colspan="4" class="text-center">
@@ -127,6 +126,7 @@
 
 @section('script')
     <script>
+        const EPSILON = 0.00001;
         let ingredientData = @json([
             'products' => $products,
             'addons' => $addons,
@@ -166,7 +166,7 @@
         }
 
         function updateIngredientPreview() {
-            let ingredientUsage = {};
+            let ingredientConsumption = {};
             let tableBody = document.querySelector('#ingredient-preview-body');
             tableBody.innerHTML = '';
 
@@ -185,48 +185,75 @@
                     if (item && item.ingredients) {
                         item.ingredients.forEach(function(i) {
                             const ingredientId = i.ingredient.id;
-                            if (!ingredientUsage[ingredientId]) {
-                                ingredientUsage[ingredientId] = {
-                                    name: i.ingredient.name,
-                                    currentStock: parseFloat(i.ingredient.stock_weight) || 0,
-                                    change: 0
+                            const ingredientName = i.ingredient.name;
+                            const unitType = i.ingredient.unit_type;
+                            const weightUnit = parseFloat(i.ingredient.weight_unit) || 1;
+
+                            let currentStock = parseFloat(i.ingredient.stock) || 0;
+                            if (unitType === 'quantity') {
+                                currentStock = currentStock / weightUnit;
+                            }
+
+                            let consumption = parseFloat(i.consumption) || 0;
+                            let convertedConsumption = consumption;
+                            if (unitType === 'quantity') {
+                                convertedConsumption = consumption / weightUnit;
+                            }
+
+                            if (!ingredientConsumption[ingredientId]) {
+                                ingredientConsumption[ingredientId] = {
+                                    name: ingredientName,
+                                    currentStock: currentStock,
+                                    change: 0,
+                                    unitType: unitType
                                 };
                             }
-                            ingredientUsage[ingredientId].change -= (parseFloat(i.weight) || 0) *
+
+                            ingredientConsumption[ingredientId].change -= convertedConsumption *
                                 quantityDifference;
                         });
                     }
                 }
             });
 
-            if (Object.keys(ingredientUsage).length === 0) {
+            if (Object.keys(ingredientConsumption).length === 0) {
                 tableBody.innerHTML =
-                    '<tr><td colspan="4" class="text-center text-muted">No ingredient usage yet. Adjust quantities above to preview.</td></tr>';
+                    '<tr><td colspan="4" class="text-center text-muted">No ingredient consumption yet. Adjust quantities above to preview.</td></tr>';
                 return;
             }
 
-            const sortedUsage = Object.values(ingredientUsage).sort((a, b) => a.name.localeCompare(b.name));
+            const sortedConsumption = Object.values(ingredientConsumption).sort((a, b) => a.name.localeCompare(b.name));
 
-            sortedUsage.forEach(function(ingredient) {
+            sortedConsumption.forEach(function(ingredient) {
                 const afterEditStock = ingredient.currentStock + ingredient.change;
+                const unitLabel = ingredient.unitType === 'quantity' ? ' qty' : ' kg';
 
                 const changeClass = ingredient.change < 0 ? 'text-danger fw-semibold' :
                     (ingredient.change > 0 ? 'text-success fw-semibold' : '');
 
-                let afterEditClass = '';
-                if (afterEditStock < 0) afterEditClass = 'table-danger';
-                else if (afterEditStock === 0) afterEditClass = 'table-warning';
+                let rowClass = '';
+                if (afterEditStock < -EPSILON) {
+                    rowClass = 'table-danger';
+                } else if (Math.abs(afterEditStock) < EPSILON) {
+                    rowClass = 'table-warning';
+                }
+
+                const afterEditTextClass = afterEditStock < -EPSILON ? 'text-danger fw-bold' : '';
 
                 const row = `
-                <tr class="${afterEditClass}">
-                    <td>${ingredient.name}</td>
-                    <td>${ingredient.currentStock.toFixed(2)} kg</td>
-                    <td class="${changeClass}">${ingredient.change > 0 ? '+' : ''}${ingredient.change.toFixed(2)} kg</td>
-                    <td>${afterEditStock.toFixed(2)} kg</td>
-                </tr>
-            `;
+            <tr class="${rowClass}">
+                <td>${ingredient.name}</td>
+                <td>${removeTrailingZeros(ingredient.currentStock)}${unitLabel}</td>
+                <td class="${changeClass}">${ingredient.change > 0 ? '+' : ''}${removeTrailingZeros(ingredient.change)}${unitLabel}</td>
+                <td class="${afterEditTextClass}">${removeTrailingZeros(afterEditStock)}${unitLabel}</td>
+            </tr>
+        `;
                 tableBody.innerHTML += row;
             });
+        }
+
+        function removeTrailingZeros(value) {
+            return value % 1 === 0 ? parseInt(value) : parseFloat(value.toFixed(2));
         }
     </script>
 @endsection

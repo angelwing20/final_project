@@ -140,14 +140,14 @@ class DailySalesItemAdminService extends Service
                         $productIngredients = $this->_productIngredientRepository->getByProductId($id);
                         foreach ($productIngredients as $productIngredient) {
                             $ingredientId = $productIngredient->ingredient_id;
-                            $requiredWeight = $productIngredient->weight * $quantity;
+                            $requiredWeight = $productIngredient->consumption * $quantity;
 
                             if (!isset($ingredientUpdates[$ingredientId])) {
                                 $ingredient = $this->_ingredientRepository->getById($ingredientId);
                                 $ingredientUpdates[$ingredientId] = [
                                     'id' => $ingredientId,
                                     'name' => $ingredient->name,
-                                    'currentWeight' => $ingredient->stock_weight,
+                                    'currentWeight' => $ingredient->stock,
                                     'consume' => 0
                                 ];
                             }
@@ -185,14 +185,14 @@ class DailySalesItemAdminService extends Service
                         $addonIngredients = $this->_addOnIngredientRepository->getByAddOnId($id);
                         foreach ($addonIngredients as $addonIngredient) {
                             $ingredientId = $addonIngredient->ingredient_id;
-                            $requiredWeight = $addonIngredient->weight * $quantity;
+                            $requiredWeight = $addonIngredient->consumption * $quantity;
 
                             if (!isset($ingredientUpdates[$ingredientId])) {
                                 $ingredient = $this->_ingredientRepository->getById($ingredientId);
                                 $ingredientUpdates[$ingredientId] = [
                                     'id' => $ingredientId,
                                     'name' => $ingredient->name,
-                                    'currentWeight' => $ingredient->stock_weight,
+                                    'currentWeight' => $ingredient->stock,
                                     'consume' => 0
                                 ];
                             }
@@ -222,7 +222,7 @@ class DailySalesItemAdminService extends Service
 
             foreach ($ingredientUpdates as $update) {
                 $newWeight = $update['currentWeight'] - $update['consume'];
-                $this->_ingredientRepository->updateWeight($update['id'], $newWeight);
+                $this->_ingredientRepository->updateStock($update['id'], $newWeight);
             }
 
             $dailySales = $this->_dailySalesRepository->save([
@@ -289,8 +289,8 @@ class DailySalesItemAdminService extends Service
                     if ($ingredient) {
                         $ingredientMap['product'][$product->id][] = [
                             'name' => $ingredient->name,
-                            'weight' => $pi->weight,
-                            'remaining' => $ingredient->stock_weight
+                            'consumption' => $pi->consumption,
+                            'remaining' => $ingredient->stock
                         ];
                     }
                 }
@@ -305,8 +305,8 @@ class DailySalesItemAdminService extends Service
                     if ($ingredient) {
                         $ingredientMap['addon'][$addon->id][] = [
                             'name' => $ingredient->name,
-                            'weight' => $ai->weight,
-                            'remaining' => $ingredient->stock_weight
+                            'consumption' => $ai->consumption,
+                            'remaining' => $ingredient->stock
                         ];
                     }
                 }
@@ -396,17 +396,17 @@ class DailySalesItemAdminService extends Service
                         foreach ($productIngredients as $pi) {
                             $ingredient = $this->_ingredientRepository->getById($pi->ingredient_id);
                             if ($ingredient) {
-                                $changeWeight = $pi->weight * $diff;
+                                $changeWeight = $pi->consumption * $diff;
 
                                 if ($changeWeight > 0) {
-                                    if ($ingredient->stock_weight < $changeWeight) {
+                                    if ($ingredient->stock < $changeWeight) {
                                         array_push($this->_errorMessage, "Insufficient stock for ingredient: " . $ingredient->name);
                                         $hasInsufficientStock = true;
                                     } else {
-                                        $this->_ingredientRepository->updateWeight($ingredient->id, $ingredient->stock_weight - $changeWeight);
+                                        $this->_ingredientRepository->updateStock($ingredient->id, $ingredient->stock - $changeWeight);
                                     }
                                 } elseif ($changeWeight < 0) {
-                                    $this->_ingredientRepository->updateWeight($ingredient->id, $ingredient->stock_weight + abs($changeWeight));
+                                    $this->_ingredientRepository->updateStock($ingredient->id, $ingredient->stock + abs($changeWeight));
                                 }
                             }
                         }
@@ -445,17 +445,17 @@ class DailySalesItemAdminService extends Service
                         foreach ($addonIngredients as $ai) {
                             $ingredient = $this->_ingredientRepository->getById($ai->ingredient_id);
                             if ($ingredient) {
-                                $changeWeight = $ai->weight * $diff;
+                                $changeWeight = $ai->consumption * $diff;
 
                                 if ($changeWeight > 0) {
-                                    if ($ingredient->stock_weight < $changeWeight) {
+                                    if ($ingredient->stock < $changeWeight) {
                                         array_push($this->_errorMessage, "Insufficient stock for ingredient: " . $ingredient->name);
                                         $hasInsufficientStock = true;
                                     } else {
-                                        $this->_ingredientRepository->updateWeight($ingredient->id, $ingredient->stock_weight - $changeWeight);
+                                        $this->_ingredientRepository->updateStock($ingredient->id, $ingredient->stock - $changeWeight);
                                     }
                                 } elseif ($changeWeight < 0) {
-                                    $this->_ingredientRepository->updateWeight($ingredient->id, $ingredient->stock_weight + abs($changeWeight));
+                                    $this->_ingredientRepository->updateStock($ingredient->id, $ingredient->stock + abs($changeWeight));
                                 }
                             }
                         }

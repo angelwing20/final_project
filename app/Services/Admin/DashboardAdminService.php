@@ -16,7 +16,7 @@ class DashboardAdminService extends Service
 
     public function getIngredientChartData()
     {
-        $rawData = $this->_dailySalesRepository->getMonthlyIngredientUsage();
+        $rawData = $this->_dailySalesRepository->getMonthlyIngredientConsumption();
 
         return [
             'labels' => $rawData->pluck('ingredient_name'),

@@ -143,11 +143,11 @@
     <div class="row g-4">
         <div class="col-lg-6 col-12">
             <div class="card shadow-sm border-0">
-                <div class="card-header bg-light fw-bold">Top 10 Ingredient Usage (Monthly)</div>
+                <div class="card-header bg-light fw-bold">Top 10 Ingredient Consumption (Monthly)</div>
                 <div class="card-body chart-container d-flex justify-content-center align-items-center"
                     style="min-height:320px;">
                     <div class="spinner-border text-primary" role="status"></div>
-                    <canvas id="ingredientUsageChart" class="d-none"></canvas>
+                    <canvas id="ingredientConsumptionChart" class="d-none"></canvas>
                 </div>
             </div>
         </div>
@@ -222,9 +222,9 @@
                 $('#kpi-last-update').text(stats.last_daily_sales_upload);
             });
 
-            $.get("{{ route('admin.ingredient_usage') }}", data => {
-                const container = $('#ingredientUsageChart').parent();
-                const canvas = $('#ingredientUsageChart');
+            $.get("{{ route('admin.ingredient_consumption') }}", data => {
+                const container = $('#ingredientConsumptionChart').parent();
+                const canvas = $('#ingredientConsumptionChart');
                 container.find('.spinner-border').remove();
 
                 let combined = data.labels.map((label, index) => ({
@@ -241,7 +241,7 @@
                 <div class="d-flex flex-column align-items-center justify-content-center" style="height:280px;">
                     <i class="fa-solid fa-chart-pie text-muted" style="font-size:36px;"></i>
                     <p class="mt-3 fw-bold text-muted">No data available</p>
-                    <small class="text-muted">Upload daily sales to see ingredient usage stats.</small>
+                    <small class="text-muted">Upload daily sales to see ingredient consumption stats.</small>
                 </div>
             `);
                     return;
@@ -330,7 +330,8 @@
                             },
                             tooltip: {
                                 callbacks: {
-                                    label: context => `RM ${context.parsed.y}`
+                                    label: context =>
+                                        `RM ${parseFloat(context.parsed.y).toFixed(2)}`
                                 }
                             }
                         }

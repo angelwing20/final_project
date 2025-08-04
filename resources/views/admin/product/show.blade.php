@@ -221,9 +221,9 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="weight" class="form-label">Weight (kg)</label>
-                                    <input type="number" class="form-control" name="weight" id="weight"
-                                        step="0.01" min="0.01" placeholder="Weight" required>
+                                    <label for="consumption" class="form-label">Consumption</label>
+                                    <input type="number" class="form-control" name="consumption" id="consumption"
+                                        placeholder="Consumption" required>
                                 </div>
                             </div>
 
@@ -361,6 +361,10 @@
                                 return {
                                     text: item.name,
                                     id: item.id,
+                                    data: {
+                                        unit_type: item.unit_type,
+                                        weight_unit: item.weight_unit
+                                    }
                                 }
                             }),
                             pagination: {
@@ -368,6 +372,25 @@
                             }
                         };
                     },
+                }
+            }).on('select2:select', function(e) {
+                const selected = e.params.data.data;
+
+                const label = selected.unit_type === 'weight' ? 'Weight (kg)' : 'Quantity (qty)';
+                $('label[for="consumption"]').text(label);
+
+                if (selected.unit_type === 'weight') {
+                    $('#consumption').attr({
+                        step: '0.01',
+                        min: '0.01',
+                        placeholder: 'Weight (kg)'
+                    });
+                } else {
+                    $('#consumption').attr({
+                        step: '1',
+                        min: '1',
+                        placeholder: 'Quantity (qty)'
+                    });
                 }
             });
         })

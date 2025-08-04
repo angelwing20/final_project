@@ -29,18 +29,20 @@ class DailySalesAdminService extends Service
         }
     }
 
-    public function getIngredientUsageTableData($dailySalesId)
+    public function getIngredientConsumptionTableData($dailySalesId)
     {
-        $ingredientUsageRows = $this->_dailySalesRepository->getIngredientUsageByDailySalesId($dailySalesId);
+        $ingredientConsumptionRows = $this->_dailySalesRepository->getIngredientConsumptionByDailySalesId($dailySalesId);
 
         $ingredients = [];
         $totalIngredientCost = 0;
 
-        foreach ($ingredientUsageRows as $ingredientRow) {
+        foreach ($ingredientConsumptionRows as $ingredientRow) {
             $ingredients[] = [
                 'name' => $ingredientRow->ingredient_name,
                 'weight' => (float) $ingredientRow->total_weight,
                 'amount' => (float) $ingredientRow->total_amount,
+                'unit_type' => $ingredientRow->unit_type,
+                'weight_unit' => (float) $ingredientRow->weight_unit,
             ];
             $totalIngredientCost += (float) $ingredientRow->total_amount;
         }

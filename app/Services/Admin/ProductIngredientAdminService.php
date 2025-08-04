@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin;
 
+use App\Repositories\IngredientRepository;
 use App\Repositories\ProductIngredientRepository;
 use Exception;
 use App\Services\Service;
@@ -11,10 +12,12 @@ use Illuminate\Support\Facades\Validator;
 class ProductIngredientAdminService extends Service
 {
     private $_productIngredientRepository;
+    private $_ingredientRepository;
 
-    public function __construct(ProductIngredientRepository $productIngredientRepository)
+    public function __construct(ProductIngredientRepository $productIngredientRepository, IngredientRepository $ingredientRepository)
     {
         $this->_productIngredientRepository = $productIngredientRepository;
+        $this->_ingredientRepository = $ingredientRepository;
     }
 
     public function createProductIngredient($data)
@@ -22,10 +25,18 @@ class ProductIngredientAdminService extends Service
         DB::beginTransaction();
 
         try {
+            $ingredient = $this->_ingredientRepository->getById($data['ingredient_id']);
+
+            if ($ingredient == null) {
+                throw new Exception();
+            }
+
+            $min = $ingredient->unit_type === 'weight' ? 0.01 : 1;
+
             $validator = Validator::make($data, [
                 'product_id' => 'required|exists:products,id',
                 'ingredient_id' => 'required|exists:ingredients,id',
-                'weight' => 'required|numeric',
+                'consumption' => ['required', 'numeric', "min:$min"],
             ]);
 
             if ($validator->fails()) {
@@ -33,6 +44,10 @@ class ProductIngredientAdminService extends Service
                     array_push($this->_errorMessage, $error);
                 }
                 return null;
+            }
+
+            if ($ingredient['unit_type'] === 'quantity') {
+                $data['consumption'] = $data['consumption'] * $ingredient['weight_unit'];
             }
 
             $productIngredient = $this->_productIngredientRepository->save($data);
@@ -52,8 +67,20 @@ class ProductIngredientAdminService extends Service
         DB::beginTransaction();
 
         try {
+            $productIngredient = $this->_productIngredientRepository->getById($id);
+            if (!$productIngredient) {
+                throw new Exception('Product Ingredient not found');
+            }
+
+            $ingredient = $this->_ingredientRepository->getById($productIngredient->ingredient_id);
+            if (!$ingredient) {
+                throw new Exception('Ingredient not found');
+            }
+
+            $min = $ingredient->unit_type === 'weight' ? 0.01 : 1;
+
             $validator = Validator::make($data, [
-                'weight' => 'required|numeric',
+                'consumption' => ['required', 'numeric', "min:$min"],
             ]);
 
             if ($validator->fails()) {
@@ -61,6 +88,10 @@ class ProductIngredientAdminService extends Service
                     array_push($this->_errorMessage, $error);
                 }
                 return null;
+            }
+
+            if ($ingredient->unit_type === 'quantity') {
+                $data['consumption'] = $data['consumption'] * $ingredient->weight_unit;
             }
 
             $product = $this->_productIngredientRepository->update($id, $data);

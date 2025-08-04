@@ -19,7 +19,7 @@ class DashboardAdminController extends Controller
         return view('admin.dashboard.dashboard');
     }
 
-    public function getIngredientUsageData()
+    public function getIngredientConsumptionData()
     {
         return response()->json($this->_dashboardAdminService->getIngredientChartData());
     }

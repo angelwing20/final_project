@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('ingredient_id')->constrained('ingredients');
             $table->foreignId('staff_id')->constrained('users');
-            $table->unsignedInteger('quantity')->nullable();
+            $table->unsignedInteger('quantity');
             $table->decimal('weight', 8, 2);
             $table->decimal('amount', 13, 2);
             $table->timestamps();

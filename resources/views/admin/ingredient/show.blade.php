@@ -68,17 +68,19 @@
 
                 <div class="col-12">
                     <div class="fw-bold">
-                        Stock: @if (
-                            $ingredient->stock_weight !== null &&
-                                $ingredient->alarm_weight !== null &&
-                                $ingredient->stock_weight <= $ingredient->alarm_weight)
+                        Stock: @if ($ingredient->stock !== null && $ingredient->min_stock !== null && $ingredient->stock <= $ingredient->min_stock)
                             <span class="badge bg-danger mt-1">
                                 Low stock
                             </span>
                         @endif
                     </div>
+
                     <div>
-                        {{ $ingredient->stock_weight }} kg
+                        @if ($ingredient->unit_type === 'weight')
+                            {{ floatval(sprintf('%.2f', $ingredient->stock)) }} kg
+                        @else
+                            {{ $ingredient->stock / $ingredient->weight_unit }} qty
+                        @endif
                     </div>
                 </div>
 
@@ -88,10 +90,15 @@
 
                 <div class="col-12">
                     <div class="fw-bold">
-                        Alarm Weight:
+                        Minimum Stock:
                     </div>
+
                     <div>
-                        {{ $ingredient->alarm_weight }} kg
+                        @if ($ingredient->unit_type === 'weight')
+                            {{ floatval(sprintf('%.2f', $ingredient->min_stock)) }} kg
+                        @else
+                            {{ $ingredient->min_stock / $ingredient->weight_unit }} qty
+                        @endif
                     </div>
                 </div>
 
@@ -103,8 +110,12 @@
                     <div class="fw-bold">
                         Price:
                     </div>
+
                     <div>
-                        RM {{ $ingredient->price_per_weight_unit }} / {{ $ingredient->weight_unit }} kg
+                        RM {{ $ingredient->price }}
+                        @if ($ingredient->unit_type === 'weight')
+                            / {{ floatval(sprintf('%.2f', $ingredient->weight_unit)) }} kg
+                        @endif
                     </div>
                 </div>
             </div>
@@ -175,10 +186,10 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="alarm_weight" class="form-label">Alarm Weight (kg)</label>
-                                    <input type="number" class="form-control" name="alarm_weight" id="alarm_weight"
-                                        value="{{ $ingredient->alarm_weight }}" min="0.01" step="0.01"
-                                        placeholder="Alarm Weight" required>
+                                    <label for="min_stock" class="form-label"></label>
+                                    <input type="number" class="form-control" name="min_stock" id="min_stock"
+                                        value="{{ $ingredient->unit_type === 'weight' ? $ingredient->min_stock : $ingredient->min_stock / $ingredient->weight_unit }}"
+                                        required>
                                 </div>
                             </div>
 
@@ -187,17 +198,15 @@
                                     <label for="weight_unit" class="form-label">Weight Unit (kg)</label>
                                     <input type="number" class="form-control" name="weight_unit" id="weight_unit"
                                         step="0.01" min="0.01" value="{{ $ingredient->weight_unit }}"
-                                        placeholder="Weight unit" required>
+                                        placeholder="Weight unit (kg)" required>
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="price_per_weight_unit" class="form-label">Price Per Weight Unit</label>
-                                    <input type="number" class="form-control" name="price_per_weight_unit"
-                                        id="price_per_weight_unit" step="0.01" min="0.01"
-                                        value="{{ $ingredient->price_per_weight_unit }}"
-                                        placeholder="Price per weight unit" required>
+                                    <label for="price" class="form-label"></label>
+                                    <input type="number" class="form-control" name="price" id="price"
+                                        step="0.01" min="0.01" value="{{ $ingredient->price }}" required>
                                 </div>
                             </div>
 
@@ -288,6 +297,38 @@
                     },
                 }
             });
+
+            const unitType = "{{ $ingredient->unit_type }}";
+
+            const minStockInput = $('#min_stock');
+            const priceInput = $('#price');
+
+            function updateFields() {
+                if (unitType === 'weight') {
+                    $('label[for="min_stock"]').text('Minimum Stock (kg)');
+                    minStockInput.attr({
+                        min: '0.01',
+                        step: '0.01',
+                        placeholder: 'Minimum stock (kg)'
+                    });
+
+                    $('label[for="price"]').text('Price per Weight Unit (RM)');
+                    priceInput.attr('placeholder', 'Price per weight unit (RM)');
+
+                } else {
+                    $('label[for="min_stock"]').text('Minimum Stock (qty)');
+                    minStockInput.attr({
+                        min: '1',
+                        step: '1',
+                        placeholder: 'Minimum stock (qty)'
+                    });
+
+                    $('label[for="price"]').text('Price per Quantity (RM)');
+                    priceInput.attr('placeholder', 'Price per quantity (RM)');
+                }
+            }
+
+            updateFields();
         })
 
         function uploadImage() {

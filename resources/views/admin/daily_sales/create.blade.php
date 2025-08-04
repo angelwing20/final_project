@@ -74,19 +74,20 @@
         </div>
 
         <div class="mt-4 mb-3">
-            <h2 class="fw-bold">Ingredient Usage Preview</h2>
+            <h2 class="fw-bold">Ingredient Consumption Preview</h2>
         </div>
 
         <div class="table-responsive">
             <table class="table table-bordered" id="ingredient-preview" style="white-space: nowrap">
                 <thead class="table-dark">
                     <tr>
-                        <th>Ingredient</th>
-                        <th>Stock (kg)</th>
-                        <th>Used (kg)</th>
-                        <th>Remaining (kg)</th>
+                        <th style="width: 40%">Ingredient</th>
+                        <th style="width: 20%">Current Stock</th>
+                        <th style="width: 20%">Consumption</th>
+                        <th style="width: 20%">Remaining Stock</th>
                     </tr>
                 </thead>
+
                 <tbody id="ingredient-preview-body">
                     <tr id="ingredient-loading-row">
                         <td colspan="4" class="text-center">
@@ -149,7 +150,7 @@
         }
 
         function updateIngredientPreview() {
-            let ingredientUsage = {};
+            let ingredientConsumption = {};
             let tableBody = document.querySelector('#ingredient-preview-body');
 
             tableBody.innerHTML = '';
@@ -168,52 +169,73 @@
                         item.ingredients.forEach(function(recipeIngredient) {
                             let ingredientId = recipeIngredient.ingredient.id;
                             let ingredientName = recipeIngredient.ingredient.name;
-                            let currentStock = parseFloat(recipeIngredient.ingredient.stock_weight) || 0;
-                            let usedWeight = (parseFloat(recipeIngredient.weight) || 0) * quantity;
+                            let currentStockWeight = parseFloat(recipeIngredient.ingredient.stock) ||
+                                0;
+                            let unitType = recipeIngredient.ingredient.unit_type;
+                            let weightUnit = parseFloat(recipeIngredient.ingredient.weight_unit) ||
+                                1;
+                            let consumptionWeight = (parseFloat(recipeIngredient.consumption) || 0) *
+                                quantity;
 
-                            if (!ingredientUsage[ingredientId]) {
-                                ingredientUsage[ingredientId] = {
+                            let currentStock = unitType === 'quantity' ?
+                                currentStockWeight / weightUnit :
+                                currentStockWeight;
+
+                            let consumption = unitType === 'quantity' ?
+                                consumptionWeight / weightUnit :
+                                consumptionWeight;
+
+                            if (!ingredientConsumption[ingredientId]) {
+                                ingredientConsumption[ingredientId] = {
                                     name: ingredientName,
                                     currentStock: currentStock,
-                                    used: 0
+                                    used: 0,
+                                    unitType: unitType
                                 };
                             }
 
-                            ingredientUsage[ingredientId].used += usedWeight;
+                            ingredientConsumption[ingredientId].used += consumption;
                         });
                     }
                 }
             });
 
-            if (Object.keys(ingredientUsage).length === 0) {
+            if (Object.keys(ingredientConsumption).length === 0) {
                 tableBody.innerHTML =
-                    '<tr><td colspan="4" class="text-center text-muted">No ingredient usage yet. Adjust quantities above to preview.</td></tr>';
+                    '<tr><td colspan="4" class="text-center text-muted">No ingredient consumption yet. Adjust quantities above to preview.</td></tr>';
                 return;
             }
 
-            let sortedIngredients = Object.values(ingredientUsage).sort((a, b) => a.name.localeCompare(b.name));
+            let sortedIngredients = Object.values(ingredientConsumption).sort((a, b) => a.name.localeCompare(b.name));
             sortedIngredients.forEach(function(ingredient) {
                 let remainingStock = ingredient.currentStock - ingredient.used;
                 let rowClass = '';
                 let remainingClass = '';
+                let unitLabel = ingredient.unitType === 'quantity' ? ' qty' : ' kg';
 
-                if (remainingStock < 0) {
+                let EPSILON = 0.00001;
+
+                if (remainingStock < -EPSILON) {
                     rowClass = 'table-danger';
                     remainingClass = 'text-danger fw-bold';
-                } else if (remainingStock === 0) {
+                } else if (Math.abs(remainingStock) < EPSILON) {
                     rowClass = 'table-warning';
                 }
 
                 let row = `
-                <tr class="${rowClass}">
-                    <td>${ingredient.name}</td>
-                    <td>${ingredient.currentStock.toFixed(2)}</td>
-                    <td>${ingredient.used.toFixed(2)}</td>
-                    <td class="${remainingClass}">${remainingStock.toFixed(2)}</td>
-                </tr>
-            `;
+            <tr class="${rowClass}">
+                <td>${ingredient.name}</td>
+                <td>${removeTrailingZeros(ingredient.currentStock)}${unitLabel}</td>
+                <td>${removeTrailingZeros(ingredient.used)}${unitLabel}</td>
+                <td class="${remainingClass}">${removeTrailingZeros(remainingStock)}${unitLabel}</td>
+            </tr>
+        `;
                 tableBody.innerHTML += row;
             });
+        }
+
+        function removeTrailingZeros(value) {
+            return value % 1 === 0 ? parseInt(value) : parseFloat(value.toFixed(2));
         }
     </script>
 @endsection

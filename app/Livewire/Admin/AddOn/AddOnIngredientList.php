@@ -30,7 +30,7 @@ class AddOnIngredientList extends Component
         $this->totalCost = DB::table('add_on_ingredients')
             ->join('ingredients', 'add_on_ingredients.ingredient_id', '=', 'ingredients.id')
             ->where('add_on_ingredients.add_on_id', $this->addOnId)
-            ->selectRaw('SUM(add_on_ingredients.weight * (ingredients.price_per_weight_unit / ingredients.weight_unit)) as total')
+            ->selectRaw('SUM(add_on_ingredients.consumption * (ingredients.price / ingredients.weight_unit)) as total')
             ->value('total') ?? 0;
     }
 
@@ -41,11 +41,13 @@ class AddOnIngredientList extends Component
             ->select(
                 'add_on_ingredients.id',
                 'add_on_ingredients.add_on_id',
-                'add_on_ingredients.weight',
+                'add_on_ingredients.consumption',
 
                 'ingredients.id as ingredient_id',
                 'ingredients.name as ingredient_name',
-                DB::raw('(add_on_ingredients.weight * (ingredients.price_per_weight_unit / ingredients.weight_unit)) as cost')
+                'ingredients.unit_type as ingredient_unit_type',
+                'ingredients.weight_unit as ingredient_weight_unit',
+                DB::raw('(add_on_ingredients.consumption * (ingredients.price / ingredients.weight_unit)) as cost')
             )
             ->where('add_on_ingredients.add_on_id', '=', $this->addOnId)
             ->orderBy('ingredients.name', 'asc');

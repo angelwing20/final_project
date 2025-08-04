@@ -42,7 +42,7 @@ Route::name('reset_password.')->prefix('reset-password')->group(function () {
 
 Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
     Route::get('/', [DashboardAdminController::class, 'index'])->name('dashboard');
-    Route::get('ingredient-usage', [DashboardAdminController::class, 'getIngredientUsageData'])->name('ingredient_usage');
+    Route::get('ingredient-consumption', [DashboardAdminController::class, 'getIngredientConsumptionData'])->name('ingredient_consumption');
     Route::get('sales-trend', [DashboardAdminController::class, 'getSalesTrendData'])->name('sales_trend');
     Route::get('stats', [DashboardAdminController::class, 'getDashboardStats'])->name('stats');
 

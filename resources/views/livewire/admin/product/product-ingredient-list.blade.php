@@ -8,7 +8,7 @@
             <thead class="table-dark">
                 <tr>
                     <th scope="col" style="white-space: nowrap;">Ingredient</th>
-                    <th scope="col" style="white-space: nowrap;">Usage (kg)</th>
+                    <th scope="col" style="white-space: nowrap;">Consumption</th>
                     <th scope="col" style="white-space: nowrap;">Cost (RM)</th>
                     <th scope="col" style="width: 10px">Action</th>
                 </tr>
@@ -19,7 +19,14 @@
                     @foreach ($productIngredients as $productIngredient)
                         <tr>
                             <td class="fw-bold">{{ $productIngredient->ingredient_name }}</td>
-                            <td>{{ $productIngredient->weight }}</td>
+                            <td>
+                                @if ($productIngredient->ingredient_unit_type === 'weight')
+                                    {{ floatval(sprintf('%.2f', $productIngredient->consumption)) }} kg
+                                @else
+                                    {{ $productIngredient->consumption / $productIngredient->ingredient_weight_unit }}
+                                    qty
+                                @endif
+                            </td>
                             <td>{{ number_format($productIngredient->cost, 2) }}</td>
                             <td>
                                 <div class="d-flex gap-2">
@@ -61,12 +68,17 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="form-group mb-3">
-                                                        <label for="weight-{{ $productIngredient->id }}"
-                                                            class="form-label">Weight (kg)</label>
-                                                        <input type="number" class="form-control" name="weight"
-                                                            id="weight-{{ $productIngredient->id }}" step="0.01"
-                                                            value="{{ $productIngredient->weight }}"
-                                                            placeholder="Weight">
+                                                        <label for="consumption-{{ $productIngredient->id }}"
+                                                            class="form-label">Consumption
+                                                            {{ $productIngredient->ingredient_unit_type === 'weight' ? '(kg)' : '(qty)' }}</label>
+                                                        <input type="number" class="form-control" name="consumption"
+                                                            id="consumption-{{ $productIngredient->id }}"
+                                                            step="{{ $productIngredient->ingredient_unit_type === 'weight' ? '0.01' : '1' }}"
+                                                            min="{{ $productIngredient->ingredient_unit_type === 'weight' ? '0.01' : '1' }}"
+                                                            value="{{ $productIngredient->ingredient_unit_type === 'weight'
+                                                                ? $productIngredient->consumption
+                                                                : $productIngredient->consumption / $productIngredient->ingredient_weight_unit }}"
+                                                            placeholder="Consumption {{ $productIngredient->ingredient_unit_type === 'weight' ? '(kg)' : '(qty)' }}">
                                                     </div>
                                                 </div>
 
