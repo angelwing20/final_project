@@ -48,7 +48,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-6">
+                                    <div class="col-6 quantity-col">
                                         <div class="form-group">
                                             <label class="form-label" for="refill-quantity-0">Quantity</label>
                                             <input type="number" class="form-control" id="refill-quantity-0"
@@ -57,7 +57,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-6">
+                                    <div class="col-6 weight-col">
                                         <div class="form-group">
                                             <label class="form-label" for="refill-weight-0">Weight (kg)</label>
                                             <input type="number" class="form-control" id="refill-weight-0"
@@ -117,8 +117,7 @@
                                 <div class="form-group mb-3">
                                     <label for="ingredient_category_id" class="form-label">Ingredient Category</label>
                                     <select class="form-select" name="ingredient_category_id" id="ingredient_category_id"
-                                        style="width: 100%" required>
-                                    </select>
+                                        style="width: 100%" required></select>
                                 </div>
                             </div>
 
@@ -126,7 +125,7 @@
                                 <div class="form-group mb-3">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" class="form-control" name="name" id="name"
-                                        placeholder="Name" required>
+                                        value="{{ old('name') }}" placeholder="Name" required>
                                 </div>
                             </div>
 
@@ -134,8 +133,10 @@
                                 <div class="form-group mb-3">
                                     <label for="unit_type" class="form-label">Unit Type</label>
                                     <select class="form-select" name="unit_type" id="unit_type" required>
-                                        <option value="weight">Weight (kg)</option>
-                                        <option value="quantity">Quantity (qty)</option>
+                                        <option value="weight" {{ old('unit_type') === 'weight' ? 'selected' : '' }}>Weight
+                                            (kg)</option>
+                                        <option value="quantity" {{ old('unit_type') === 'quantity' ? 'selected' : '' }}>
+                                            Quantity (qty)</option>
                                     </select>
                                 </div>
                             </div>
@@ -143,14 +144,16 @@
                             <div class="col-12">
                                 <div class="form-group mb-3">
                                     <label for="stock" class="form-label"></label>
-                                    <input type="number" class="form-control" name="stock" id="stock">
+                                    <input type="number" class="form-control" name="stock" id="stock"
+                                        value="{{ old('stock') }}">
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
                                     <label for="min_stock" class="form-label"></label>
-                                    <input type="number" class="form-control" name="min_stock" id="min_stock" required>
+                                    <input type="number" class="form-control" name="min_stock" id="min_stock"
+                                        value="{{ old('min_stock') }}" required>
                                 </div>
                             </div>
 
@@ -158,7 +161,8 @@
                                 <div class="form-group mb-3">
                                     <label for="weight_unit" class="form-label">Weight Unit (kg)</label>
                                     <input type="number" class="form-control" name="weight_unit" id="weight_unit"
-                                        step="0.01" min="0.01" placeholder="Weight unit (kg)" required>
+                                        step="0.01" min="0.01" value="{{ old('weight_unit') }}"
+                                        placeholder="Weight unit (kg)" required>
                                 </div>
                             </div>
 
@@ -166,7 +170,7 @@
                                 <div class="form-group mb-3">
                                     <label for="price" class="form-label"></label>
                                     <input type="number" class="form-control" name="price" id="price"
-                                        step="0.01" min="0.01" required>
+                                        value="{{ old('price') }}" step="0.01" min="0.01" required>
                                 </div>
                             </div>
 
@@ -186,49 +190,28 @@
 @section('script')
     <script>
         $(function() {
-            $('#form').validate({
-                ignore: [],
-                errorElement: 'span',
-                errorClass: 'invalid-feedback',
-                errorPlacement: function(error, element) {
-                    element.closest('.form-group').append(error);
-                },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-invalid');
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
-                },
-                invalidHandler: function(form, validator) {
-                    var errors = validator.numberOfInvalids();
-                    if (errors) {
-                        notifier.show('Error!', 'Please ensure all inputs are correct.', 'warning', '',
-                            4000);
-                    }
-                },
-            })
-
-            $('#refill-form').validate({
-                ignore: [],
-                errorElement: 'span',
-                errorClass: 'invalid-feedback',
-                errorPlacement: function(error, element) {
-                    element.closest('.form-group').append(error);
-                },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-invalid');
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
-                },
-                invalidHandler: function(form, validator) {
-                    var errors = validator.numberOfInvalids();
-                    if (errors) {
-                        notifier.show('Error!', 'Please ensure all inputs are correct.', 'warning', '',
-                            4000);
-                    }
-                },
-            })
+            $('#form, #refill-form').each(function() {
+                $(this).validate({
+                    ignore: [],
+                    errorElement: 'span',
+                    errorClass: 'invalid-feedback',
+                    errorPlacement: function(error, element) {
+                        element.closest('.form-group').append(error);
+                    },
+                    highlight: function(element) {
+                        $(element).addClass('is-invalid');
+                    },
+                    unhighlight: function(element) {
+                        $(element).removeClass('is-invalid');
+                    },
+                    invalidHandler: function(form, validator) {
+                        if (validator.numberOfInvalids()) {
+                            notifier.show('Error!', 'Please ensure all inputs are correct.',
+                                'warning', '', 4000);
+                        }
+                    },
+                });
+            });
 
             $('.image-input').change(function(e) {
                 const file = e.target.files[0];
@@ -246,13 +229,13 @@
                 }
             });
 
-            $('select[name="refills[0][ingredient_id]"]').select2({
+            $('#ingredient_category_id').select2({
                 theme: 'bootstrap-5',
                 allowClear: true,
-                dropdownParent: $('#refillStockModal .modal-content'),
-                placeholder: 'Select ingredient',
+                dropdownParent: $('#addIngredientModal .modal-content'),
+                placeholder: 'Select ingredient category',
                 ajax: {
-                    url: "{{ route('admin.ingredient.select_search') }}",
+                    url: "{{ route('admin.ingredient_category.select_search') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function(params) {
@@ -266,11 +249,7 @@
                             results: $.map(data.results, function(item) {
                                 return {
                                     text: item.name,
-                                    id: item.id,
-                                    data: {
-                                        unit_type: item.unit_type,
-                                        weight_unit: item.weight_unit
-                                    }
+                                    id: item.id
                                 };
                             }),
                             pagination: {
@@ -281,62 +260,15 @@
                 }
             });
 
-            $('select[name="refills[0][ingredient_id]"]').on('select2:select', function(e) {
-                var selectedData = e.params.data.data;
-                var row = $(this).closest(".refill-group");
-                var weightInput = row.find('input[name^="refills"][name$="[weight]"]');
-
-                if (selectedData.unit_type === 'quantity') {
-                    weightInput.val(selectedData.weight_unit);
-                    weightInput.prop('readonly', true);
-                } else {
-                    weightInput.val('');
-                    weightInput.prop('readonly', false);
-                }
-            });
-
-            $('#ingredient_category_id').select2({
-                theme: 'bootstrap-5',
-                allowClear: true,
-                dropdownParent: $('#addIngredientModal .modal-content'),
-                placeholder: 'Select ingredient category',
-
-                ajax: {
-                    url: "{{ route('admin.ingredient_category.select_search') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        var query = {
-                            search_term: params.term,
-                            page: params.page,
-                        }
-                        return query;
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.results, function(item) {
-                                return {
-                                    text: item.name,
-                                    id: item.id,
-                                }
-                            }),
-                            pagination: {
-                                more: data.pagination.more
-                            }
-                        };
-                    },
-                }
-            });
-
             const unitTypeSelect = $('#unit_type');
             const stockInput = $('#stock');
             const minStockInput = $('#min_stock');
             const priceInput = $('#price');
 
             function updateFields() {
-                const selectedType = unitTypeSelect.val();
+                const type = unitTypeSelect.val();
 
-                if (selectedType === 'weight') {
+                if (type === 'weight') {
                     $('label[for="stock"]').text('Current Stock (kg)');
                     stockInput.attr({
                         min: '0.01',
@@ -373,35 +305,21 @@
                     priceInput.attr('placeholder', 'Price per quantity (RM)');
                 }
 
-                stockInput.val('');
-                minStockInput.val('');
+                if (!stockInput.val()) {
+                    stockInput.val('');
+                }
+                if (!minStockInput.val()) {
+                    minStockInput.val('');
+                }
             }
-
             updateFields();
-
             unitTypeSelect.on('change', updateFields);
-        })
 
-        function uploadImage() {
-            $('#image').click();
-        }
+            initIngredientSelect($('select[name="refills[0][ingredient_id]"]'));
+            let refillIndex = 1;
 
-        function removeImage() {
-            $('#image').val(null);
-
-            var initialImage = $('#image-display').data('initial-image');
-            $('#image-display').attr("src", initialImage);
-            $('#remove-btn').addClass('d-none');
-        }
-
-        let refillIndex = 1;
-
-        $(document).on('click', '.remove-refill-group', function() {
-            $(this).closest('.refill-group').remove();
-        });
-
-        $('#add-refill-btn').on('click', function() {
-            const newGroup = `
+            $('#add-refill-btn').on('click', function() {
+                const newGroup = `
                 <div class="refill-group mb-3 pb-3 position-relative bg-light p-3 rounded">
                     <div class="d-flex justify-content-end mb-2">
                         <button type="button" class="btn btn-outline-danger remove-refill-group">
@@ -415,77 +333,94 @@
                                 <select class="form-select ingredient-select" id="refill-ingredient-${refillIndex}" name="refills[${refillIndex}][ingredient_id]" required></select>
                             </div>
                         </div>
-
-                        <div class="col-6">
+                        <div class="col-6 quantity-col">
                             <div class="form-group">
                                 <label class="form-label" for="refill-quantity-${refillIndex}">Quantity</label>
                                 <input type="number" class="form-control" id="refill-quantity-${refillIndex}" name="refills[${refillIndex}][quantity]" step="1" min="1" value="1" placeholder="Quantity" required>
                             </div>
                         </div>
-
-                        <div class="col-6">
+                        <div class="col-6 weight-col">
                             <div class="form-group">
                                 <label class="form-label" for="refill-weight-${refillIndex}">Weight (kg)</label>
                                 <input type="number" class="form-control" id="refill-weight-${refillIndex}" name="refills[${refillIndex}][weight]" step="0.01" min="0.01" placeholder="Weight" required>
                             </div>
                         </div>
                     </div>
-                </div>
-            `;
+                </div>`;
+                $('#refill-container').append(newGroup);
+                initIngredientSelect($(`select[name="refills[${refillIndex}][ingredient_id]"]`));
+                refillIndex++;
+            });
 
-            $('#refill-container').append(newGroup);
+            $(document).on('click', '.remove-refill-group', function() {
+                $(this).closest('.refill-group').remove();
+            });
 
-            $(`select[name="refills[${refillIndex}][ingredient_id]"]`).select2({
-                theme: 'bootstrap-5',
-                allowClear: true,
-                dropdownParent: $('#refillStockModal .modal-content'),
-                placeholder: 'Select ingredient',
-                ajax: {
-                    url: "{{ route('admin.ingredient.select_search') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        return {
-                            search_term: params.term,
-                            page: params.page
-                        };
-                    },
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data.results, function(item) {
-                                return {
-                                    text: item.name,
-                                    id: item.id,
-                                    data: {
-                                        unit_type: item.unit_type,
-                                        weight_unit: item.weight_unit
-                                    }
-                                };
-                            }),
-                            pagination: {
-                                more: data.pagination.more
-                            }
-                        };
+            function initIngredientSelect($element) {
+                $element.select2({
+                    theme: 'bootstrap-5',
+                    allowClear: true,
+                    dropdownParent: $('#refillStockModal .modal-content'),
+                    placeholder: 'Select ingredient',
+                    ajax: {
+                        url: "{{ route('admin.ingredient.select_search') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function(params) {
+                            return {
+                                search_term: params.term,
+                                page: params.page
+                            };
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data.results, function(item) {
+                                    return {
+                                        text: item.name,
+                                        id: item.id,
+                                        data: {
+                                            unit_type: item.unit_type,
+                                            weight_unit: item.weight_unit
+                                        }
+                                    };
+                                }),
+                                pagination: {
+                                    more: data.pagination.more
+                                }
+                            };
+                        }
                     }
-                }
-            });
+                });
 
-            $(`select[name="refills[${refillIndex}][ingredient_id]"]`).on('select2:select', function(e) {
-                var selectedData = e.params.data.data;
-                var row = $(this).closest(".refill-group");
-                var weightInput = row.find('input[name^="refills"][name$="[weight]"]');
+                $element.on('select2:select', function(e) {
+                    var selectedData = e.params.data.data;
+                    var row = $(this).closest(".refill-group");
+                    var weightCol = row.find('.weight-col');
+                    var quantityCol = row.find('.quantity-col');
+                    var weightInput = weightCol.find('input[name^="refills"][name$="[weight]"]');
 
-                if (selectedData.unit_type === 'quantity') {
-                    weightInput.val(selectedData.weight_unit);
-                    weightInput.prop('readonly', true);
-                } else {
-                    weightInput.val('');
-                    weightInput.prop('readonly', false);
-                }
-            });
-
-            refillIndex++;
-
+                    if (selectedData.unit_type === 'quantity') {
+                        weightCol.addClass('d-none');
+                        quantityCol.removeClass('col-6').addClass('col-12');
+                        weightInput.prop('required', false).val('');
+                    } else {
+                        weightCol.removeClass('d-none');
+                        quantityCol.removeClass('col-12').addClass('col-6');
+                        weightInput.prop('required', true);
+                    }
+                });
+            }
         });
+
+        function uploadImage() {
+            $('#image').click();
+        }
+
+        function removeImage() {
+            $('#image').val(null);
+            var initialImage = $('#image-display').data('initial-image');
+            $('#image-display').attr("src", initialImage);
+            $('#remove-btn').addClass('d-none');
+        }
     </script>
 @endsection

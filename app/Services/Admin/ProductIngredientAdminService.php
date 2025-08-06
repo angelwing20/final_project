@@ -62,50 +62,6 @@ class ProductIngredientAdminService extends Service
         }
     }
 
-    public function update($id, $data)
-    {
-        DB::beginTransaction();
-
-        try {
-            $productIngredient = $this->_productIngredientRepository->getById($id);
-            if (!$productIngredient) {
-                throw new Exception('Product Ingredient not found');
-            }
-
-            $ingredient = $this->_ingredientRepository->getById($productIngredient->ingredient_id);
-            if (!$ingredient) {
-                throw new Exception('Ingredient not found');
-            }
-
-            $min = $ingredient->unit_type === 'weight' ? 0.01 : 1;
-
-            $validator = Validator::make($data, [
-                'consumption' => ['required', 'numeric', "min:$min"],
-            ]);
-
-            if ($validator->fails()) {
-                foreach ($validator->errors()->all() as $error) {
-                    array_push($this->_errorMessage, $error);
-                }
-                return null;
-            }
-
-            if ($ingredient->unit_type === 'quantity') {
-                $data['consumption'] = $data['consumption'] * $ingredient->weight_unit;
-            }
-
-            $product = $this->_productIngredientRepository->update($id, $data);
-
-            DB::commit();
-            return $product;
-        } catch (Exception $e) {
-            array_push($this->_errorMessage, "Fail to update product ingredient.");
-
-            DB::rollBack();
-            return null;
-        }
-    }
-
     public function deleteById($id)
     {
         DB::beginTransaction();

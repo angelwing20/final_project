@@ -9,7 +9,7 @@ class AddOnList extends Component
 {
     public $addOns;
     public $page = 0;
-    public $limitDataPerPage = 30;
+    public $limitDataPerPage = 15;
     public $noMoreData = false;
 
     public $filter = [

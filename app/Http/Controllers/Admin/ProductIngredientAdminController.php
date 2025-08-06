@@ -33,22 +33,6 @@ class ProductIngredientAdminController extends Controller
         return back()->with('success', 'Product ingredient added successfully.');
     }
 
-    public function update(Request $request, $id)
-    {
-        $data = $request->only([
-            'consumption',
-        ]);
-
-        $result = $this->_productIngredientAdminService->update($id, $data);
-
-        if ($result == null) {
-            $errorMessage = implode("<br>", $this->_productIngredientAdminService->_errorMessage);
-            return back()->with('error', $errorMessage)->withInput();
-        }
-
-        return back()->with('success', 'Product ingredient updated successfully.');
-    }
-
     public function destroy($id)
     {
         $result = $this->_productIngredientAdminService->deleteById($id);

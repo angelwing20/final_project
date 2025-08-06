@@ -127,11 +127,11 @@
                                     <label for="role" class="form-label">Role</label>
                                     <select class="form-select" name="role" id="role" required>
                                         <option value="Superadmin"
-                                            {{ $staff->roles->first()?->name === 'Superadmin' ? 'selected' : '' }}>
+                                            {{ old('role', $staff->roles->first()?->name === 'Superadmin' ? 'selected' : '') }}>
                                             Superadmin
                                         </option>
                                         <option value="Admin"
-                                            {{ $staff->roles->first()?->name === 'Admin' ? 'selected' : '' }}>
+                                            {{ old('role', $staff->roles->first()?->name === 'Admin' ? 'selected' : '') }}>
                                             Admin
                                         </option>
                                     </select>
@@ -142,7 +142,7 @@
                                 <div class="form-group mb-3">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" class="form-control" name="name" id="name"
-                                        value="{{ $staff->name }}" placeholder="Name" required>
+                                        value="{{ old('name', $staff->name) }}" placeholder="Name" required>
                                 </div>
                             </div>
 
@@ -150,7 +150,7 @@
                                 <div class="form-group mb-3">
                                     <label for="email" class="form-label">Email Address</label>
                                     <input type="email" class="form-control" name="email" id="email"
-                                        value="{{ $staff->email }}" placeholder="Email address" required>
+                                        value="{{ old('email', $staff->email) }}" placeholder="Email address" required>
                                 </div>
                             </div>
 

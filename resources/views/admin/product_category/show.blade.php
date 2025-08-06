@@ -78,15 +78,13 @@
                                 <div class="form-group mb-3">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" class="form-control" name="name" id="name"
-                                        value="{{ $productCategory->name }}" placeholder="Name" required>
+                                        value="{{ old('name', $productCategory->name) }}" placeholder="Name" required>
                                 </div>
                             </div>
-                            <div class="row">
 
-                                <div class="col-12">
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-warning">Submit</button>
-                                    </div>
+                            <div class="col-12">
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-warning">Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -133,7 +131,7 @@
                                 <div class="form-group mb-3">
                                     <label for="product-name" class="form-label">Name</label>
                                     <input type="text" class="form-control" name="name" id="product-name"
-                                        placeholder="Name" required>
+                                        value="{{ old('name') }}" placeholder="Name" required>
                                 </div>
                             </div>
 
@@ -141,7 +139,8 @@
                                 <div class="form-group mb-3">
                                     <label for="product-price" class="form-label">Price</label>
                                     <input type="number" class="form-control" name="price" id="product-price"
-                                        step="0.01" min="0.01" placeholder="Price" required>
+                                        value="{{ old('price') }}" step="0.01" min="0.01" placeholder="Price"
+                                        required>
                                 </div>
                             </div>
 
@@ -149,7 +148,7 @@
                                 <div class="form-group mb-3">
                                     <label for="product-description" class="form-label">Description</label>
                                     <textarea name="description" class="form-control" id="product-description" rows="3"
-                                        placeholder="Description"></textarea>
+                                        placeholder="Description">{{ old('description') }}</textarea>
                                 </div>
                             </div>
 

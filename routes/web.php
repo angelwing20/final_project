@@ -82,7 +82,6 @@ Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
 
         Route::name("ingredient.")->prefix("ingredient")->group(function () {
             Route::post('/', [ProductIngredientAdminController::class, 'store'])->name('store');
-            Route::patch('{id}', [ProductIngredientAdminController::class, 'update'])->name('update');
             Route::delete('{id}', [ProductIngredientAdminController::class, 'destroy'])->name('destroy');
         });
     });
@@ -105,7 +104,6 @@ Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
 
         Route::name("ingredient.")->prefix("ingredient")->group(function () {
             Route::post('/', [AddOnIngredientAdminController::class, 'store'])->name('store');
-            Route::patch('{id}', [AddOnIngredientAdminController::class, 'update'])->name('update');
             Route::delete('{id}', [AddOnIngredientAdminController::class, 'destroy'])->name('destroy');
         });
     });

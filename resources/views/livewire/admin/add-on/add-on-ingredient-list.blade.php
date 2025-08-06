@@ -10,7 +10,7 @@
                     <th scope="col" style="white-space: nowrap;">Ingredient</th>
                     <th scope="col" style="white-space: nowrap;">Consumption</th>
                     <th scope="col" style="white-space: nowrap;">Cost (RM)</th>
-                    <th scope="col" style="width: 10px;">Action</th>
+                    <th scope="col" style="width: 10px"></th>
                 </tr>
             </thead>
 
@@ -29,69 +29,17 @@
                             </td>
                             <td>{{ number_format($addOnIngredient->cost, 2) }}</td>
                             <td>
-                                <div class="d-flex gap-2">
-                                    <form
-                                        action="{{ route('admin.add_on.ingredient.destroy', ['id' => $addOnIngredient->id]) }}"
-                                        method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger"
-                                            onclick="deleteConfirmation(event)">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </form>
-                                    <button class="btn btn-warning" data-bs-toggle="modal"
-                                        data-bs-target="#editAddOnIngredientModal-{{ $addOnIngredient->id }}">
-                                        <i class="fa-solid fa-pen-to-square"></i>
+                                <form
+                                    action="{{ route('admin.add_on.ingredient.destroy', ['id' => $addOnIngredient->id]) }}"
+                                    method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger" onclick="deleteConfirmation(event)">
+                                        <i class="fa-solid fa-trash"></i>
                                     </button>
-                                </div>
+                                </form>
                             </td>
                         </tr>
-
-                        <div class="modal fade" id="editAddOnIngredientModal-{{ $addOnIngredient->id }}" tabindex="-1">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title fw-bold">Edit Add-on Ingredient Detail</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-
-                                    <div class="modal-body">
-                                        <form id="form-{{ $addOnIngredient->id }}"
-                                            action="{{ route('admin.add_on.ingredient.update', ['id' => $addOnIngredient->id]) }}"
-                                            method="POST">
-                                            @csrf
-                                            @method('PATCH')
-
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="form-group mb-3">
-                                                        <label for="consumption-{{ $addOnIngredient->id }}"
-                                                            class="form-label">
-                                                            {{ $addOnIngredient->ingredient_unit_type === 'weight' ? 'Weight (kg)' : 'Quantity (qty)' }}</label>
-                                                        <input type="number" class="form-control" name="consumption"
-                                                            id="consumption-{{ $addOnIngredient->id }}"
-                                                            step="{{ $addOnIngredient->ingredient_unit_type === 'weight' ? '0.01' : '1' }}"
-                                                            min="{{ $addOnIngredient->ingredient_unit_type === 'weight' ? '0.01' : '1' }}"
-                                                            value="{{ $addOnIngredient->ingredient_unit_type === 'weight'
-                                                                ? $addOnIngredient->consumption
-                                                                : $addOnIngredient->consumption / $addOnIngredient->ingredient_weight_unit }}"
-                                                            placeholder="{{ $addOnIngredient->ingredient_unit_type === 'weight' ? 'Weight (kg)' : 'Quantity (qty)' }}">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-12">
-                                                    <div class="text-center">
-                                                        <button type="submit" class="btn btn-warning">Submit</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     @endforeach
                 @else
                     <tr>

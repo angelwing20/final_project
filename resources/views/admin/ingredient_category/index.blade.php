@@ -38,7 +38,7 @@
                                 <div class="form-group mb-3">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" class="form-control" name="name" id="name"
-                                        placeholder="Name" required>
+                                        value="{{ old('name') }}" placeholder="Name" required>
                                 </div>
                             </div>
 

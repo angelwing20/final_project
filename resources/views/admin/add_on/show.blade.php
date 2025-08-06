@@ -119,7 +119,7 @@
                                 <div class="form-group mb-3">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" class="form-control" name="name" id="name"
-                                        value="{{ $addOn->name }}" placeholder="Name" required>
+                                        value="{{ old('name', $addOn->name) }}" placeholder="Name" required>
                                 </div>
                             </div>
 
@@ -127,7 +127,8 @@
                                 <div class="form-group mb-3">
                                     <label for="price" class="form-label">Price</label>
                                     <input type="number" class="form-control" name="price" id="price" step="0.01"
-                                        min="0.01" value="{{ $addOn->price }}" placeholder="Price" required>
+                                        min="0.01" value="{{ old('price', $addOn->price) }}" placeholder="Price"
+                                        required>
                                 </div>
                             </div>
 
@@ -173,7 +174,7 @@
                                 <div class="form-group mb-3">
                                     <label for="consumption" class="form-label">Consumption</label>
                                     <input type="number" class="form-control" name="consumption" id="consumption"
-                                        placeholder="Consumption" required>
+                                        value="{{ old('comsuption') }}" placeholder="Consumption" required>
                                 </div>
                             </div>
 

@@ -12,7 +12,7 @@ class RefillStockHistoryList extends Component
     public $unitType;
     public $refillStockHistories;
     public $page = 0;
-    public $limitDataPerPage = 10;
+    public $limitDataPerPage = 15;
     public $noMoreData = false;
 
     public function mount($ingredientId)

@@ -108,6 +108,43 @@
 
 @section('script')
     <script>
+        $('#dailySalesForm').validate({
+            ignore: [],
+            errorElement: 'span',
+            errorClass: 'invalid-feedback',
+            errorPlacement: function(error, element) {
+                element.closest('td').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            },
+            invalidHandler: function(form, validator) {
+                var errors = validator.numberOfInvalids();
+                if (errors) {
+                    notifier.show('Error!', 'Please ensure all inputs are correct.', 'warning', '', 4000);
+                }
+            },
+            rules: {
+                @foreach ($products as $product)
+                    "products[{{ $product->id }}][quantity]": {
+                        required: true,
+                        digits: true,
+                        min: 0
+                    },
+                @endforeach
+                @foreach ($addons as $addon)
+                    "addons[{{ $addon->id }}][quantity]": {
+                        required: true,
+                        digits: true,
+                        min: 0
+                    },
+                @endforeach
+            },
+        });
+
         let ingredientData = @json([
             'products' => $products,
             'addons' => $addons,
@@ -117,8 +154,9 @@
             calculateTotals();
             updateIngredientPreview();
 
-            document.querySelectorAll('.quantity-input').forEach(function(inputElement) {
-                inputElement.addEventListener('input', function() {
+            document.querySelectorAll('.quantity-input').forEach(function(input) {
+                input.addEventListener('input', function() {
+                    if (parseInt(this.value) < 0) this.value = 0;
                     calculateTotals();
                     updateIngredientPreview();
                 });
@@ -129,10 +167,10 @@
             let totalQuantity = 0;
             let totalAmount = 0;
 
-            document.querySelectorAll('tbody tr').forEach(function(rowElement) {
-                const quantityInput = rowElement.querySelector('.quantity-input');
-                const priceCell = rowElement.querySelector('td.text-end');
-                const subtotalCell = rowElement.querySelector('.subtotal');
+            document.querySelectorAll('tbody tr').forEach(row => {
+                const quantityInput = row.querySelector('.quantity-input');
+                const priceCell = row.querySelector('td.text-end');
+                const subtotalCell = row.querySelector('.subtotal');
 
                 if (quantityInput && priceCell && subtotalCell) {
                     const quantity = parseFloat(quantityInput.value) || 0;

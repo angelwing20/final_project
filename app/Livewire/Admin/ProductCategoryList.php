@@ -9,7 +9,7 @@ class ProductCategoryList extends Component
 {
     public $productCategories;
     public $page = 0;
-    public $limitDataPerPage = 30;
+    public $limitDataPerPage = 15;
     public $noMoreData = false;
 
     public $filter = [

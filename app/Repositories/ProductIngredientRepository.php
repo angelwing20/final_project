@@ -24,17 +24,6 @@ class ProductIngredientRepository extends Repository
         return $model->fresh();
     }
 
-    public function update($id, $data)
-    {
-        $model = $this->_db->find($id);
-        $model->product_id = $data['product_id'] ?? $model->product_id;
-        $model->ingredient_id = $data['ingredient_id'] ?? $model->ingredient_id;
-        $model->consumption = $data['consumption'] ?? $model->consumption;
-
-        $model->update();
-        return $model;
-    }
-
     public function getByProductId($productId)
     {
         return $this->_db->where('product_id', $productId)->get();

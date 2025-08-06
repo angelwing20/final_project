@@ -24,17 +24,6 @@ class AddOnIngredientRepository extends Repository
         return $model->fresh();
     }
 
-    public function update($id, $data)
-    {
-        $model = $this->_db->find($id);
-        $model->add_on_id = $data['add_on_id'] ?? $model->add_on_id;
-        $model->ingredient_id = $data['ingredient_id'] ?? $model->ingredient_id;
-        $model->consumption = $data['consumption'] ?? $model->consumption;
-
-        $model->update();
-        return $model;
-    }
-
     public function getByAddOnId($addOnId)
     {
         return $this->_db->where('add_on_id', $addOnId)->get();

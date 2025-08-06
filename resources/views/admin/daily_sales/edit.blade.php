@@ -126,6 +126,37 @@
 
 @section('script')
     <script>
+        $('#form').validate({
+            ignore: [],
+            errorElement: 'span',
+            errorClass: 'invalid-feedback',
+            errorPlacement: function(error, element) {
+                element.closest('td').append(error);
+            },
+            highlight: function(element) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element) {
+                $(element).removeClass('is-invalid');
+            },
+            invalidHandler: function(form, validator) {
+                if (validator.numberOfInvalids()) {
+                    notifier.show('Error!', 'Please ensure all inputs are correct.', 'warning', '', 4000);
+                }
+            },
+            rules: (function() {
+                let dynamicRules = {};
+                $('.quantity-input').each(function() {
+                    dynamicRules[$(this).attr('name')] = {
+                        required: true,
+                        digits: true,
+                        min: 0
+                    };
+                });
+                return dynamicRules;
+            })()
+        });
+
         const EPSILON = 0.00001;
         let ingredientData = @json([
             'products' => $products,
@@ -136,7 +167,7 @@
             calculateTotals();
             updateIngredientPreview();
 
-            document.querySelectorAll('.quantity-input').forEach(input => {
+            document.querySelectorAll('.quantity-input').forEach(function(input) {
                 input.addEventListener('input', function() {
                     if (parseInt(this.value) < 0) this.value = 0;
                     calculateTotals();
@@ -149,13 +180,13 @@
             let totalQuantity = 0;
             let totalAmount = 0;
 
-            document.querySelectorAll('.quantity-input').forEach(function(input) {
+            document.querySelectorAll('.quantity-input').forEach(input => {
                 const quantity = parseFloat(input.value) || 0;
                 const price = parseFloat(input.closest('tr').querySelector('input[type="hidden"]').value) || 0;
-                const subtotalCellElement = input.closest('tr').querySelector('.subtotal');
+                const subtotalCell = input.closest('tr').querySelector('.subtotal');
 
                 const subtotal = quantity * price;
-                subtotalCellElement.textContent = subtotal.toFixed(2);
+                subtotalCell.textContent = subtotal.toFixed(2);
 
                 totalQuantity += quantity;
                 totalAmount += subtotal;

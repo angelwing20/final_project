@@ -58,9 +58,12 @@
                                 <div class="form-group mb-3">
                                     <label for="role" class="form-label">Role</label>
                                     <select class="form-select" name="role" id="role" required>
-                                        <option value="" selected disabled>Select role</option>
-                                        <option value="Superadmin">Superadmin</option>
-                                        <option value="Admin">Admin</option>
+                                        <option value="" {{ !old('role') ? 'selected' : '' }} disabled>Select role
+                                        </option>
+                                        <option value="Superadmin" {{ old('role') === 'Superadmin' ? 'selected' : '' }}>
+                                            Superadmin</option>
+                                        <option value="Admin" {{ old('role') === 'Admin' ? 'selected' : '' }}>Admin
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -69,7 +72,7 @@
                                 <div class="form-group mb-3">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" class="form-control" name="name" id="name"
-                                        placeholder="Name" required>
+                                        value="{{ old('name') }}" placeholder="Name" required>
                                 </div>
                             </div>
 
@@ -77,7 +80,7 @@
                                 <div class="form-group mb-3">
                                     <label for="email" class="form-label">Email Address</label>
                                     <input type="email" class="form-control" name="email" id="email"
-                                        placeholder="Email address" required>
+                                        value="{{ old('email') }}" placeholder="Email address" required>
                                 </div>
                             </div>
 
@@ -85,7 +88,7 @@
                                 <div class="form-group mb-3">
                                     <label for="password" class="form-label">Password</label>
                                     <input type="password" class="form-control" name="password" id="password"
-                                        placeholder="Password" required>
+                                        value="{{ old('password') }}" placeholder="Password" required>
                                 </div>
                             </div>
 

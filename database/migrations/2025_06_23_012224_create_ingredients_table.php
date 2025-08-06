@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ingredients', function (Blueprint $table) {
             $table->id();
             $table->foreignId('ingredient_category_id')->constrained();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('image')->nullable();
             $table->enum('unit_type', ['weight', 'quantity']);
             $table->decimal('stock', 8, 2)->nullable()->default('0');

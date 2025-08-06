@@ -10,7 +10,7 @@ class RefillStockHistoryList extends Component
     public $refillStockHistories;
     public $totalAmount = 0;
     public $page = 0;
-    public $limitDataPerPage = 30;
+    public $limitDataPerPage = 15;
     public $noMoreData = false;
 
     public $filter = [

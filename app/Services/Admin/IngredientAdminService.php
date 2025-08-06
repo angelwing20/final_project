@@ -34,7 +34,7 @@ class IngredientAdminService extends Service
             $validator = Validator::make($data, [
                 'ingredient_category_id' => 'required|exists:ingredient_categories,id',
                 'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:255|unique:ingredients,name',
                 'unit_type' => 'required|in:weight,quantity',
                 'stock' => ['nullable', 'numeric', "min:$min"],
                 'min_stock' => ['required', 'numeric', "min:$min"],
@@ -116,7 +116,7 @@ class IngredientAdminService extends Service
             $validator = Validator::make($data, [
                 'ingredient_category_id' => 'required|exists:ingredient_categories,id',
                 'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:255|unique:ingredients,name,' . $id,
                 'min_stock' => ['required', 'numeric', "min:$min"],
                 'weight_unit' => 'required|numeric|min:0.01',
                 'price' => 'required|numeric|min:0.01',
@@ -190,11 +190,17 @@ class IngredientAdminService extends Service
 
         try {
             foreach ($refills as $refill) {
-                $validator = Validator::make($refill, [
+                $ingredient = $this->_ingredientRepository->getById($refill['ingredient_id']);
+
+                $rules = [
                     'ingredient_id' => 'required|exists:ingredients,id',
                     'quantity' => 'required|integer|min:1',
-                    'weight' => 'required|numeric|min:0.01',
-                ]);
+                    'weight' => $ingredient->unit_type === 'weight'
+                        ? 'required|numeric|min:0.01'
+                        : 'nullable|numeric|min:0.01',
+                ];
+
+                $validator = Validator::make($refill, $rules);
 
                 if ($validator->fails()) {
                     foreach ($validator->errors()->all() as $error) {
@@ -203,11 +209,7 @@ class IngredientAdminService extends Service
                     return null;
                 }
 
-                $refill['quantity'] = $refill['quantity'] ?? 1;
-
-                $ingredient = $this->_ingredientRepository->getById($refill['ingredient_id']);
-
-                if ($ingredient['unit type'] === 'quantity') {
+                if ($ingredient->unit_type === 'quantity') {
                     $totalWeight = $refill['quantity'] * $ingredient->weight_unit;
                 } else {
                     $totalWeight = $refill['quantity'] * $refill['weight'];

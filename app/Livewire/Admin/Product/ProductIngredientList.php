@@ -11,7 +11,7 @@ class ProductIngredientList extends Component
     public $productIngredients = [];
     public $totalCost = 0;
     public $page = 0;
-    public $limitDataPerPage = 30;
+    public $limitDataPerPage = 15;
     public $noMoreData = false;
 
     public function mount($productId)

@@ -281,7 +281,8 @@
                                 callbacks: {
                                     label: context => {
                                         const value = context.parsed;
-                                        const percentage = ((value / total) * 100).toFixed(1);
+                                        const percentage = parseFloat(((value / total) * 100)
+                                            .toFixed(2));
                                         return `${percentage}%`;
                                     }
                                 }

@@ -76,7 +76,7 @@
                                 <div class="form-group mb-3">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" class="form-control" name="name" id="name"
-                                        value="{{ $ingredientCategory->name }}" placeholder="Name" required>
+                                        value="{{ old('name', $ingredientCategory->name) }}" placeholder="Name" required>
                                 </div>
                             </div>
                             <div class="row">
@@ -132,7 +132,7 @@
                                 <div class="form-group mb-3">
                                     <label for="ingredient-name" class="form-label">Name</label>
                                     <input type="text" class="form-control" name="name" id="ingredient-name"
-                                        placeholder="Name" required>
+                                        value="{{ old('name') }}" placeholder="Name" required>
                                 </div>
                             </div>
 
@@ -140,8 +140,10 @@
                                 <div class="form-group mb-3">
                                     <label for="ingredient-unit_type" class="form-label">Unit Type</label>
                                     <select class="form-select" name="unit_type" id="ingredient-unit_type" required>
-                                        <option value="weight" selected>Weight (kg)</option>
-                                        <option value="quantity">Quantity (qty)</option>
+                                        <option value="weight" {{ old('unit_type') === 'weight' ? 'selected' : '' }}>
+                                            Weight (kg)</option>
+                                        <option value="quantity" {{ old('unit_type') === 'quantity' ? 'selected' : '' }}>
+                                            Quantity (qty)</option>
                                     </select>
                                 </div>
                             </div>
@@ -149,7 +151,8 @@
                             <div class="col-12">
                                 <div class="form-group mb-3">
                                     <label for="ingredient-stock" class="form-label"></label>
-                                    <input type="number" class="form-control" name="stock" id="ingredient-stock">
+                                    <input type="number" class="form-control" name="stock" id="ingredient-stock"
+                                        value="{{ old('stock') }}">
                                 </div>
                             </div>
 
@@ -157,7 +160,7 @@
                                 <div class="form-group mb-3">
                                     <label for="ingredient-min_stock" class="form-label"></label>
                                     <input type="number" class="form-control" name="min_stock"
-                                        id="ingredient-min_stock" required>
+                                        id="ingredient-min_stock" value="{{ old('min_stock') }}" required>
                                 </div>
                             </div>
 
@@ -166,7 +169,7 @@
                                     <label for="ingredient-weight_unit" class="form-label">Weight Unit (kg)</label>
                                     <input type="number" class="form-control" name="weight_unit"
                                         id="ingredient-weight_unit" step="0.01" min="0.01"
-                                        placeholder="Weight unit (kg)" required>
+                                        value="{{ old('weight_unit') }}" placeholder="Weight unit (kg)" required>
                                 </div>
                             </div>
 
@@ -174,7 +177,7 @@
                                 <div class="form-group mb-3">
                                     <label for="ingredient-price" class="form-label"></label>
                                     <input type="number" class="form-control" name="price" id="ingredient-price"
-                                        min="0.01" step="0.01" required>
+                                        min="0.01" step="0.01" value="{{ old('price') }}" required>
                                 </div>
                             </div>
 
@@ -300,8 +303,12 @@
                     priceInput.attr('placeholder', 'Price per quantity (RM)');
                 }
 
-                stockInput.val('');
-                minStockInput.val('');
+                if (!stockInput.val()) {
+                    stockInput.val('');
+                }
+                if (!minStockInput.val()) {
+                    minStockInput.val('');
+                }
             }
 
             updateFields();
