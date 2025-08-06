@@ -1,48 +1,45 @@
 @extends('admin.layout.layout')
 
-@section('page_title', 'Staff')
+@section('page_title', 'Food Menu')
 
 @section('content')
 
     <div class="row mb-3">
         <div class="col">
-            <h2 class="fw-bold">Staff</h2>
+            <h2 class="fw-bold">Food Menu</h2>
         </div>
-
-        @role('Superadmin')
-            <div class="col-12 col-md-auto">
-                <div class="d-flex gap-2 align-items-center float-end">
-                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addStaffModal">
-                        <i class="fa-solid fa-plus"></i> Add
-                    </button>
-                </div>
+        <div class="col-12 col-md-auto">
+            <div class="d-flex gap-2 align-items-center float-end">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addFoodModal">
+                    <i class="fa-solid fa-plus"></i> Add
+                </button>
             </div>
-        @endrole
+        </div>
     </div>
 
     {{-- livewire --}}
-    @livewire('admin.staff-list')
+    @livewire('admin.food-list')
 
-    <!-- Modal for Add Staff -->
-    <div class="modal fade" id="addStaffModal" tabindex="-1">
+    <!-- Modal for Add Food -->
+    <div class="modal fade" id="addFoodModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fw-bold">Add Staff</h5>
+                    <h5 class="modal-title fw-bold">Add Food</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
-                    <form id="form" action="{{ route('admin.staff.store') }}" method="POST"
+                    <form id="form" action="{{ route('admin.food.store') }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
 
                         <div class="row">
                             <div class="col-12">
-                                <div class="default-avatar-wrapper mb-3">
-                                    <img id="image-display" src="{{ asset('img/default-avatar-light.png') }}"
-                                        data-initial-image="{{ asset('img/default-avatar-light.png') }}"
-                                        onerror="this.onerror=null; this.src='{{ asset('img/default-avatar-light.png') }}'">
+                                <div class="default-image-wrapper mb-3">
+                                    <img id="image-display" src="{{ asset('img/default-image.png') }}"
+                                        data-initial-image="{{ asset('img/default-image.png') }}"
+                                        onerror="this.onerror=null; this.src='{{ asset('img/default-image.png') }}'">
                                     <input type="file" class="image-input d-none" name="image" id="image"
                                         accept=".jpg, .jpeg, .png, .webp" hidden>
                                 </div>
@@ -56,14 +53,9 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="role" class="form-label">Role</label>
-                                    <select class="form-select" name="role" id="role" required>
-                                        <option value="" {{ !old('role') ? 'selected' : '' }} disabled>Select role
-                                        </option>
-                                        <option value="Superadmin" {{ old('role') === 'Superadmin' ? 'selected' : '' }}>
-                                            Superadmin</option>
-                                        <option value="Admin" {{ old('role') === 'Admin' ? 'selected' : '' }}>Admin
-                                        </option>
+                                    <label for="food_category_id" class="form-label">Food Category</label>
+                                    <select class="form-select" name="food_category_id" id="food_category_id"
+                                        style="width: 100%" required>
                                     </select>
                                 </div>
                             </div>
@@ -78,17 +70,16 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="email" class="form-label">Email Address</label>
-                                    <input type="email" class="form-control" name="email" id="email"
-                                        value="{{ old('email') }}" placeholder="Email address" required>
+                                    <label for="price" class="form-label">Price</label>
+                                    <input type="number" class="form-control" name="price" id="price" step="0.01"
+                                        min="0.01" value="{{ old('price') }}" placeholder="Price" required>
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="password" class="form-label">Password</label>
-                                    <input type="password" class="form-control" name="password" id="password"
-                                        placeholder="Password" required>
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea name="description" class="form-control" id="description" rows="3" placeholder="Description">{{ old('description') }}</textarea>
                                 </div>
                             </div>
 
@@ -111,12 +102,6 @@
         $(function() {
             $('#form').validate({
                 ignore: [],
-                rules: {
-                    password: {
-                        required: true,
-                        minlength: 6,
-                    },
-                },
                 errorElement: 'span',
                 errorClass: 'invalid-feedback',
                 errorPlacement: function(error, element) {
@@ -150,6 +135,39 @@
                     var initialImage = $('#image-display').data('initial-image');
                     $('#image-display').attr("src", initialImage);
                     $('#remove-btn').addClass('d-none');
+                }
+            });
+
+            $('#food_category_id').select2({
+                theme: 'bootstrap-5',
+                allowClear: true,
+                dropdownParent: $('#addFoodModal .modal-content'),
+                placeholder: 'Select food category',
+
+                ajax: {
+                    url: "{{ route('admin.food_category.select_search') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        var query = {
+                            search_term: params.term,
+                            page: params.page,
+                        }
+                        return query;
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data.results, function(item) {
+                                return {
+                                    text: item.name,
+                                    id: item.id,
+                                }
+                            }),
+                            pagination: {
+                                more: data.pagination.more
+                            }
+                        };
+                    },
                 }
             });
         })

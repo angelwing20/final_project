@@ -7,8 +7,8 @@ use App\Repositories\AddOnRepository;
 use App\Repositories\DailySalesRepository;
 use App\Repositories\DailySalesItemRepository;
 use App\Repositories\IngredientRepository;
-use App\Repositories\ProductIngredientRepository;
-use App\Repositories\ProductRepository;
+use App\Repositories\FoodIngredientRepository;
+use App\Repositories\FoodRepository;
 use App\Services\Service;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -19,46 +19,46 @@ class DailySalesItemAdminService extends Service
 {
     private $_dailySalesRepository;
     private $_dailySalesItemRepository;
-    private $_productRepository;
+    private $_foodRepository;
     private $_addOnRepository;
-    private $_productIngredientRepository;
+    private $_foodIngredientRepository;
     private $_addOnIngredientRepository;
     private $_ingredientRepository;
 
     public function __construct(
         DailySalesRepository $dailySalesRepository,
         DailySalesItemRepository $dailySalesItemRepository,
-        ProductRepository $productRepository,
+        FoodRepository $foodRepository,
         AddOnRepository $addOnRepository,
-        ProductIngredientRepository $productIngredientRepository,
+        FoodIngredientRepository $foodIngredientRepository,
         AddOnIngredientRepository $addOnIngredientRepository,
         IngredientRepository $ingredientRepository
     ) {
         $this->_dailySalesRepository = $dailySalesRepository;
         $this->_dailySalesItemRepository = $dailySalesItemRepository;
-        $this->_productRepository = $productRepository;
+        $this->_foodRepository = $foodRepository;
         $this->_addOnRepository = $addOnRepository;
-        $this->_productIngredientRepository = $productIngredientRepository;
+        $this->_foodIngredientRepository = $foodIngredientRepository;
         $this->_addOnIngredientRepository = $addOnIngredientRepository;
         $this->_ingredientRepository = $ingredientRepository;
     }
 
-    public function getAllProductsAndAddOns()
+    public function getAllFoodsAndAddOns()
     {
         try {
-            $products = $this->_productRepository->getAll();
+            $foods = $this->_foodRepository->getAll();
             $addons = $this->_addOnRepository->getAll();
 
-            if ($products == null && $addons == null) {
+            if ($foods == null && $addons == null) {
                 throw new Exception();
             }
 
             return [
-                'products' => $products,
+                'foods' => $foods,
                 'addons' => $addons
             ];
         } catch (Exception $e) {
-            array_push($this->_errorMessage, "Fail to get products and add-ons.");
+            array_push($this->_errorMessage, "Fail to get foods and add-ons.");
             return null;
         }
     }
@@ -73,9 +73,9 @@ class DailySalesItemAdminService extends Service
             }
 
             foreach ($items as $item) {
-                if ($item->item_type === 'product') {
-                    $product = $this->_productRepository->getById($item->item_id);
-                    $item->name = $product ? $product->name : 'Unknown Product';
+                if ($item->item_type === 'food') {
+                    $food = $this->_foodRepository->getById($item->item_id);
+                    $item->name = $food ? $food->name : 'Unknown Food';
                 } else {
                     $addon = $this->_addOnRepository->getById($item->item_id);
                     $item->name = $addon ? $addon->name : 'Unknown Addon';
@@ -95,7 +95,7 @@ class DailySalesItemAdminService extends Service
 
         try {
             $validator = Validator::make($data, [
-                'products' => 'nullable|array',
+                'foods' => 'nullable|array',
                 'addons' => 'nullable|array',
             ]);
 
@@ -113,34 +113,34 @@ class DailySalesItemAdminService extends Service
             $hasInsufficientStock = false;
             $ingredientUpdates = [];
 
-            if (!empty($data['products'])) {
-                foreach ($data['products'] as $id => $item) {
+            if (!empty($data['foods'])) {
+                foreach ($data['foods'] as $id => $item) {
                     $quantity = intval($item['quantity']);
 
                     if ($quantity > 0) {
-                        $product = $this->_productRepository->getById($id);
-                        if (!$product) {
+                        $food = $this->_foodRepository->getById($id);
+                        if (!$food) {
                             continue;
                         }
 
-                        $price = $product->price;
+                        $price = $food->price;
                         $amount = $quantity * $price;
 
                         $totalQuantity += $quantity;
                         $totalAmount += $amount;
 
                         $items[] = [
-                            'item_type' => 'product',
+                            'item_type' => 'food',
                             'item_id' => $id,
                             'quantity' => $quantity,
                             'price' => $price,
                             'amount' => $amount,
                         ];
 
-                        $productIngredients = $this->_productIngredientRepository->getByProductId($id);
-                        foreach ($productIngredients as $productIngredient) {
-                            $ingredientId = $productIngredient->ingredient_id;
-                            $requiredWeight = $productIngredient->consumption * $quantity;
+                        $foodIngredients = $this->_foodIngredientRepository->getByFoodId($id);
+                        foreach ($foodIngredients as $foodIngredient) {
+                            $ingredientId = $foodIngredient->ingredient_id;
+                            $requiredWeight = $foodIngredient->consumption * $quantity;
 
                             if (!isset($ingredientUpdates[$ingredientId])) {
                                 $ingredient = $this->_ingredientRepository->getById($ingredientId);
@@ -204,7 +204,7 @@ class DailySalesItemAdminService extends Service
             }
 
             if ($totalQuantity === 0) {
-                array_push($this->_errorMessage, "Please select at least one product or addon.");
+                array_push($this->_errorMessage, "Please select at least one food or addon.");
                 return null;
             }
 
@@ -263,31 +263,31 @@ class DailySalesItemAdminService extends Service
             }
 
             foreach ($dailySalesItems as $item) {
-                if ($item->item_type === 'product') {
-                    $product = $this->_productRepository->getById($item->item_id);
-                    $item->name = $product ? $product->name : 'Unknown Product';
+                if ($item->item_type === 'food') {
+                    $food = $this->_foodRepository->getById($item->item_id);
+                    $item->name = $food ? $food->name : 'Unknown Food';
                 } else {
                     $addon = $this->_addOnRepository->getById($item->item_id);
                     $item->name = $addon ? $addon->name : 'Unknown Addon';
                 }
             }
 
-            $products = $this->_productRepository->getAll();
+            $foods = $this->_foodRepository->getAll();
             $addons = $this->_addOnRepository->getAll();
 
             $ingredientMap = [
-                'product' => [],
+                'food' => [],
                 'addon' => []
             ];
 
-            foreach ($products as $product) {
-                $ingredients = $this->_productIngredientRepository->getByProductId($product->id);
-                $ingredientMap['product'][$product->id] = [];
+            foreach ($foods as $food) {
+                $ingredients = $this->_foodIngredientRepository->getByFoodId($food->id);
+                $ingredientMap['food'][$food->id] = [];
 
                 foreach ($ingredients as $pi) {
                     $ingredient = $this->_ingredientRepository->getById($pi->ingredient_id);
                     if ($ingredient) {
-                        $ingredientMap['product'][$product->id][] = [
+                        $ingredientMap['food'][$food->id][] = [
                             'name' => $ingredient->name,
                             'consumption' => $pi->consumption,
                             'remaining' => $ingredient->stock
@@ -315,7 +315,7 @@ class DailySalesItemAdminService extends Service
             return [
                 'dailySales' => $dailySales,
                 'dailySalesItems' => $dailySalesItems,
-                'products' => $products,
+                'foods' => $foods,
                 'addons' => $addons,
                 'ingredientMap' => $ingredientMap
             ];
@@ -332,7 +332,7 @@ class DailySalesItemAdminService extends Service
 
         try {
             $validator = Validator::make($data, [
-                'products' => 'nullable|array',
+                'foods' => 'nullable|array',
                 'addons' => 'nullable|array',
             ]);
 
@@ -353,7 +353,7 @@ class DailySalesItemAdminService extends Service
             $oldItems = $this->_dailySalesItemRepository->getByDailySalesId($id);
 
             $oldQuantities = [
-                'product' => [],
+                'food' => [],
                 'addon' => []
             ];
             foreach ($oldItems as $item) {
@@ -365,25 +365,25 @@ class DailySalesItemAdminService extends Service
             $items = [];
             $hasInsufficientStock = false;
 
-            if (!empty($data['products'])) {
-                foreach ($data['products'] as $productId => $item) {
+            if (!empty($data['foods'])) {
+                foreach ($data['foods'] as $foodId => $item) {
                     $newQty = intval($item['quantity']);
-                    $oldQty = $oldQuantities['product'][$productId] ?? 0;
+                    $oldQty = $oldQuantities['food'][$foodId] ?? 0;
                     $diff = $newQty - $oldQty;
 
                     if ($newQty > 0) {
-                        $product = $this->_productRepository->getById($productId);
-                        if (!$product) continue;
+                        $food = $this->_foodRepository->getById($foodId);
+                        if (!$food) continue;
 
-                        $price = $product->price;
+                        $price = $food->price;
                         $amount = $newQty * $price;
 
                         $totalQuantity += $newQty;
                         $totalAmount += $amount;
 
                         $items[] = [
-                            'item_type' => 'product',
-                            'item_id' => $productId,
+                            'item_type' => 'food',
+                            'item_id' => $foodId,
                             'quantity' => $newQty,
                             'price' => $price,
                             'amount' => $amount,
@@ -392,8 +392,8 @@ class DailySalesItemAdminService extends Service
                     }
 
                     if ($diff !== 0) {
-                        $productIngredients = $this->_productIngredientRepository->getByProductId($productId);
-                        foreach ($productIngredients as $pi) {
+                        $foodIngredients = $this->_foodIngredientRepository->getByFoodId($foodId);
+                        foreach ($foodIngredients as $pi) {
                             $ingredient = $this->_ingredientRepository->getById($pi->ingredient_id);
                             if ($ingredient) {
                                 $changeWeight = $pi->consumption * $diff;

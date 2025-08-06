@@ -43,12 +43,12 @@ class DailySalesRepository extends Repository
         $endDate = Carbon::now()->endOfMonth();
 
         return DB::table('ingredients as ingredients')
-            ->leftJoin('product_ingredients as product_ingredients', 'product_ingredients.ingredient_id', '=', 'ingredients.id')
+            ->leftJoin('food_ingredients as food_ingredients', 'food_ingredients.ingredient_id', '=', 'ingredients.id')
             ->leftJoin('add_on_ingredients as add_on_ingredients', 'add_on_ingredients.ingredient_id', '=', 'ingredients.id')
             ->leftJoin('daily_sales_items as daily_sales_items', function ($join) {
                 $join->on(function ($query) {
-                    $query->on('daily_sales_items.item_id', '=', 'product_ingredients.product_id')
-                        ->where('daily_sales_items.item_type', '=', 'product');
+                    $query->on('daily_sales_items.item_id', '=', 'food_ingredients.food_id')
+                        ->where('daily_sales_items.item_type', '=', 'food');
                 })->orOn(function ($query) {
                     $query->on('daily_sales_items.item_id', '=', 'add_on_ingredients.add_on_id')
                         ->where('daily_sales_items.item_type', '=', 'addon');
@@ -59,8 +59,8 @@ class DailySalesRepository extends Repository
             ->select(
                 'ingredients.name as ingredient_name',
                 DB::raw('
-                    COALESCE(SUM(CASE WHEN daily_sales_items.item_type = "product"
-                                      THEN product_ingredients.consumption * daily_sales_items.quantity
+                    COALESCE(SUM(CASE WHEN daily_sales_items.item_type = "food"
+                                      THEN food_ingredients.consumption * daily_sales_items.quantity
                                       ELSE 0 END), 0)
                     +
                     COALESCE(SUM(CASE WHEN daily_sales_items.item_type = "addon"
@@ -115,24 +115,24 @@ class DailySalesRepository extends Repository
     {
         return DB::table('daily_sales_items as daily_sales_items')
             ->join('daily_sales as daily_sales', 'daily_sales.id', '=', 'daily_sales_items.daily_sales_id')
-            ->leftJoin('product_ingredients as product_ingredients', function ($join) {
-                $join->on('product_ingredients.product_id', '=', 'daily_sales_items.item_id')
-                    ->where('daily_sales_items.item_type', '=', 'product');
+            ->leftJoin('food_ingredients as food_ingredients', function ($join) {
+                $join->on('food_ingredients.food_id', '=', 'daily_sales_items.item_id')
+                    ->where('daily_sales_items.item_type', '=', 'food');
             })
             ->leftJoin('add_on_ingredients as add_on_ingredients', function ($join) {
                 $join->on('add_on_ingredients.add_on_id', '=', 'daily_sales_items.item_id')
                     ->where('daily_sales_items.item_type', '=', 'addon');
             })
             ->leftJoin('ingredients as ingredients', function ($join) {
-                $join->on('ingredients.id', '=', DB::raw('COALESCE(product_ingredients.ingredient_id, add_on_ingredients.ingredient_id)'));
+                $join->on('ingredients.id', '=', DB::raw('COALESCE(food_ingredients.ingredient_id, add_on_ingredients.ingredient_id)'));
             })
             ->select(
                 'ingredients.name as ingredient_name',
                 'ingredients.unit_type',
                 'ingredients.weight_unit',
                 'ingredients.price',
-                DB::raw('SUM((COALESCE(product_ingredients.consumption, add_on_ingredients.consumption) * daily_sales_items.quantity)) as total_weight'),
-                DB::raw('SUM(((COALESCE(product_ingredients.consumption, add_on_ingredients.consumption) * daily_sales_items.quantity) / ingredients.weight_unit) * ingredients.price) as total_amount')
+                DB::raw('SUM((COALESCE(food_ingredients.consumption, add_on_ingredients.consumption) * daily_sales_items.quantity)) as total_weight'),
+                DB::raw('SUM(((COALESCE(food_ingredients.consumption, add_on_ingredients.consumption) * daily_sales_items.quantity) / ingredients.weight_unit) * ingredients.price) as total_amount')
             )
             ->where('daily_sales_items.daily_sales_id', $dailySalesId)
             ->whereNotNull('ingredients.name')

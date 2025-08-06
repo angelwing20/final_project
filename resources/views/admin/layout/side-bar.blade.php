@@ -16,7 +16,7 @@
             <a href="{{ route('admin.ingredient.index') }}"
                 class="sidebar-link {{ Request::routeIs('admin.ingredient.*') ? 'active' : '' }}">
                 <i class="fas fa-boxes-stacked"></i>
-                Ingredient
+                Ingredient Stock
             </a>
 
             <a href="{{ route('admin.ingredient_category.index') }}"
@@ -25,16 +25,16 @@
                 Ingredient Category
             </a>
 
-            <a href="{{ route('admin.product.index') }}"
-                class="sidebar-link {{ Request::routeIs('admin.product.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.food.index') }}"
+                class="sidebar-link {{ Request::routeIs('admin.food.*') ? 'active' : '' }}">
                 <i class="fas fa-layer-group"></i>
-                Product
+                Food Menu
             </a>
 
-            <a href="{{ route('admin.product_category.index') }}"
-                class="sidebar-link {{ Request::routeIs('admin.product_category.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.food_category.index') }}"
+                class="sidebar-link {{ Request::routeIs('admin.food_category.*') ? 'active' : '' }}">
                 <i class="fas fa-layer-group"></i>
-                Product Category
+                Food Category
             </a>
 
             <a href="{{ route('admin.add_on.index') }}"

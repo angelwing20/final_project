@@ -32,28 +32,27 @@
                 </thead>
                 <tbody>
                     <tr class="table-secondary">
-                        <td colspan="4" class="fw-bold">Products</td>
+                        <td colspan="4" class="fw-bold">Foods</td>
                     </tr>
-                    @foreach ($products as $product)
+                    @foreach ($foods as $food)
                         @php
                             $currentItem = $dailySalesItems
-                                ->where('item_type', 'product')
-                                ->where('item_id', $product->id)
+                                ->where('item_type', 'food')
+                                ->where('item_id', $food->id)
                                 ->first();
                             $quantity = $currentItem ? $currentItem->quantity : 0;
                         @endphp
                         <tr>
-                            <td>{{ $product->name }}</td>
+                            <td>{{ $food->name }}</td>
                             <td>
                                 <input type="number" class="form-control quantity-input"
-                                    name="products[{{ $product->id }}][quantity]" min="0"
-                                    value="{{ old('products.' . $product->id . '.quantity', $quantity) }}"
-                                    data-type="product" data-id="{{ $product->id }}" data-old="{{ $quantity }}">
-                                <input type="hidden" name="products[{{ $product->id }}][price]"
-                                    value="{{ $product->price }}">
+                                    name="foods[{{ $food->id }}][quantity]" min="0"
+                                    value="{{ old('foods.' . $food->id . '.quantity', $quantity) }}" data-type="food"
+                                    data-id="{{ $food->id }}" data-old="{{ $quantity }}">
+                                <input type="hidden" name="foods[{{ $food->id }}][price]" value="{{ $food->price }}">
                             </td>
-                            <td class="text-end">{{ number_format($product->price, 2) }}</td>
-                            <td class="text-end subtotal">{{ number_format($quantity * $product->price, 2) }}</td>
+                            <td class="text-end">{{ number_format($food->price, 2) }}</td>
+                            <td class="text-end subtotal">{{ number_format($quantity * $food->price, 2) }}</td>
                         </tr>
                     @endforeach
 
@@ -159,7 +158,7 @@
 
         const EPSILON = 0.00001;
         let ingredientData = @json([
-            'products' => $products,
+            'foods' => $foods,
             'addons' => $addons,
         ]);
 

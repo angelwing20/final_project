@@ -111,7 +111,7 @@ class IngredientAdminController extends Controller
         $data = [
             "search_term" => $request->search_term ?? null,
             "page" => $request->page ?? 1,
-            "exclude_product_id" => $request->exclude_product_id ?? null,
+            "exclude_food_id" => $request->exclude_food_id ?? null,
             "exclude_add_on_id" => $request->exclude_add_on_id ?? null,
         ];
 

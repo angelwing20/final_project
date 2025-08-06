@@ -76,16 +76,16 @@ class IngredientRepository extends Repository
         return $totalCount;
     }
 
-    public function getAllBySearchTermAndExcludeProduct($data, $exclude_product_id)
+    public function getAllBySearchTermAndExcludeFood($data, $exclude_food_id)
     {
 
         $name = $data['search_term'] ?? '';
 
         $data = $this->_db->select('id', 'name', 'unit_type', 'weight_unit')
-            ->whereNotIn('id', function ($sub) use ($exclude_product_id) {
+            ->whereNotIn('id', function ($sub) use ($exclude_food_id) {
                 $sub->select('ingredient_id')
-                    ->from('product_ingredients')
-                    ->where('product_id', $exclude_product_id);
+                    ->from('food_ingredients')
+                    ->where('food_id', $exclude_food_id);
             })
             ->where('name', 'LIKE', "%$name%")
             ->skip($data['offset'])->take($data['result_count'])
@@ -97,16 +97,16 @@ class IngredientRepository extends Repository
         return $data;
     }
 
-    public function getTotalCountBySearchTermAndExcludeProduct($data, $exclude_product_id)
+    public function getTotalCountBySearchTermAndExcludeFood($data, $exclude_food_id)
     {
 
         $name = $data['search_term'] ?? '';
 
         $totalCount = $this->_db
-            ->whereNotIn('id', function ($sub) use ($exclude_product_id) {
+            ->whereNotIn('id', function ($sub) use ($exclude_food_id) {
                 $sub->select('ingredient_id')
-                    ->from('product_ingredients')
-                    ->where('product_id', $exclude_product_id);
+                    ->from('food_ingredients')
+                    ->where('food_id', $exclude_food_id);
             })
             ->where('name', 'LIKE', "%$name%")
             ->count();

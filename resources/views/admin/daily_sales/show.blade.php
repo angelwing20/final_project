@@ -34,7 +34,7 @@
         $totalQuantity = 0;
         $totalAmount = 0;
 
-        $productSalesItems = $dailySalesItems->where('item_type', 'product');
+        $foodSalesItems = $dailySalesItems->where('item_type', 'food');
         $addonSalesItems = $dailySalesItems->where('item_type', 'addon');
     @endphp
 
@@ -49,11 +49,11 @@
                 </tr>
             </thead>
             <tbody>
-                @if ($productSalesItems->isNotEmpty())
+                @if ($foodSalesItems->isNotEmpty())
                     <tr class="table-secondary">
-                        <td colspan="4" class="fw-bold">Products</td>
+                        <td colspan="4" class="fw-bold">Foods</td>
                     </tr>
-                    @foreach ($productSalesItems as $salesItem)
+                    @foreach ($foodSalesItems as $salesItem)
                         @php
                             $totalQuantity += $salesItem->quantity;
                             $totalAmount += $salesItem->amount;

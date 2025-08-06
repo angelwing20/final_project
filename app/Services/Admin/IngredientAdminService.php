@@ -248,12 +248,12 @@ class IngredientAdminService extends Service
             $data['result_count'] = 50;
             $data['offset'] = ($data['page'] - 1) * $data['result_count'];
 
-            if ($data['exclude_product_id'] == null && $data['exclude_add_on_id'] == null) {
+            if ($data['exclude_food_id'] == null && $data['exclude_add_on_id'] == null) {
                 $ingredients = $this->_ingredientRepository->getAllBySearchTerm($data);
                 $totalCount = $this->_ingredientRepository->getTotalCountBySearchTerm($data);
-            } elseif ($data['exclude_product_id'] != null) {
-                $ingredients = $this->_ingredientRepository->getAllBySearchTermAndExcludeProduct($data, $data['exclude_product_id']);
-                $totalCount = $this->_ingredientRepository->getTotalCountBySearchTermAndExcludeProduct($data, $data['exclude_product_id']);
+            } elseif ($data['exclude_food_id'] != null) {
+                $ingredients = $this->_ingredientRepository->getAllBySearchTermAndExcludeFood($data, $data['exclude_food_id']);
+                $totalCount = $this->_ingredientRepository->getTotalCountBySearchTermAndExcludeFood($data, $data['exclude_food_id']);
             } else {
                 $ingredients = $this->_ingredientRepository->getAllBySearchTermAndExcludeAddOn($data, $data['exclude_add_on_id']);
                 $totalCount = $this->_ingredientRepository->getTotalCountBySearchTermAndExcludeAddOn($data, $data['exclude_add_on_id']);

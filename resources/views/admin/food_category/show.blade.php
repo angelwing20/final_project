@@ -1,27 +1,26 @@
 @extends('admin.layout.layout')
 
-@section('page_title', 'Ingredient Category Detail')
+@section('page_title', 'Food Category Detail')
 
 @section('content')
 
     <div class="row mb-3">
         <div class="col">
-            <h2 class="fw-bold">Ingredient Category Detail</h2>
+            <h2 class="fw-bold">Food Category Detail</h2>
         </div>
         <div class="col-12 col-md-auto">
             <div class="d-flex gap-2 align-items-center float-end">
-                <a href="{{ route('admin.ingredient_category.index') }}" class="btn btn-secondary">
+                <a href="{{ route('admin.food_category.index') }}" class="btn btn-secondary">
                     <i class="fa-solid fa-arrow-left"></i> Back
                 </a>
-                <form action="{{ route('admin.ingredient_category.destroy', ['id' => $ingredientCategory->id]) }}"
-                    method="POST">
+                <form action="{{ route('admin.food_category.destroy', ['id' => $foodCategory->id]) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger" onclick="deleteConfirmation(event)">
                         <i class="fa-solid fa-trash"></i> Delete
                     </button>
                 </form>
-                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editIngredientCategoryModal">
+                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editFoodCategoryModal">
                     <i class="fa-solid fa-pen-to-square"></i> Edit
                 </button>
             </div>
@@ -32,8 +31,12 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-12">
-                    <div class="fw-bold">Name:</div>
-                    <div>{{ $ingredientCategory->name }}</div>
+                    <div class="fw-bold">
+                        Name:
+                    </div>
+                    <div>
+                        {{ $foodCategory->name }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -41,32 +44,30 @@
 
     <div class="row mt-4 mb-3">
         <div class="col">
-            <h2 class="fw-bold">Ingredient Stock</h2>
+            <h2 class="fw-bold">Food Menu</h2>
         </div>
-
         <div class="col-12 col-md-auto">
             <div class="d-flex gap-2 align-items-center float-end">
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addIngredientModal">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addFoodModal">
                     <i class="fa-solid fa-plus"></i> Add
                 </button>
             </div>
         </div>
     </div>
 
-    @livewire('admin.ingredient-category.ingredient-list', ['ingredientCategoryId' => $ingredientCategory->id])
+    @livewire('admin.food-category.food-list', ['foodCategoryId' => $foodCategory->id])
 
-    <!-- Modal for Edit Ingredient Category -->
-    <div class="modal fade" id="editIngredientCategoryModal" tabindex="-1">
+    <!-- Modal for Edit Food Category -->
+    <div class="modal fade" id="editFoodCategoryModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fw-bold">Edit Ingredient Category</h5>
+                    <h5 class="modal-title fw-bold">Edit Food Category</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
-                    <form id="form"
-                        action="{{ route('admin.ingredient_category.update', ['id' => $ingredientCategory->id]) }}"
+                    <form id="form" action="{{ route('admin.food_category.update', ['id' => $foodCategory->id]) }}"
                         method="POST">
                         @csrf
                         @method('PATCH')
@@ -76,15 +77,13 @@
                                 <div class="form-group mb-3">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" class="form-control" name="name" id="name"
-                                        value="{{ old('name', $ingredientCategory->name) }}" placeholder="Name" required>
+                                        value="{{ old('name', $foodCategory->name) }}" placeholder="Name" required>
                                 </div>
                             </div>
-                            <div class="row">
 
-                                <div class="col-12">
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-warning">Submit</button>
-                                    </div>
+                            <div class="col-12">
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-warning">Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -94,17 +93,17 @@
         </div>
     </div>
 
-    <!-- Modal for Add Ingredient Stock -->
-    <div class="modal fade" id="addIngredientModal" tabindex="-1">
+    <!-- Modal for Add Food -->
+    <div class="modal fade" id="addFoodModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fw-bold">Add Ingredient Stock</h5>
+                    <h5 class="modal-title fw-bold">Add Food</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
-                    <form id="add-ingredient-form" action="{{ route('admin.ingredient.store') }}" method="POST"
+                    <form id="add-food-form" action="{{ route('admin.food.store') }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
 
@@ -114,7 +113,7 @@
                                     <img id="image-display" src="{{ asset('img/default-image.png') }}"
                                         data-initial-image="{{ asset('img/default-image.png') }}"
                                         onerror="this.onerror=null; this.src='{{ asset('img/default-image.png') }}'">
-                                    <input type="file" class="image-input d-none" name="image" id="ingredient-image"
+                                    <input type="file" class="image-input d-none" name="image" id="food-image"
                                         accept=".jpg, .jpeg, .png, .webp" hidden>
                                 </div>
 
@@ -125,59 +124,29 @@
                                 </div>
                             </div>
 
-                            <input type="text" name="ingredient_category_id" value="{{ $ingredientCategory->id }}"
-                                hidden>
+                            <input type="text" name="food_category_id" value="{{ $foodCategory->id }}" hidden>
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="ingredient-name" class="form-label">Name</label>
-                                    <input type="text" class="form-control" name="name" id="ingredient-name"
+                                    <label for="food-name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" name="name" id="food-name"
                                         value="{{ old('name') }}" placeholder="Name" required>
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="ingredient-unit_type" class="form-label">Unit Type</label>
-                                    <select class="form-select" name="unit_type" id="ingredient-unit_type" required>
-                                        <option value="weight" {{ old('unit_type') === 'weight' ? 'selected' : '' }}>
-                                            Weight (kg)</option>
-                                        <option value="quantity" {{ old('unit_type') === 'quantity' ? 'selected' : '' }}>
-                                            Quantity (qty)</option>
-                                    </select>
+                                    <label for="food-price" class="form-label">Price</label>
+                                    <input type="number" class="form-control" name="price" id="food-price"
+                                        value="{{ old('price') }}" step="0.01" min="0.01" placeholder="Price"
+                                        required>
                                 </div>
                             </div>
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="ingredient-stock" class="form-label"></label>
-                                    <input type="number" class="form-control" name="stock" id="ingredient-stock"
-                                        value="{{ old('stock') }}">
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="form-group mb-3">
-                                    <label for="ingredient-min_stock" class="form-label"></label>
-                                    <input type="number" class="form-control" name="min_stock"
-                                        id="ingredient-min_stock" value="{{ old('min_stock') }}" required>
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="form-group mb-3">
-                                    <label for="ingredient-weight_unit" class="form-label">Weight Unit (kg)</label>
-                                    <input type="number" class="form-control" name="weight_unit"
-                                        id="ingredient-weight_unit" step="0.01" min="0.01"
-                                        value="{{ old('weight_unit') }}" placeholder="Weight unit (kg)" required>
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="form-group mb-3">
-                                    <label for="ingredient-price" class="form-label"></label>
-                                    <input type="number" class="form-control" name="price" id="ingredient-price"
-                                        min="0.01" step="0.01" value="{{ old('price') }}" required>
+                                    <label for="food-description" class="form-label">Description</label>
+                                    <textarea name="description" class="form-control" id="food-description" rows="3" placeholder="Description">{{ old('description') }}</textarea>
                                 </div>
                             </div>
 
@@ -218,9 +187,9 @@
                             4000);
                     }
                 },
-            });
+            })
 
-            $('#add-ingredient-form').validate({
+            $('#add-food-form').validate({
                 ignore: [],
                 errorElement: 'span',
                 errorClass: 'invalid-feedback',
@@ -240,7 +209,7 @@
                             4000);
                     }
                 },
-            });
+            })
 
             $('.image-input').change(function(e) {
                 const file = e.target.files[0];
@@ -257,71 +226,15 @@
                     $('#remove-btn').addClass('d-none');
                 }
             });
-
-            const unitTypeSelect = $('#ingredient-unit_type');
-            const stockInput = $('#ingredient-stock');
-            const minStockInput = $('#ingredient-min_stock');
-            const priceInput = $('#ingredient-price');
-
-            function updateFields() {
-                const selectedType = unitTypeSelect.val();
-
-                if (selectedType === 'weight') {
-                    $('label[for="ingredient-stock"]').text('Current Stock (kg)');
-                    stockInput.attr({
-                        min: '0.01',
-                        step: '0.01',
-                        placeholder: 'Current stock (kg)'
-                    });
-
-                    $('label[for="ingredient-min_stock"]').text('Minimum Stock (kg)');
-                    minStockInput.attr({
-                        min: '0.01',
-                        step: '0.01',
-                        placeholder: 'Minimum stock (kg)'
-                    });
-
-                    $('label[for="ingredient-price"]').text('Price per Weight Unit (RM)');
-                    priceInput.attr('placeholder', 'Price per weight unit (RM)');
-
-                } else {
-                    $('label[for="ingredient-stock"]').text('Current Stock (qty)');
-                    stockInput.attr({
-                        min: '1',
-                        step: '1',
-                        placeholder: 'Current stock (qty)'
-                    });
-
-                    $('label[for="ingredient-min_stock"]').text('Minimum Stock (qty)');
-                    minStockInput.attr({
-                        min: '1',
-                        step: '1',
-                        placeholder: 'Minimum stock (qty)'
-                    });
-
-                    $('label[for="ingredient-price"]').text('Price per Quantity (RM)');
-                    priceInput.attr('placeholder', 'Price per quantity (RM)');
-                }
-
-                if (!stockInput.val()) {
-                    stockInput.val('');
-                }
-                if (!minStockInput.val()) {
-                    minStockInput.val('');
-                }
-            }
-
-            updateFields();
-
-            unitTypeSelect.on('change', updateFields);
-        });
+        })
 
         function uploadImage() {
-            $('#ingredient-image').click();
+            $('#food-image').click();
         }
 
         function removeImage() {
-            $('#ingredient-image').val(null);
+            $('#food-image').val(null);
+
             var initialImage = $('#image-display').data('initial-image');
             $('#image-display').attr("src", initialImage);
             $('#remove-btn').addClass('d-none');

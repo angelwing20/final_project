@@ -1,12 +1,12 @@
 @extends('admin.layout.layout')
 
-@section('page_title', 'Ingredient')
+@section('page_title', 'Ingredient Stock')
 
 @section('content')
 
     <div class="row mb-3">
         <div class="col">
-            <h2 class="fw-bold">Ingredient</h2>
+            <h2 class="fw-bold">Ingredient Stock</h2>
         </div>
         <div class="col-12 col-md-auto">
             <div class="d-flex gap-2 align-items-center float-end">
@@ -82,12 +82,12 @@
         </div>
     </div>
 
-    <!-- Modal for Add Ingredient -->
+    <!-- Modal for Add Ingredient Stock -->
     <div class="modal fade" id="addIngredientModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fw-bold">Add Ingredient</h5>
+                    <h5 class="modal-title fw-bold">Add Ingredient Stock</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 

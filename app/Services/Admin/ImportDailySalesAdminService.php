@@ -7,9 +7,9 @@ use App\Repositories\AddOnIngredientRepository;
 use App\Repositories\AddOnRepository;
 use App\Repositories\DailySalesItemRepository;
 use App\Repositories\DailySalesRepository;
-use App\Repositories\ProductRepository;
+use App\Repositories\FoodRepository;
 use App\Repositories\IngredientRepository;
-use App\Repositories\ProductIngredientRepository;
+use App\Repositories\FoodIngredientRepository;
 use Exception;
 use App\Services\Service;
 use Illuminate\Support\Facades\Auth;
@@ -19,26 +19,26 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ImportDailySalesAdminService extends Service
 {
-    private $_productRepository;
+    private $_foodRepository;
     private $_ingredientRepository;
-    private $_productIngredientRepository;
+    private $_foodIngredientRepository;
     private $_dailySalesRepository;
     private $_dailySalesItemRepository;
     private $_addOnRepository;
     private $_addOnIngredientRepository;
 
     public function __construct(
-        ProductRepository $productRepository,
+        FoodRepository $foodRepository,
         IngredientRepository $ingredientRepository,
-        ProductIngredientRepository $productIngredientRepository,
+        FoodIngredientRepository $foodIngredientRepository,
         DailySalesRepository $dailySalesRepository,
         DailySalesItemRepository $dailySalesItemRepository,
         AddOnRepository $addOnRepository,
         AddOnIngredientRepository $addOnIngredientRepository
     ) {
-        $this->_productRepository = $productRepository;
+        $this->_foodRepository = $foodRepository;
         $this->_ingredientRepository = $ingredientRepository;
-        $this->_productIngredientRepository = $productIngredientRepository;
+        $this->_foodIngredientRepository = $foodIngredientRepository;
         $this->_dailySalesRepository = $dailySalesRepository;
         $this->_dailySalesItemRepository = $dailySalesItemRepository;
         $this->_addOnRepository = $addOnRepository;
@@ -82,13 +82,13 @@ class ImportDailySalesAdminService extends Service
                     continue;
                 }
 
-                if (!in_array($itemType, ['product', 'addon'])) {
+                if (!in_array($itemType, ['food', 'addon'])) {
                     array_push($this->_errorMessage, "Invalid item type [$itemType] for [$itemName] (row " . ($index + 1) . ")");
                     continue;
                 }
 
-                $item = $itemType === 'product'
-                    ? $this->_productRepository->getByName($itemName)
+                $item = $itemType === 'food'
+                    ? $this->_foodRepository->getByName($itemName)
                     : $this->_addOnRepository->getByName($itemName);
 
                 if (!$item || empty($item->id)) {
@@ -96,8 +96,8 @@ class ImportDailySalesAdminService extends Service
                     continue;
                 }
 
-                $ingredients = $itemType === 'product'
-                    ? $this->_productIngredientRepository->getByProductId($item->id)
+                $ingredients = $itemType === 'food'
+                    ? $this->_foodIngredientRepository->getByFoodId($item->id)
                     : $this->_addOnIngredientRepository->getByAddOnId($item->id);
 
                 $price = $item->price;

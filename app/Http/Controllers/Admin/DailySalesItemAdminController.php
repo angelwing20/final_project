@@ -17,7 +17,7 @@ class DailySalesItemAdminController extends Controller
 
     public function create()
     {
-        $data = $this->_dailySalesItemAdminService->getAllProductsAndAddOns();
+        $data = $this->_dailySalesItemAdminService->getAllFoodsAndAddOns();
 
         if ($data == null) {
             $errorMessage = implode("<br>", $this->_dailySalesItemAdminService->_errorMessage);
@@ -25,14 +25,14 @@ class DailySalesItemAdminController extends Controller
         }
 
         return view('admin.daily_sales.create', [
-            'products' => $data['products'],
+            'foods' => $data['foods'],
             'addons' => $data['addons'],
         ]);
     }
 
     public function store(Request $request)
     {
-        $data = $request->only(['products', 'addons']);
+        $data = $request->only(['foods', 'addons']);
 
         $result = $this->_dailySalesItemAdminService->createDailySales($data);
 
@@ -56,7 +56,7 @@ class DailySalesItemAdminController extends Controller
         return view('admin.daily_sales.edit', [
             'dailySales' => $data['dailySales'],
             'dailySalesItems' => $data['dailySalesItems'],
-            'products' => $data['products'],
+            'foods' => $data['foods'],
             'addons' => $data['addons'],
             'ingredientMap' => $data['ingredientMap'],
         ]);
@@ -64,7 +64,7 @@ class DailySalesItemAdminController extends Controller
 
     public function update(Request $request, $id)
     {
-        $data = $request->only(['products', 'addons']);
+        $data = $request->only(['foods', 'addons']);
 
         $result = $this->_dailySalesItemAdminService->updateDailySales($id, $data);
 

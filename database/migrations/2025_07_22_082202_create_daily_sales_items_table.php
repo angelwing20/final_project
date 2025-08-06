@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('daily_sales_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('daily_sales_id')->constrained('daily_sales');
-            $table->enum('item_type', ['product', 'addon']);
+            $table->enum('item_type', ['food', 'addon']);
             $table->unsignedBigInteger('item_id');
             $table->unsignedInteger('quantity');
             $table->decimal('price', 13, 2);

@@ -31,18 +31,18 @@
                 </thead>
                 <tbody>
                     <tr class="table-secondary">
-                        <td colspan="4" class="fw-bold">Products</td>
+                        <td colspan="4" class="fw-bold">Foods</td>
                     </tr>
-                    @foreach ($products as $product)
+                    @foreach ($foods as $food)
                         <tr>
-                            <td>{{ $product->name }}</td>
+                            <td>{{ $food->name }}</td>
                             <td>
                                 <input type="number" class="form-control quantity-input"
-                                    name="products[{{ $product->id }}][quantity]" min="0"
-                                    value="{{ old('products.' . $product->id . '.quantity', 0) }}" data-item-type="product"
-                                    data-item-id="{{ $product->id }}">
+                                    name="foods[{{ $food->id }}][quantity]" min="0"
+                                    value="{{ old('foods.' . $food->id . '.quantity', 0) }}" data-item-type="food"
+                                    data-item-id="{{ $food->id }}">
                             </td>
-                            <td class="text-end">{{ number_format($product->price, 2) }}</td>
+                            <td class="text-end">{{ number_format($food->price, 2) }}</td>
                             <td class="text-end subtotal">0.00</td>
                         </tr>
                     @endforeach
@@ -128,8 +128,8 @@
                 }
             },
             rules: {
-                @foreach ($products as $product)
-                    "products[{{ $product->id }}][quantity]": {
+                @foreach ($foods as $food)
+                    "foods[{{ $food->id }}][quantity]": {
                         required: true,
                         digits: true,
                         min: 0
@@ -146,7 +146,7 @@
         });
 
         let ingredientData = @json([
-            'products' => $products,
+            'foods' => $foods,
             'addons' => $addons,
         ]);
 
