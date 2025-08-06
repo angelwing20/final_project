@@ -72,7 +72,11 @@ class ImportDailySalesAdminService extends Service
             $totalQty = 0;
             $totalAmount = 0;
 
+            $insufficientIngredients = [];
+
             foreach ($rows as $index => $row) {
+                $hasError = false;
+
                 $itemName = trim($row['item_name'] ?? '');
                 $itemType = strtolower(trim($row['item_type'] ?? ''));
                 $quantity = (int)($row['quantity'] ?? 0);
@@ -96,26 +100,38 @@ class ImportDailySalesAdminService extends Service
                     continue;
                 }
 
-                $ingredients = $itemType === 'food'
+                $itemIngredients = $itemType === 'food'
                     ? $this->_foodIngredientRepository->getByFoodId($item->id)
                     : $this->_addOnIngredientRepository->getByAddOnId($item->id);
 
                 $price = $item->price;
                 $amount = $price * $quantity;
 
-                foreach ($ingredients as $ingredientLink) {
-                    $ingredient = $this->_ingredientRepository->getById($ingredientLink->ingredient_id);
-                    $weightNeeded = $ingredientLink->weight * $quantity;
+                foreach ($itemIngredients as $itemIngredient) {
+                    $ingredient = $this->_ingredientRepository->getById($itemIngredient->ingredient_id);
+                    $consumptionNeeded = $itemIngredient->consumption * $quantity;
 
-                    if ($ingredient->stock < $weightNeeded) {
-                        array_push($this->_errorMessage, "Ingredient [{$ingredient->name}] stock not enough (row " . ($index + 1) . ").");
-                        continue 2;
+                    if ($ingredient->stock < $consumptionNeeded) {
+                        if (!in_array($ingredient->name, $insufficientIngredients)) {
+                            $insufficientIngredients[] = $ingredient->name;
+                        }
+                        $hasError = true;
+                        break;
                     }
                 }
 
-                $validatedItems[] = compact('item', 'itemType', 'quantity', 'price', 'amount', 'ingredients');
+                if ($hasError) {
+                    continue;
+                }
+
+                $validatedItems[] = compact('item', 'itemType', 'quantity', 'price', 'amount', 'itemIngredients');
                 $totalQty += $quantity;
                 $totalAmount += $amount;
+            }
+
+            if (!empty($insufficientIngredients)) {
+                array_push($this->_errorMessage, "Ingredient stock not enough: " . implode(', ', $insufficientIngredients));
+                return false;
             }
 
             if (!empty($this->_errorMessage)) {
@@ -140,10 +156,12 @@ class ImportDailySalesAdminService extends Service
                         'amount' => $data['amount'],
                     ]);
 
-                    foreach ($data['ingredients'] as $ingredientLink) {
-                        $ingredient = $this->_ingredientRepository->getById($ingredientLink->ingredient_id);
-                        $ingredient->stock -= $ingredientLink->weight * $data['quantity'];
-                        $this->_ingredientRepository->update($ingredient->id, ['stock' => $ingredient->stock]);
+                    foreach ($data['itemIngredients'] as $itemIngredient) {
+                        $ingredient = $this->_ingredientRepository->getById($itemIngredient->ingredient_id);
+                        $consumptionNeeded = $itemIngredient->consumption * $data['quantity'];
+
+                        $newStock = max(0, $ingredient->stock - $consumptionNeeded);
+                        $this->_ingredientRepository->updateStock($ingredient->id, $newStock);
                     }
                 }
 
