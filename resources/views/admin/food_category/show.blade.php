@@ -13,16 +13,20 @@
                 <a href="{{ route('admin.food_category.index') }}" class="btn btn-secondary">
                     <i class="fa-solid fa-arrow-left"></i> Back
                 </a>
-                <form action="{{ route('admin.food_category.destroy', ['id' => $foodCategory->id]) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger" onclick="deleteConfirmation(event)">
-                        <i class="fa-solid fa-trash"></i> Delete
+
+                @role('Superadmin')
+                    <form action="{{ route('admin.food_category.destroy', ['id' => $foodCategory->id]) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger" onclick="deleteConfirmation(event)">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </button>
+                    </form>
+
+                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editFoodCategoryModal">
+                        <i class="fa-solid fa-pen-to-square"></i> Edit
                     </button>
-                </form>
-                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editFoodCategoryModal">
-                    <i class="fa-solid fa-pen-to-square"></i> Edit
-                </button>
+                @endrole
             </div>
         </div>
     </div>
@@ -46,13 +50,16 @@
         <div class="col">
             <h2 class="fw-bold">Food Menu</h2>
         </div>
-        <div class="col-12 col-md-auto">
-            <div class="d-flex gap-2 align-items-center float-end">
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addFoodModal">
-                    <i class="fa-solid fa-plus"></i> Add
-                </button>
+
+        @role('Superadmin')
+            <div class="col-12 col-md-auto">
+                <div class="d-flex gap-2 align-items-center float-end">
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addFoodModal">
+                        <i class="fa-solid fa-plus"></i> Add
+                    </button>
+                </div>
             </div>
-        </div>
+        @endrole
     </div>
 
     @livewire('admin.food-category.food-list', ['foodCategoryId' => $foodCategory->id])

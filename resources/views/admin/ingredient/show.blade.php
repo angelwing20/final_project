@@ -14,17 +14,19 @@
                     <i class="fa-solid fa-arrow-left"></i> Back
                 </a>
 
-                <form action="{{ route('admin.ingredient.destroy', ['id' => $ingredient->id]) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger" onclick="deleteConfirmation(event)">
-                        <i class="fa-solid fa-trash"></i> Delete
-                    </button>
-                </form>
+                @role('Superadmin')
+                    <form action="{{ route('admin.ingredient.destroy', ['id' => $ingredient->id]) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger" onclick="deleteConfirmation(event)">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </button>
+                    </form>
 
-                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editIngredientModal">
-                    <i class="fa-solid fa-pen-to-square"></i> Edit
-                </button>
+                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editIngredientModal">
+                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                    </button>
+                @endrole
             </div>
         </div>
     </div>

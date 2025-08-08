@@ -14,17 +14,19 @@
                     <i class="fa-solid fa-arrow-left"></i> Back
                 </a>
 
-                <form action="{{ route('admin.food.destroy', ['id' => $food->id]) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger" onclick="deleteConfirmation(event)">
-                        <i class="fa-solid fa-trash"></i> Delete
-                    </button>
-                </form>
+                @role('Superadmin')
+                    <form action="{{ route('admin.food.destroy', ['id' => $food->id]) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger" onclick="deleteConfirmation(event)">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </button>
+                    </form>
 
-                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editFoodModal">
-                    <i class="fa-solid fa-pen-to-square"></i> Edit
-                </button>
+                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editFoodModal">
+                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                    </button>
+                @endrole
             </div>
         </div>
     </div>
@@ -100,13 +102,15 @@
             <h2 class="fw-bold">Food Ingredient</h2>
         </div>
 
-        <div class="col-12 col-md-auto">
-            <div class="d-flex gap-2 align-items-center float-end">
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addFoodIngredientModal">
-                    <i class="fa-solid fa-plus"></i> Add
-                </button>
+        @role('Superadmin')
+            <div class="col-12 col-md-auto">
+                <div class="d-flex gap-2 align-items-center float-end">
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addFoodIngredientModal">
+                        <i class="fa-solid fa-plus"></i> Add
+                    </button>
+                </div>
             </div>
-        </div>
+        @endrole
     </div>
 
     @livewire('admin.food.food-ingredient-list', ['foodId' => $food->id])

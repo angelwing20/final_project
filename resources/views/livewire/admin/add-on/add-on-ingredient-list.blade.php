@@ -10,7 +10,9 @@
                     <th scope="col" style="white-space: nowrap;">Ingredient</th>
                     <th scope="col" style="white-space: nowrap;">Consumption</th>
                     <th scope="col" style="white-space: nowrap;">Cost (RM)</th>
-                    <th scope="col" style="width: 10px"></th>
+                    @role('Superadmin')
+                        <th scope="col" style="width: 10px"></th>
+                    @endrole
                 </tr>
             </thead>
 
@@ -28,17 +30,19 @@
                                 @endif
                             </td>
                             <td>{{ number_format($addOnIngredient->cost, 2) }}</td>
-                            <td>
-                                <form
-                                    action="{{ route('admin.add_on.ingredient.destroy', ['id' => $addOnIngredient->id]) }}"
-                                    method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger" onclick="deleteConfirmation(event)">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
+                            @role('Superadmin')
+                                <td>
+                                    <form
+                                        action="{{ route('admin.add_on.ingredient.destroy', ['id' => $addOnIngredient->id]) }}"
+                                        method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger" onclick="deleteConfirmation(event)">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            @endrole
                         </tr>
                     @endforeach
                 @else

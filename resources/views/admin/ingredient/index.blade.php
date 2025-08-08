@@ -8,14 +8,18 @@
         <div class="col">
             <h2 class="fw-bold">Ingredient Stock</h2>
         </div>
+
         <div class="col-12 col-md-auto">
             <div class="d-flex gap-2 align-items-center float-end">
                 <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#refillStockModal">
                     <i class="fa-solid fa-plus"></i> Refill Stock
                 </button>
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addIngredientModal">
-                    <i class="fa-solid fa-plus"></i> Add
-                </button>
+
+                @role('Superadmin')
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addIngredientModal">
+                        <i class="fa-solid fa-plus"></i> Add
+                    </button>
+                @endrole
             </div>
         </div>
     </div>
