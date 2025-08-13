@@ -60,44 +60,6 @@
                 color: #3e2c23 !important;
             }
         }
-
-        .sidebar-section-group {
-            display: flex;
-            flex-direction: column;
-
-            .sidebar-main-item {
-                display: flex;
-
-                .sidebar-link {
-                    display: flex;
-                    gap: 8px;
-                    width: 100%;
-
-                    .sidebar-link-title {
-                        display: flex;
-                        align-items: center;
-                    }
-
-                    .rotate-icon{
-                        transition: transform 0.2s ease-in-out;
-                    }
-                }
-            }
-
-            .sidebar-sub-item {
-                display: none;
-            }
-
-            &.active {
-                .sidebar-sub-item {
-                    display: grid;
-                }
-
-                .rotate-icon{
-                    transform: rotate(180deg);
-                }
-            }
-        }
     }
 
     .close-sidebar-btn {

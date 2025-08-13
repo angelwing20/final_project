@@ -47,16 +47,6 @@
             }
         }
 
-        function toggleSidebarSectionGroup(e) {
-            var sectionGroup = $(e).closest('.sidebar-section-group');
-
-            if (sectionGroup.hasClass('active')) {
-                sectionGroup.removeClass('active');
-            } else {
-                sectionGroup.addClass('active');
-            }
-        }
-
         function deleteConfirmation(e) {
             e.preventDefault();
 

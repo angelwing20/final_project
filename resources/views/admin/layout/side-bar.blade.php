@@ -43,39 +43,23 @@
                 Add-on
             </a>
 
-            <div
-                class="sidebar-section-group {{ Request::routeIs('admin.daily_sales.*') || Request::routeIs('admin.refill_stock_history.*') || Request::routeIs('admin.staff.*') ? 'active' : '' }}">
-                <div class="sidebar-main-item" onclick="toggleSidebarSectionGroup(this)" role="button">
-                    <a href="#" class="sidebar-link">
-                        <div class="sidebar-link-icon">
-                            <i class="fa-solid fa-gear"></i>
-                        </div>
-                        <div class="sidebar-link-title">Setting</div>
-                        <i class="fas fa-angle-down rotate-icon ms-auto"></i>
-                    </a>
-                </div>
+            <a href="{{ route('admin.daily_sales.index') }}"
+                class="sidebar-link {{ Request::routeIs('admin.daily_sales.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-calendar-days"></i>
+                Daily Sales
+            </a>
 
-                <div class="sidebar-sub-item">
-                    <a href="{{ route('admin.daily_sales.index') }}"
-                        class="sidebar-link {{ Request::routeIs('admin.daily_sales.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-calendar-days"></i> Daily Sales
-                    </a>
-                </div>
+            <a href="{{ route('admin.refill_stock_history.index') }}"
+                class="sidebar-link {{ Request::routeIs('admin.refill_stock_history.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-table-list"></i>
+                Refill Stock History
+            </a>
 
-                <div class="sidebar-sub-item">
-                    <a href="{{ route('admin.refill_stock_history.index') }}"
-                        class="sidebar-link {{ Request::routeIs('admin.refill_stock_history.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-table-list"></i> Refill Stock History
-                    </a>
-                </div>
-
-                <div class="sidebar-sub-item">
-                    <a href="{{ route('admin.staff.index') }}"
-                        class="sidebar-link {{ Request::routeIs('admin.staff.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-users"></i> Staff
-                    </a>
-                </div>
-            </div>
+            <a href="{{ route('admin.staff.index') }}"
+                class="sidebar-link {{ Request::routeIs('admin.staff.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-users"></i>
+                Staff
+            </a>
         </nav>
     </div>
 
