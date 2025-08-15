@@ -121,7 +121,7 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="name" class="form-label">Name</label>
+                                    <label for="name" class="form-label">Name<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name" id="name"
                                         value="{{ old('name', $addOn->name) }}" placeholder="Name" required>
                                 </div>
@@ -129,7 +129,7 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="price" class="form-label">Price</label>
+                                    <label for="price" class="form-label">Price<span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" name="price" id="price" step="0.01"
                                         min="0.01" value="{{ old('price', $addOn->price) }}" placeholder="Price"
                                         required>
@@ -167,7 +167,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="ingredient_id" class="form-label">Ingredient</label>
+                                    <label for="ingredient_id" class="form-label">Ingredient<span
+                                            class="text-danger">*</span></label>
                                     <select class="form-select" name="ingredient_id" id="ingredient_id"
                                         style="width: 100%" required>
                                     </select>
@@ -176,7 +177,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="consumption" class="form-label">Consumption</label>
+                                    <label for="consumption" class="form-label">Consumption<span
+                                            class="text-danger">*</span></label>
                                     <input type="number" class="form-control" name="consumption" id="consumption"
                                         value="{{ old('comsuption') }}" placeholder="Consumption" required>
                                 </div>

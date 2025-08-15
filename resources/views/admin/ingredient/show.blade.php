@@ -168,7 +168,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="ingredient_category_id" class="form-label">Ingredient Category</label>
+                                    <label for="ingredient_category_id" class="form-label">Ingredient Category<span
+                                            class="text-danger">*</span></label>
                                     <select class="form-select" name="ingredient_category_id" id="ingredient_category_id"
                                         style="width: 100%" required>
                                         <option value="{{ $ingredient->ingredient_category_id }}" selected>
@@ -180,7 +181,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="name" class="form-label">Name</label>
+                                    <label for="name" class="form-label">Name<span
+                                            class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name" id="name"
                                         value="{{ old('name', $ingredient->name) }}" placeholder="Name" required>
                                 </div>
@@ -197,7 +199,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="weight_unit" class="form-label">Weight Unit (kg)</label>
+                                    <label for="weight_unit" class="form-label">Weight Unit (kg)<span
+                                            class="text-danger">*</span></label>
                                     <input type="number" class="form-control" name="weight_unit" id="weight_unit"
                                         step="0.01" min="0.01"
                                         value="{{ old('weight_unit', $ingredient->weight_unit) }}"
@@ -309,25 +312,29 @@
 
             function updateFields() {
                 if (unitType === 'weight') {
-                    $('label[for="min_stock"]').text('Minimum Stock (kg)');
+                    $('label[for="min_stock"]').html(
+                        'Minimum Stock (kg)<span class="text-danger">*</span>');
                     minStockInput.attr({
                         min: '0.01',
                         step: '0.01',
                         placeholder: 'Minimum stock (kg)'
                     });
 
-                    $('label[for="price"]').text('Price per Weight Unit (RM)');
+                    $('label[for="price"]').html(
+                        'Price per Weight Unit (RM)<span class="text-danger">*</span>');
                     priceInput.attr('placeholder', 'Price per weight unit (RM)');
 
                 } else {
-                    $('label[for="min_stock"]').text('Minimum Stock (qty)');
+                    $('label[for="min_stock"]').html(
+                        'Minimum Stock (qty)<span class="text-danger">*</span>');
                     minStockInput.attr({
                         min: '1',
                         step: '1',
                         placeholder: 'Minimum stock (qty)'
                     });
 
-                    $('label[for="price"]').text('Price per Quantity (RM)');
+                    $('label[for="price"]').html(
+                        'Price per Quantity (RM)<span class="text-danger">*</span>');
                     priceInput.attr('placeholder', 'Price per quantity (RM)');
                 }
             }

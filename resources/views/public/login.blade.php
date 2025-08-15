@@ -16,13 +16,13 @@
         @csrf
 
         <div class="form-group mb-3">
-            <label for="email" class="form-label">Email Address</label>
+            <label for="email" class="form-label">Email Address<span class="text-danger">*</span></label>
             <input type="email" name="email" id="email" class="form-control" value="{{ old('email') }}"
                 placeholder="Email address" required>
         </div>
 
         <div class="form-group mb-3">
-            <label for="password" class="form-label">Password</label>
+            <label for="password" class="form-label">Password<span class="text-danger">*</span></label>
             <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
         </div>
 

@@ -33,6 +33,7 @@ class ForgotPasswordController extends Controller
             return back()->with('error', $errorMessage)->withInput();
         }
 
-        return redirect()->route('login.index')->with('success', "A password reset link has been sent to your email. Please check your inbox.");
+        return redirect()->route('login.index')
+            ->with('success', "If the email exists, a password reset link has been sent. Please check your inbox.");
     }
 }

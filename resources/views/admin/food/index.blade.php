@@ -56,7 +56,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="food_category_id" class="form-label">Food Category</label>
+                                    <label for="food_category_id" class="form-label">Food Category<span
+                                            class="text-danger">*</span></label>
                                     <select class="form-select" name="food_category_id" id="food_category_id"
                                         style="width: 100%" required>
                                     </select>
@@ -65,7 +66,7 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="name" class="form-label">Name</label>
+                                    <label for="name" class="form-label">Name<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name" id="name"
                                         value="{{ old('name') }}" placeholder="Name" required>
                                 </div>
@@ -73,7 +74,7 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="price" class="form-label">Price</label>
+                                    <label for="price" class="form-label">Price<span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" name="price" id="price" step="0.01"
                                         min="0.01" value="{{ old('price') }}" placeholder="Price" required>
                                 </div>

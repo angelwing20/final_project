@@ -82,7 +82,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="name" class="form-label">Name</label>
+                                    <label for="name" class="form-label">Name<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name" id="name"
                                         value="{{ old('name', $foodCategory->name) }}" placeholder="Name" required>
                                 </div>
@@ -135,7 +135,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="food-name" class="form-label">Name</label>
+                                    <label for="food-name" class="form-label">Name<span
+                                            class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name" id="food-name"
                                         value="{{ old('name') }}" placeholder="Name" required>
                                 </div>
@@ -143,7 +144,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="food-price" class="form-label">Price</label>
+                                    <label for="food-price" class="form-label">Price<span
+                                            class="text-danger">*</span></label>
                                     <input type="number" class="form-control" name="price" id="food-price"
                                         value="{{ old('price') }}" step="0.01" min="0.01" placeholder="Price"
                                         required>

@@ -106,7 +106,7 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="name" class="form-label">Name</label>
+                                    <label for="name" class="form-label">Name<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name" id="name"
                                         value="{{ $user->name }}" placeholder="Name" required>
                                 </div>
@@ -114,7 +114,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="email" class="form-label">Email Address</label>
+                                    <label for="email" class="form-label">Email Address<span
+                                            class="text-danger">*</span></label>
                                     <input type="email" class="form-control" name="email" id="email"
                                         value="{{ $user->email }}" placeholder="Email address" required>
                                 </div>
@@ -149,7 +150,8 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="current_password" class="form-label">Current Password</label>
+                                    <label for="current_password" class="form-label">Current Password<span
+                                            class="text-danger">*</span></label>
                                     <input type="password" class="form-control" name="current_password"
                                         id="current_password" placeholder="Current password" required>
                                 </div>
@@ -157,7 +159,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="password" class="form-label">New Password</label>
+                                    <label for="password" class="form-label">New Password<span
+                                            class="text-danger">*</span></label>
                                     <input type="password" class="form-control" name="password" id="password"
                                         placeholder="New password" required>
                                 </div>
@@ -165,7 +168,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="password_confirmation" class="form-label">Confirm Password</label>
+                                    <label for="password_confirmation" class="form-label">Confirm Password<span
+                                            class="text-danger">*</span></label>
                                     <input type="password" class="form-control" name="password_confirmation"
                                         id="password_confirmation" placeholder="Confirm password" required>
                                 </div>

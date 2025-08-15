@@ -28,7 +28,24 @@ class ForgotPasswordService extends Service
     {
         DB::beginTransaction();
         try {
-            $rateLimiterKey = 'forgot_password|' . request()->ip();
+            $validator = Validator::make($data, [
+                'email' => 'required|email',
+            ]);
+
+            if ($validator->fails()) {
+                foreach ($validator->errors()->all() as $error) {
+                    array_push($this->_errorMessage, $error);
+                }
+                return null;
+            }
+
+            $user = $this->_userRepository->getByEmail($data['email']);
+
+            if (!$user) {
+                return true;
+            }
+
+            $rateLimiterKey = 'forgot_password|' . $data['email'] . '|' . request()->ip();
             $maxAttempts = 3;
             $decaySeconds = 600;
 
@@ -41,29 +58,12 @@ class ForgotPasswordService extends Service
 
             RateLimiter::increment($rateLimiterKey, $decaySeconds);
 
-            $validator = Validator::make($data, [
-                'email' => 'required|email',
-            ]);
+            $data['user_id'] = $user->id;
+            $data['token'] = Str::random(30);
+            $data['expired_minutes'] = $this->_passwordResetService->_expiredMinutes;
 
-            if ($validator->fails()) {
-                foreach ($validator->errors()->all() as $error) {
-                    array_push($this->_errorMessage, $error);
-                }
-
-                return null;
-            }
-
-            $user = $this->_userRepository->getByEmail($data['email']);
-
-            if ($user != null) {
-                $data['user_id'] = $user->id;
-                $data['token'] = Str::random(30);
-                $data['expired_minutes'] = $this->_passwordResetService->_expiredMinutes;
-
-                $passwordReset = $this->_passwordResetService->createPasswordResetRequest($data);
-
-                Mail::to($data['email'])->send(new PasswordResetRequest($data));
-            }
+            $this->_passwordResetService->createPasswordResetRequest($data);
+            Mail::to($data['email'])->send(new PasswordResetRequest($data));
 
             DB::commit();
             return true;

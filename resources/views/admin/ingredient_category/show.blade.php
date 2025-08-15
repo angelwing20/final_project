@@ -80,7 +80,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="name" class="form-label">Name</label>
+                                    <label for="name" class="form-label">Name<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name" id="name"
                                         value="{{ old('name', $ingredientCategory->name) }}" placeholder="Name" required>
                                 </div>
@@ -136,7 +136,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="ingredient-name" class="form-label">Name</label>
+                                    <label for="ingredient-name" class="form-label">Name<span
+                                            class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name" id="ingredient-name"
                                         value="{{ old('name') }}" placeholder="Name" required>
                                 </div>
@@ -144,7 +145,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="ingredient-unit_type" class="form-label">Unit Type</label>
+                                    <label for="ingredient-unit_type" class="form-label">Unit Type<span
+                                            class="text-danger">*</span></label>
                                     <select class="form-select" name="unit_type" id="ingredient-unit_type" required>
                                         <option value="weight" {{ old('unit_type') === 'weight' ? 'selected' : '' }}>
                                             Weight (kg)</option>
@@ -172,7 +174,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="ingredient-weight_unit" class="form-label">Weight Unit (kg)</label>
+                                    <label for="ingredient-weight_unit" class="form-label">Weight Unit (kg)<span
+                                            class="text-danger">*</span></label>
                                     <input type="number" class="form-control" name="weight_unit"
                                         id="ingredient-weight_unit" step="0.01" min="0.01"
                                         value="{{ old('weight_unit') }}" placeholder="Weight unit (kg)" required>
@@ -280,14 +283,16 @@
                         placeholder: 'Current stock (kg)'
                     });
 
-                    $('label[for="ingredient-min_stock"]').text('Minimum Stock (kg)');
+                    $('label[for="ingredient-min_stock"]').html(
+                        'Minimum Stock (kg)<span class="text-danger">*</span>');
                     minStockInput.attr({
                         min: '0.01',
                         step: '0.01',
                         placeholder: 'Minimum stock (kg)'
                     });
 
-                    $('label[for="ingredient-price"]').text('Price per Weight Unit (RM)');
+                    $('label[for="ingredient-price"]').html(
+                        'Price per Weight Unit (RM)<span class="text-danger">*</span>');
                     priceInput.attr('placeholder', 'Price per weight unit (RM)');
 
                 } else {
@@ -298,14 +303,16 @@
                         placeholder: 'Current stock (qty)'
                     });
 
-                    $('label[for="ingredient-min_stock"]').text('Minimum Stock (qty)');
+                    $('label[for="ingredient-min_stock"]').html(
+                        'Minimum Stock (qty)<span class="text-danger">*</span>');
                     minStockInput.attr({
                         min: '1',
                         step: '1',
                         placeholder: 'Minimum stock (qty)'
                     });
 
-                    $('label[for="ingredient-price"]').text('Price per Quantity (RM)');
+                    $('label[for="ingredient-price"]').html(
+                        'Price per Quantity (RM)<span class="text-danger">*</span>');
                     priceInput.attr('placeholder', 'Price per quantity (RM)');
                 }
 

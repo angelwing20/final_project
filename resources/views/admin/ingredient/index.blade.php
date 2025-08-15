@@ -46,7 +46,8 @@
                                 <div class="row">
                                     <div class="col-12 mb-2">
                                         <div class="form-group">
-                                            <label class="form-label" for="refill-ingredient-0">Ingredient</label>
+                                            <label class="form-label" for="refill-ingredient-0">Ingredient<span
+                                                    class="text-danger">*</span></label>
                                             <select class="form-select ingredient-select" id="refill-ingredient-0"
                                                 name="refills[0][ingredient_id]" required></select>
                                         </div>
@@ -54,7 +55,8 @@
 
                                     <div class="col-6 quantity-col">
                                         <div class="form-group">
-                                            <label class="form-label" for="refill-quantity-0">Quantity</label>
+                                            <label class="form-label" for="refill-quantity-0">Quantity<span
+                                                    class="text-danger">*</span></label>
                                             <input type="number" class="form-control" id="refill-quantity-0"
                                                 name="refills[0][quantity]" step="1" min="1" value="1"
                                                 placeholder="Quantity" required>
@@ -63,7 +65,8 @@
 
                                     <div class="col-6 weight-col">
                                         <div class="form-group">
-                                            <label class="form-label" for="refill-weight-0">Weight (kg)</label>
+                                            <label class="form-label" for="refill-weight-0">Weight (kg)<span
+                                                    class="text-danger">*</span></label>
                                             <input type="number" class="form-control" id="refill-weight-0"
                                                 name="refills[0][weight]" step="0.01" min="0.01" placeholder="Weight"
                                                 required>
@@ -111,7 +114,8 @@
                                 </div>
 
                                 <div class="text-center mb-3">
-                                    <button type="button" class="btn btn-warning" onclick="uploadImage()">Upload</button>
+                                    <button type="button" class="btn btn-warning"
+                                        onclick="uploadImage()">Upload</button>
                                     <button type="button" class="btn btn-danger d-none" id="remove-btn"
                                         onclick="removeImage()">Remove</button>
                                 </div>
@@ -119,7 +123,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="ingredient_category_id" class="form-label">Ingredient Category</label>
+                                    <label for="ingredient_category_id" class="form-label">Ingredient Category<span
+                                            class="text-danger">*</span></label>
                                     <select class="form-select" name="ingredient_category_id" id="ingredient_category_id"
                                         style="width: 100%" required></select>
                                 </div>
@@ -127,7 +132,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="name" class="form-label">Name</label>
+                                    <label for="name" class="form-label">Name<span
+                                            class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name" id="name"
                                         value="{{ old('name') }}" placeholder="Name" required>
                                 </div>
@@ -135,7 +141,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="unit_type" class="form-label">Unit Type</label>
+                                    <label for="unit_type" class="form-label">Unit Type<span
+                                            class="text-danger">*</span></label>
                                     <select class="form-select" name="unit_type" id="unit_type" required>
                                         <option value="weight" {{ old('unit_type') === 'weight' ? 'selected' : '' }}>Weight
                                             (kg)</option>
@@ -163,7 +170,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="weight_unit" class="form-label">Weight Unit (kg)</label>
+                                    <label for="weight_unit" class="form-label">Weight Unit (kg)<span
+                                            class="text-danger">*</span></label>
                                     <input type="number" class="form-control" name="weight_unit" id="weight_unit"
                                         step="0.01" min="0.01" value="{{ old('weight_unit') }}"
                                         placeholder="Weight unit (kg)" required>
@@ -280,14 +288,16 @@
                         placeholder: 'Current stock (kg)'
                     });
 
-                    $('label[for="min_stock"]').text('Minimum Stock (kg)');
+                    $('label[for="min_stock"]').html(
+                        'Minimum Stock (kg)<span class="text-danger">*</span>');
                     minStockInput.attr({
                         min: '0.01',
                         step: '0.01',
                         placeholder: 'Minimum stock (kg)'
                     });
 
-                    $('label[for="price"]').text('Price per Weight Unit (RM)');
+                    $('label[for="price"]').html(
+                        'Price per Weight Unit (RM)<span class="text-danger">*</span>');
                     priceInput.attr('placeholder', 'Price per weight unit (RM)');
 
                 } else {
@@ -298,14 +308,16 @@
                         placeholder: 'Current stock (qty)'
                     });
 
-                    $('label[for="min_stock"]').text('Minimum Stock (qty)');
+                    $('label[for="min_stock"]').html(
+                        'Minimum Stock (qty)<span class="text-danger">*</span>');
                     minStockInput.attr({
                         min: '1',
                         step: '1',
                         placeholder: 'Minimum stock (qty)'
                     });
 
-                    $('label[for="price"]').text('Price per Quantity (RM)');
+                    $('label[for="price"]').html(
+                        'Price per Quantity (RM)<span class="text-danger">*</span>');
                     priceInput.attr('placeholder', 'Price per quantity (RM)');
                 }
 
@@ -333,19 +345,19 @@
                     <div class="row">
                         <div class="col-12 mb-2">
                             <div class="form-group">
-                                <label class="form-label" for="refill-ingredient-${refillIndex}">Ingredient</label>
+                                <label class="form-label" for="refill-ingredient-${refillIndex}">Ingredient<span class="text-danger">*</span></label>
                                 <select class="form-select ingredient-select" id="refill-ingredient-${refillIndex}" name="refills[${refillIndex}][ingredient_id]" required></select>
                             </div>
                         </div>
                         <div class="col-6 quantity-col">
                             <div class="form-group">
-                                <label class="form-label" for="refill-quantity-${refillIndex}">Quantity</label>
+                                <label class="form-label" for="refill-quantity-${refillIndex}">Quantity<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" id="refill-quantity-${refillIndex}" name="refills[${refillIndex}][quantity]" step="1" min="1" value="1" placeholder="Quantity" required>
                             </div>
                         </div>
                         <div class="col-6 weight-col">
                             <div class="form-group">
-                                <label class="form-label" for="refill-weight-${refillIndex}">Weight (kg)</label>
+                                <label class="form-label" for="refill-weight-${refillIndex}">Weight (kg)<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" id="refill-weight-${refillIndex}" name="refills[${refillIndex}][weight]" step="0.01" min="0.01" placeholder="Weight" required>
                             </div>
                         </div>

@@ -56,7 +56,7 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="role" class="form-label">Role</label>
+                                    <label for="role" class="form-label">Role<span class="text-danger">*</span></label>
                                     <select class="form-select" name="role" id="role" required>
                                         <option value="" {{ !old('role') ? 'selected' : '' }} disabled>Select role
                                         </option>
@@ -70,7 +70,7 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="name" class="form-label">Name</label>
+                                    <label for="name" class="form-label">Name<span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name" id="name"
                                         value="{{ old('name') }}" placeholder="Name" required>
                                 </div>
@@ -78,7 +78,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="email" class="form-label">Email Address</label>
+                                    <label for="email" class="form-label">Email Address<span
+                                            class="text-danger">*</span></label>
                                     <input type="email" class="form-control" name="email" id="email"
                                         value="{{ old('email') }}" placeholder="Email address" required>
                                 </div>
@@ -86,7 +87,8 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="password" class="form-label">Password</label>
+                                    <label for="password" class="form-label">Password<span
+                                            class="text-danger">*</span></label>
                                     <input type="password" class="form-control" name="password" id="password"
                                         placeholder="Password" required>
                                 </div>

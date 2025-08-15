@@ -18,7 +18,7 @@
         @csrf
 
         <div class="form-group mb-3">
-            <label for="email" class="form-label">Email Address</label>
+            <label for="email" class="form-label">Email Address<span class="text-danger">*</span></label>
             <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}"
                 placeholder="Email address" required>
         </div>
