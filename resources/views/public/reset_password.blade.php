@@ -19,12 +19,12 @@
         <input type="hidden" name="email" value="{{ Request::route('email') }}">
 
         <div class="form-group mb-3">
-            <label for="password" class="form-label">Password</label>
+            <label for="password" class="form-label">Password<span class="text-danger">*</span></label>
             <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
         </div>
 
         <div class="form-group mb-3">
-            <label for="password_confirmation" class="form-label">Confirm Password</label>
+            <label for="password_confirmation" class="form-label">Confirm Password<span class="text-danger">*</span></label>
             <input type="password" class="form-control" name="password_confirmation" id="password_confirmation"
                 placeholder="Confirm password" required>
         </div>
