@@ -24,7 +24,7 @@
                 <thead class="table-dark">
                     <tr>
                         <th style="width: 40%">Name</th>
-                        <th style="width: 20%">Quantity</th>
+                        <th style="width: 20%">Quantity<span class="text-danger">*</span></th>
                         <th style="width: 20%">Price (RM)</th>
                         <th style="width: 20%">Subtotal (RM)</th>
                     </tr>
