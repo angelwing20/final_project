@@ -39,11 +39,6 @@ class FoodRepository extends Repository
         return $model;
     }
 
-    public function getByName($name)
-    {
-        return $this->_db->where('name', $name)->first();
-    }
-
     public function getAll()
     {
         return Food::with(['ingredients.ingredient'])->get();

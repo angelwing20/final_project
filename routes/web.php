@@ -46,8 +46,6 @@ Route::name("admin.")->prefix("admin")->middleware('auth')->group(function () {
     Route::get('sales-trend', [DashboardAdminController::class, 'getSalesTrendData'])->name('sales_trend');
     Route::get('stats', [DashboardAdminController::class, 'getDashboardStats'])->name('stats');
 
-    Route::post('/', [ImportDailySalesAdminController::class, 'importDailySales'])->name('import_daily_sales');
-
     Route::name("account.")->prefix("account")->group(function () {
         Route::get('/', [ProfileAdminController::class, 'index'])->name('profile');
         Route::patch('/', [ProfileAdminController::class, 'update'])->name('update');

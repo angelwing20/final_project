@@ -4,81 +4,9 @@
 
 @section('content')
 
-    @if (session('successFiles') || session('failedFiles'))
-        <div class="mb-3">
-            @if (session('successFiles') && count(session('successFiles')) > 0)
-                <div class="alert alert-success">
-                    <strong>✅ Successfully Uploaded:</strong>
-                    <hr class="my-2">
-                    <ul class="mb-0">
-                        @foreach (session('successFiles') as $file)
-                            <li>{{ $file }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            @if (session('failedFiles') && count(session('failedFiles')) > 0)
-                <div class="alert alert-danger">
-                    <strong>❌ Failed to Upload:</strong>
-                    <hr class="my-2">
-                    @foreach (session('failedFiles') as $fail)
-                        <div>
-                            <strong>{{ $fail['file'] }}</strong>
-                            <ul class="mb-0">
-                                @foreach ($fail['errors'] as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
-        </div>
-    @endif
-
     <div class="row mb-3">
         <div class="col">
             <h2 class="fw-bold">Dashboard</h2>
-        </div>
-        <div class="col-12 col-md-auto">
-            <div class="d-flex gap-2 align-items-center float-end">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#importDailySalesModal">
-                    <i class="fa-solid fa-upload"></i> Import Daily Sales
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="importDailySalesModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold">Import Daily Sales (.xlsx / .csv)</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body">
-                    <form id="import-form" action="{{ route('admin.import_daily_sales') }}" method="POST"
-                        enctype="multipart/form-data">
-                        @csrf
-                        <div id="dropZone" class="border border-2 rounded p-4 text-center mb-3"
-                            style="border-style: dashed; background:#f8f9fa; cursor:pointer;">
-                            <p class="mb-2"><i class="fa-solid fa-cloud-arrow-up fs-1 text-primary"></i></p>
-                            <p class="fw-bold mb-1">Drag & Drop your file here</p>
-                            <p class="text-muted small mb-0">or click to select .xlsx / .csv file</p>
-                            <input type="file" name="excel_file[]" class="d-none" id="fileInput" accept=".xlsx,.csv"
-                                multiple required>
-                        </div>
-                        <p id="fileName" class="text-center text-muted mb-3" style="display:none;"></p>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary w-100">
-                                <i class="fa-solid fa-upload me-1"></i> Upload File
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -172,49 +100,6 @@
 @section('script')
     <script>
         $(function() {
-            $('#import-form').validate({
-                ignore: [],
-                errorElement: 'span',
-                errorClass: 'invalid-feedback',
-                errorPlacement: function(error, element) {
-                    element.closest('.form-group').append(error);
-                },
-                highlight: function(element) {
-                    $(element).addClass('is-invalid');
-                },
-                unhighlight: function(element) {
-                    $(element).removeClass('is-invalid');
-                },
-                invalidHandler: function() {
-                    notifier.show('Error!', 'Please ensure all inputs are correct.', 'warning', '',
-                        4000);
-                },
-            });
-
-            const dropZone = $('#dropZone'),
-                fileInput = $('#fileInput'),
-                fileName = $('#fileName');
-            dropZone.on('click', () => fileInput[0].click());
-            fileInput.on('change', function() {
-                let names = $.map(this.files, file => file.name);
-                fileName.html(names.join('<br>')).show();
-            });
-            dropZone.on('dragover', e => {
-                e.preventDefault();
-                dropZone.addClass('bg-light');
-            });
-            dropZone.on('dragleave', () => dropZone.removeClass('bg-light'));
-            dropZone.on('drop', function(e) {
-                e.preventDefault();
-                dropZone.removeClass('bg-light');
-                const files = e.originalEvent.dataTransfer.files;
-                if (files.length > 0) {
-                    fileInput[0].files = files;
-                    let names = $.map(files, file => file.name);
-                    fileName.html(names.join('<br>')).show();
-                }
-            });
-
             $.get("{{ route('admin.stats') }}", stats => {
                 $('#kpi-revenue').text('RM ' + (stats.total_revenue ?? 0).toFixed(2));
                 $('#kpi-low-stock').text(stats.low_stock_count ?? 0);
