@@ -53,18 +53,18 @@ class DailySalesList extends Component
                 'daily_sales.id',
                 'daily_sales.total_quantity',
                 'daily_sales.total_amount',
-                'daily_sales.created_at',
+                'daily_sales.date',
 
                 'users.name as staff_name'
             )
-            ->orderBy('daily_sales.created_at', 'desc');
+            ->orderBy('daily_sales.date', 'desc');
 
         if (isset($this->filter['date_from']) && $this->filter['date_from'] != null) {
-            $query = $query->whereDate('daily_sales.created_at', '>=', $this->filter['date_from']);
+            $query = $query->whereDate('daily_sales.date', '>=', $this->filter['date_from']);
         }
 
         if (isset($this->filter['date_to']) && $this->filter['date_to'] != null) {
-            $query = $query->whereDate('daily_sales.created_at', '<=', $this->filter['date_to']);
+            $query = $query->whereDate('daily_sales.date', '<=', $this->filter['date_to']);
         }
 
         if (isset($this->filter['staff_id']) && $this->filter['staff_id'] != null) {

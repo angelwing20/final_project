@@ -95,6 +95,7 @@ class DailySalesItemAdminService extends Service
 
         try {
             $validator = Validator::make($data, [
+                'date' => 'required|date',
                 'foods' => 'nullable|array',
                 'addons' => 'nullable|array',
             ]);
@@ -226,6 +227,7 @@ class DailySalesItemAdminService extends Service
             }
 
             $dailySales = $this->_dailySalesRepository->save([
+                'date' => $data['date'],
                 'total_quantity' => $totalQuantity,
                 'total_amount' => $totalAmount,
                 'staff_id' => Auth::id(),
@@ -332,6 +334,7 @@ class DailySalesItemAdminService extends Service
 
         try {
             $validator = Validator::make($data, [
+                'date' => 'required|date',
                 'foods' => 'nullable|array',
                 'addons' => 'nullable|array',
             ]);
@@ -474,6 +477,7 @@ class DailySalesItemAdminService extends Service
             }
 
             $this->_dailySalesRepository->update($id, [
+                'date' => $data['date'],
                 'total_quantity' => $totalQuantity,
                 'total_amount' => $totalAmount,
                 'staff_id' => Auth::id(),

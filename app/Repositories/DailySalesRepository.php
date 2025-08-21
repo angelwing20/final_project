@@ -18,6 +18,7 @@ class DailySalesRepository extends Repository
     public function save($data)
     {
         $model = new DailySales();
+        $model->date = $data['date'];
         $model->total_quantity = $data['total_quantity'];
         $model->total_amount = $data['total_amount'];
         $model->staff_id = $data['staff_id'];
@@ -29,6 +30,7 @@ class DailySalesRepository extends Repository
     public function update($id, $data)
     {
         $model = $this->_db->find($id);
+        $model->date = $data['date'] ?? $model->date;
         $model->total_quantity = $data['total_quantity'] ?? $model->total_quantity;
         $model->total_amount = $data['total_amount'] ?? $model->total_amount;
         $model->staff_id = $data['staff_id'] ?? $model->staff_id;
@@ -55,7 +57,7 @@ class DailySalesRepository extends Repository
                 });
             })
             ->leftJoin('daily_sales as daily_sales', 'daily_sales.id', '=', 'daily_sales_items.daily_sales_id')
-            ->whereBetween('daily_sales.created_at', [$startDate, $endDate])
+            ->whereBetween('daily_sales.date', [$startDate, $endDate])
             ->select(
                 'ingredients.name as ingredient_name',
                 DB::raw('
@@ -77,8 +79,8 @@ class DailySalesRepository extends Repository
     public function getSalesTrendLast7Days()
     {
         return DB::table('daily_sales')
-            ->selectRaw('DATE(created_at) as date, SUM(total_amount) as total')
-            ->where('created_at', '>=', now()->subDays(6))
+            ->selectRaw('date, SUM(total_amount) as total')
+            ->where('date', '>=', now()->subDays(6)->toDateString())
             ->groupBy('date')
             ->orderBy('date')
             ->get();
@@ -90,7 +92,7 @@ class DailySalesRepository extends Repository
         $endDate = now()->endOfMonth();
 
         $totalRevenue = DB::table('daily_sales')
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
             ->sum('total_amount');
 
         $lowStockCount = DB::table('ingredients')
@@ -101,7 +103,7 @@ class DailySalesRepository extends Repository
             ->whereBetween('created_at', [$startDate, $endDate])
             ->sum('amount');
 
-        $lastDailySalesUpload = DB::table('daily_sales')->max('created_at');
+        $lastDailySalesUpload = DB::table('daily_sales')->max('date');
 
         return [
             'total_revenue' => $totalRevenue,

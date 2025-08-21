@@ -20,6 +20,12 @@
         @csrf
         @method('PATCH')
 
+        <div class="d-flex align-items-center gap-2 gap-sm-3 mb-3">
+            <label for="date" class="fw-bold">Date<span class="text-danger">*</span></label>
+            <input type="date" class="form-control" id="date" name="date"
+                value="{{ old('date', $dailySales->date) }}" required>
+        </div>
+
         <div class="table-responsive">
             <table class="table table-bordered" style="white-space: nowrap">
                 <thead class="table-dark">

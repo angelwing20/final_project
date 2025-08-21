@@ -12,10 +12,7 @@
         <div class="col">
             <h2 class="fw-bold">
                 Daily Sales Detail -
-                {{ Carbon::parse($dailySales->created_at)->format('d M Y') }}
-                <span class="fs-6 text-muted">
-                    {{ Carbon::parse($dailySales->created_at)->format('h:i A') }}
-                </span>
+                {{ Carbon::parse($dailySales->date)->format('d M Y') }}
             </h2>
         </div>
         <div class="col-12 col-md-auto">

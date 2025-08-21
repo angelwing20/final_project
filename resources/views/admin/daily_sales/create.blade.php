@@ -19,6 +19,12 @@
     <form id="dailySalesForm" action="{{ route('admin.daily_sales.store') }}" method="POST">
         @csrf
 
+        <div class="d-flex align-items-center gap-2 gap-sm-3 mb-3">
+            <label for="date" class="fw-bold">Date<span class="text-danger">*</span></label>
+            <input type="date" name="date" id="date" class="form-control"
+                value="{{ old('date', date('Y-m-d')) }}" required>
+        </div>
+
         <div class="table-responsive">
             <table class="table table-bordered" style="white-space: nowrap">
                 <thead class="table-dark">

@@ -32,7 +32,7 @@ class DailySalesItemAdminController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->only(['foods', 'addons']);
+        $data = $request->only(['date', 'foods', 'addons']);
 
         $result = $this->_dailySalesItemAdminService->createDailySales($data);
 
@@ -64,7 +64,7 @@ class DailySalesItemAdminController extends Controller
 
     public function update(Request $request, $id)
     {
-        $data = $request->only(['foods', 'addons']);
+        $data = $request->only(['date', 'foods', 'addons']);
 
         $result = $this->_dailySalesItemAdminService->updateDailySales($id, $data);
 

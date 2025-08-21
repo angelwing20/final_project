@@ -82,10 +82,7 @@
                                 <div class="col">
                                     <div>
                                         <h3 class="fw-bold">
-                                            {{ Carbon::parse($dailySale->created_at)->format('d M Y') }}
-                                            <span class="fs-6 text-muted">
-                                                {{ Carbon::parse($dailySale->created_at)->format('h:i A') }}
-                                            </span>
+                                            {{ Carbon::parse($dailySale->date)->format('d M Y') }}
                                         </h3>
 
                                         <div class="fw-semibold text-muted">
