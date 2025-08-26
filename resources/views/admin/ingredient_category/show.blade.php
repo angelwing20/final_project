@@ -174,11 +174,11 @@
 
                             <div class="col-12">
                                 <div class="form-group mb-3">
-                                    <label for="ingredient-weight_unit" class="form-label">Weight Unit (kg)<span
+                                    <label for="ingredient-weight_unit" class="form-label">Unit Per Weight (kg)<span
                                             class="text-danger">*</span></label>
                                     <input type="number" class="form-control" name="weight_unit"
                                         id="ingredient-weight_unit" step="0.01" min="0.01"
-                                        value="{{ old('weight_unit') }}" placeholder="Weight unit (kg)" required>
+                                        value="{{ old('weight_unit') }}" placeholder="Unit per weight (kg)" required>
                                 </div>
                             </div>
 
