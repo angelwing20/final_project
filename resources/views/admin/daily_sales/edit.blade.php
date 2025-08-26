@@ -31,9 +31,9 @@
                 <thead class="table-dark">
                     <tr>
                         <th style="width: 40%">Name</th>
-                        <th style="width: 20%">Quantity<span class="text-danger">*</span></th>
-                        <th style="width: 20%">Price (RM)</th>
-                        <th style="width: 20%">Subtotal (RM)</th>
+                        <th style="width: 20%" class="text-end">Quantity<span class="text-danger">*</span></th>
+                        <th style="width: 20%" class="text-end">Price (RM)</th>
+                        <th style="width: 20%" class="text-end">Subtotal (RM)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -106,9 +106,10 @@
                 <thead class="table-dark">
                     <tr>
                         <th style="width: 40%">Ingredient</th>
-                        <th style="width: 20%">Current Stock</th>
-                        <th style="width: 20%">Change</th>
-                        <th style="width: 20%">After Edit</th>
+                        <th style="width: 15%" class="text-end">Current Stock</th>
+                        <th style="width: 15%" class="text-end">Change</th>
+                        <th style="width: 15%" class="text-end">After Edit</th>
+                        <th style="width: 15%" class="text-end">Cost (RM)</th>
                     </tr>
                 </thead>
                 <tbody id="ingredient-preview-body">
@@ -213,52 +214,63 @@
                 const type = input.dataset.type;
                 const id = input.dataset.id;
 
-                if (quantityDifference !== 0) {
-                    const item = ingredientData[type + 's'].find(function(i) {
-                        return i.id == id;
-                    });
+                const item = ingredientData[type + 's'].find(function(i) {
+                    return i.id == id;
+                });
 
-                    if (item && item.ingredients) {
-                        item.ingredients.forEach(function(i) {
-                            const ingredientId = i.ingredient.id;
-                            const ingredientName = i.ingredient.name;
-                            const unitType = i.ingredient.unit_type;
-                            const weightUnit = parseFloat(i.ingredient.weight_unit) || 1;
+                if (item && item.ingredients) {
+                    item.ingredients.forEach(function(i) {
+                        const ingredientId = i.ingredient.id;
+                        const ingredientName = i.ingredient.name;
+                        const unitType = i.ingredient.unit_type;
+                        const weightUnit = parseFloat(i.ingredient.weight_unit) || 1;
 
-                            let currentStock = parseFloat(i.ingredient.stock) || 0;
-                            if (unitType === 'quantity') {
-                                currentStock = currentStock / weightUnit;
-                            }
+                        let currentStock = parseFloat(i.ingredient.stock) || 0;
+                        if (unitType === 'quantity') {
+                            currentStock = currentStock / weightUnit;
+                        }
 
-                            let consumption = parseFloat(i.consumption) || 0;
-                            let convertedConsumption = consumption;
-                            if (unitType === 'quantity') {
-                                convertedConsumption = consumption / weightUnit;
-                            }
+                        let consumption = parseFloat(i.consumption) || 0;
+                        let convertedConsumption = unitType === 'quantity' ? consumption / weightUnit :
+                            consumption;
 
-                            if (!ingredientConsumption[ingredientId]) {
-                                ingredientConsumption[ingredientId] = {
-                                    name: ingredientName,
-                                    currentStock: currentStock,
-                                    change: 0,
-                                    unitType: unitType
-                                };
-                            }
+                        if (!ingredientConsumption[ingredientId]) {
+                            ingredientConsumption[ingredientId] = {
+                                name: ingredientName,
+                                currentStock: currentStock,
+                                change: 0,
+                                unitType: unitType,
+                                cost: 0,
+                                visible: false
+                            };
+                        }
 
+                        let price = parseFloat(i.ingredient.price) || 0;
+                        let costPerUnit = unitType === 'weight' ? price / weightUnit : price;
+                        let cost = convertedConsumption * newQuantity * costPerUnit;
+                        ingredientConsumption[ingredientId].cost += cost;
+
+                        if (quantityDifference !== 0) {
                             ingredientConsumption[ingredientId].change -= convertedConsumption *
                                 quantityDifference;
-                        });
-                    }
+                            ingredientConsumption[ingredientId].visible = true;
+                        }
+                    });
                 }
             });
 
-            if (Object.keys(ingredientConsumption).length === 0) {
-                tableBody.innerHTML =
-                    '<tr><td colspan="4" class="text-center text-muted">No ingredient consumption yet. Adjust quantities above to preview.</td></tr>';
+            const hasVisible = Object.values(ingredientConsumption).some(i => i.visible);
+            if (!hasVisible) {
+                tableBody.innerHTML = `
+            <tr><td colspan="5" class="text-center text-muted">
+                No changes made yet. Adjust the quantities above to preview updated ingredient consumption.
+            </td></tr>`;
                 return;
             }
 
-            const sortedConsumption = Object.values(ingredientConsumption).sort((a, b) => a.name.localeCompare(b.name));
+            const sortedConsumption = Object.values(ingredientConsumption)
+                .filter(i => i.visible)
+                .sort((a, b) => a.name.localeCompare(b.name));
 
             sortedConsumption.forEach(function(ingredient) {
                 const afterEditStock = ingredient.currentStock + ingredient.change;
@@ -277,15 +289,24 @@
                 const afterEditTextClass = afterEditStock < -EPSILON ? 'text-danger fw-bold' : '';
 
                 const row = `
-            <tr class="${rowClass}">
-                <td>${ingredient.name}</td>
-                <td>${removeTrailingZeros(ingredient.currentStock)}${unitLabel}</td>
-                <td class="${changeClass}">${ingredient.change > 0 ? '+' : ''}${removeTrailingZeros(ingredient.change)}${unitLabel}</td>
-                <td class="${afterEditTextClass}">${removeTrailingZeros(afterEditStock)}${unitLabel}</td>
-            </tr>
-        `;
+                    <tr class="${rowClass}">
+                        <td>${ingredient.name}</td>
+                        <td class="text-end">${removeTrailingZeros(ingredient.currentStock)}${unitLabel}</td>
+                        <td class="text-end ${changeClass}">${ingredient.change > 0 ? '+' : ''}${removeTrailingZeros(ingredient.change)}${unitLabel}</td>
+                        <td class="text-end ${afterEditTextClass}">${removeTrailingZeros(afterEditStock)}${unitLabel}</td>
+                        <td class="text-end">${ingredient.cost.toFixed(2)}</td>
+                    </tr>
+                `;
                 tableBody.innerHTML += row;
             });
+
+            let totalCost = Object.values(ingredientConsumption).reduce((sum, i) => sum + i.cost, 0);
+            tableBody.innerHTML += `
+                <tr class="table-warning fw-bold">
+                    <td class="text-end">TOTAL</td>
+                    <td class="text-end" colspan="4">RM ${totalCost.toFixed(2)}</td>
+                </tr>
+            `;
         }
 
         function removeTrailingZeros(value) {

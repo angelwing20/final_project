@@ -30,9 +30,9 @@
                 <thead class="table-dark">
                     <tr>
                         <th style="width: 40%">Name</th>
-                        <th style="width: 20%">Quantity<span class="text-danger">*</span></th>
-                        <th style="width: 20%">Price (RM)</th>
-                        <th style="width: 20%">Subtotal (RM)</th>
+                        <th style="width: 20%" class="text-end">Quantity<span class="text-danger">*</span></th>
+                        <th style="width: 20%" class="text-end">Price (RM)</th>
+                        <th style="width: 20%" class="text-end">Subtotal (RM)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -88,9 +88,10 @@
                 <thead class="table-dark">
                     <tr>
                         <th style="width: 40%">Ingredient</th>
-                        <th style="width: 20%">Current Stock</th>
-                        <th style="width: 20%">Consumption</th>
-                        <th style="width: 20%">Remaining Stock</th>
+                        <th style="width: 15%" class="text-end">Current Stock</th>
+                        <th style="width: 15%" class="text-end">Consumption</th>
+                        <th style="width: 15%" class="text-end">Remaining Stock</th>
+                        <th style="width: 15%" class="text-end">Cost (RM)</th>
                     </tr>
                 </thead>
 
@@ -196,6 +197,7 @@
         function updateIngredientPreview() {
             let ingredientConsumption = {};
             let tableBody = document.querySelector('#ingredient-preview-body');
+            let totalCost = 0;
 
             tableBody.innerHTML = '';
 
@@ -211,34 +213,38 @@
 
                     if (item && item.ingredients) {
                         item.ingredients.forEach(function(recipeIngredient) {
-                            let ingredientId = recipeIngredient.ingredient.id;
-                            let ingredientName = recipeIngredient.ingredient.name;
-                            let currentStockWeight = parseFloat(recipeIngredient.ingredient.stock) ||
-                                0;
-                            let unitType = recipeIngredient.ingredient.unit_type;
-                            let weightUnit = parseFloat(recipeIngredient.ingredient.weight_unit) ||
-                                1;
+                            let ingredient = recipeIngredient.ingredient;
+                            let ingredientId = ingredient.id;
+                            let ingredientName = ingredient.name;
+                            let unitType = ingredient.unit_type;
+                            let weightUnit = parseFloat(ingredient.weight_unit) || 1;
+                            let price = parseFloat(ingredient.price) || 0;
+
+                            let currentStockWeight = parseFloat(ingredient.stock) || 0;
                             let consumptionWeight = (parseFloat(recipeIngredient.consumption) || 0) *
                                 quantity;
 
-                            let currentStock = unitType === 'quantity' ?
-                                currentStockWeight / weightUnit :
+                            let currentStock = unitType === 'quantity' ? currentStockWeight / weightUnit :
                                 currentStockWeight;
-
-                            let consumption = unitType === 'quantity' ?
-                                consumptionWeight / weightUnit :
+                            let consumption = unitType === 'quantity' ? consumptionWeight / weightUnit :
                                 consumptionWeight;
+
+                            let costPerUnit = unitType === 'weight' ? price / weightUnit : price;
+                            let cost = consumption * costPerUnit;
 
                             if (!ingredientConsumption[ingredientId]) {
                                 ingredientConsumption[ingredientId] = {
                                     name: ingredientName,
                                     currentStock: currentStock,
                                     used: 0,
-                                    unitType: unitType
+                                    unitType: unitType,
+                                    cost: 0
                                 };
                             }
 
                             ingredientConsumption[ingredientId].used += consumption;
+                            ingredientConsumption[ingredientId].cost += cost;
+                            totalCost += cost;
                         });
                     }
                 }
@@ -246,7 +252,7 @@
 
             if (Object.keys(ingredientConsumption).length === 0) {
                 tableBody.innerHTML =
-                    '<tr><td colspan="4" class="text-center text-muted">No ingredient consumption yet. Adjust quantities above to preview.</td></tr>';
+                    '<tr><td colspan="5" class="text-center text-muted">No ingredient consumption yet. Adjust quantities above to preview.</td></tr>';
                 return;
             }
 
@@ -267,16 +273,25 @@
                 }
 
                 let row = `
-            <tr class="${rowClass}">
-                <td>${ingredient.name}</td>
-                <td>${removeTrailingZeros(ingredient.currentStock)}${unitLabel}</td>
-                <td>${removeTrailingZeros(ingredient.used)}${unitLabel}</td>
-                <td class="${remainingClass}">${removeTrailingZeros(remainingStock)}${unitLabel}</td>
-            </tr>
-        `;
+                <tr class="${rowClass}">
+                    <td>${ingredient.name}</td>
+                    <td class="text-end">${removeTrailingZeros(ingredient.currentStock)}${unitLabel}</td>
+                    <td class="text-end">-${removeTrailingZeros(ingredient.used)}${unitLabel}</td>
+                    <td class="text-end ${remainingClass}">${removeTrailingZeros(remainingStock)}${unitLabel}</td>
+                    <td class="text-end">${ingredient.cost.toFixed(2)}</td>
+                </tr>
+                `;
                 tableBody.innerHTML += row;
             });
+
+            tableBody.innerHTML += `
+                <tr class="table-warning fw-bold">
+                    <td class="text-end">TOTAL</td>
+                    <td colspan="4" class="text-end">RM ${totalCost.toFixed(2)}</td>
+                </tr>
+            `;
         }
+
 
         function removeTrailingZeros(value) {
             return value % 1 === 0 ? parseInt(value) : parseFloat(value.toFixed(2));
