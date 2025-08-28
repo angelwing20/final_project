@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <h2 class="custom-title">Admin Login</h2>
+    <h2 class="custom-title">Superadmin & Admin Login Portal</h2>
 
     @if (session('error'))
         <div class="alert alert-danger">{{ session('error') }}</div>

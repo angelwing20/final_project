@@ -6,7 +6,8 @@
 
     <h2 class="custom-title">Forgot Password</h2>
 
-    <p class="text-muted mb-4 text-center">Enter your email address and we'll send you a link to reset your password.</p>
+    <p class="text-muted mb-4 text-center">Please enter the email address associated with your account.
+        We will send a password reset link to that email.</p>
 
     @if (session('error'))
         <div class="alert alert-danger">{{ session('error') }}</div>
