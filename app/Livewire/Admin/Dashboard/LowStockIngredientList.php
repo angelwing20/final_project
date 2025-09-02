@@ -35,7 +35,8 @@ class LowStockIngredientList extends Component
                 'ingredient_categories.name as ingredient_category_name'
             )
             ->whereColumn('ingredients.stock', '<=', 'ingredients.min_stock')
-            ->orderBy('ingredients.stock', 'asc');
+            ->orderBy('ingredient_categories.name', 'asc')
+            ->orderBy('ingredients.name', 'asc');
 
         $query = $query
             ->offset($this->page * $this->limitDataPerPage)
