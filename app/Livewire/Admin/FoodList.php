@@ -86,6 +86,7 @@ class FoodList extends Component
                 'food.image',
                 'food_categories.name'
             )
+            ->orderBy('food_categories.name', 'asc')
             ->orderBy('food.name', 'asc');
 
         if (isset($this->filter['name']) && $this->filter['name'] !== null) {

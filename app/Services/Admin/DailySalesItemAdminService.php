@@ -107,6 +107,13 @@ class DailySalesItemAdminService extends Service
                 return null;
             }
 
+            $exists = $this->_dailySalesRepository->getByDate($data['date']);
+            if ($exists) {
+                array_push($this->_errorMessage, "Daily sales for this date already exists.");
+                DB::rollBack();
+                return null;
+            }
+
             $totalQuantity = 0;
             $totalAmount = 0;
             $items = [];
@@ -350,6 +357,13 @@ class DailySalesItemAdminService extends Service
 
             if (!$dailySales) {
                 array_push($this->_errorMessage, "Daily Sales not found.");
+                return false;
+            }
+
+            $exists = $this->_dailySalesRepository->getByDate($data['date']);
+            if ($exists && $exists->id != $id) {
+                array_push($this->_errorMessage, "Daily sales for this date already exists.");
+                DB::rollBack();
                 return false;
             }
 

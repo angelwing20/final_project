@@ -142,4 +142,9 @@ class DailySalesRepository extends Repository
             ->orderBy('ingredients.name', 'asc')
             ->get();
     }
+
+    public function getByDate($date)
+    {
+        return DailySales::where('date', $date)->first();
+    }
 }

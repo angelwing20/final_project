@@ -63,6 +63,7 @@ class IngredientList extends Component
 
                 'ingredient_categories.name as ingredient_category_name',
             )
+            ->orderBy('ingredient_categories.name', 'asc')
             ->orderBy('ingredients.name', 'asc');
 
         if (isset($this->filter['ingredient_category_id']) && $this->filter['ingredient_category_id'] !== null) {
