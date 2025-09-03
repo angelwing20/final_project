@@ -61,8 +61,8 @@ class FoodList extends Component
                             ingredients.name, ' (',
                             CASE
                                 WHEN ingredients.unit_type = 'quantity'
-                                THEN TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM FORMAT(food_ingredients.consumption / ingredients.weight_unit, 2)))
-                                ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM FORMAT(food_ingredients.consumption, 2)))
+                                THEN TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM FORMAT(food_ingredients.consumption / ingredients.weight_unit, 3)))
+                                ELSE TRIM(TRAILING '.' FROM TRIM(TRAILING '0' FROM FORMAT(food_ingredients.consumption, 3)))
                             END,
                             ' ',
                             CASE
