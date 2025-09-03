@@ -24,7 +24,7 @@
                                         <div>
                                             Price: RM {{ $ingredient->price }}
                                             @if ($ingredient->unit_type === 'weight')
-                                                / {{ floatval(sprintf('%.2f', $ingredient->weight_unit)) }} kg
+                                                / {{ floatval(sprintf('%.3f', $ingredient->weight_unit)) }} kg
                                             @endif
                                         </div>
 
@@ -40,7 +40,7 @@
                                     <div class="d-flex flex-column fw-semibold align-items-end">
                                         <div>
                                             Stock: @if ($ingredient->unit_type === 'weight')
-                                                {{ floatval(sprintf('%.2f', $ingredient->stock)) }} kg
+                                                {{ floatval(sprintf('%.3f', $ingredient->stock)) }} kg
                                             @else
                                                 {{ $ingredient->stock / $ingredient->weight_unit }} qty
                                             @endif
@@ -48,7 +48,7 @@
 
                                         <div>
                                             Minimum Stock: @if ($ingredient->unit_type === 'weight')
-                                                {{ floatval(sprintf('%.2f', $ingredient->min_stock)) }} kg
+                                                {{ floatval(sprintf('%.3f', $ingredient->min_stock)) }} kg
                                             @else
                                                 {{ $ingredient->min_stock / $ingredient->weight_unit }} qty
                                             @endif

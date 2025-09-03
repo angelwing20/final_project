@@ -304,8 +304,8 @@
 
                 if (selected.unit_type === 'weight') {
                     $('#consumption').attr({
-                        step: '0.01',
-                        min: '0.01',
+                        step: '0.001',
+                        min: '0.001',
                         placeholder: 'Weight (kg)'
                     });
                 } else {

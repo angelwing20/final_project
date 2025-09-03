@@ -31,7 +31,7 @@ class FoodIngredientAdminService extends Service
                 throw new Exception();
             }
 
-            $min = $ingredient->unit_type === 'weight' ? 0.01 : 1;
+            $min = $ingredient->unit_type === 'weight' ? 0.001 : 1;
 
             $validator = Validator::make($data, [
                 'food_id' => 'required|exists:food,id',

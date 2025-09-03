@@ -177,7 +177,7 @@
                                     <label for="ingredient-weight_unit" class="form-label">Unit Per Weight (kg)<span
                                             class="text-danger">*</span></label>
                                     <input type="number" class="form-control" name="weight_unit"
-                                        id="ingredient-weight_unit" step="0.01" min="0.01"
+                                        id="ingredient-weight_unit" step="0.001" min="0.001"
                                         value="{{ old('weight_unit') }}" placeholder="Unit per weight (kg)" required>
                                 </div>
                             </div>
@@ -278,16 +278,16 @@
                 if (selectedType === 'weight') {
                     $('label[for="ingredient-stock"]').text('Current Stock (kg)');
                     stockInput.attr({
-                        min: '0.01',
-                        step: '0.01',
+                        min: '0.001',
+                        step: '0.001',
                         placeholder: 'Current stock (kg)'
                     });
 
                     $('label[for="ingredient-min_stock"]').html(
                         'Minimum Stock (kg)<span class="text-danger">*</span>');
                     minStockInput.attr({
-                        min: '0.01',
-                        step: '0.01',
+                        min: '0.001',
+                        step: '0.001',
                         placeholder: 'Minimum stock (kg)'
                     });
 

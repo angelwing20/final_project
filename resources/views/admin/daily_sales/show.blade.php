@@ -113,7 +113,7 @@
                                 @if ($ingredientData['unit_type'] === 'quantity')
                                     -{{ intval(round($ingredientData['weight'] / $ingredientData['weight_unit'])) }} qty
                                 @else
-                                    -{{ floatval(sprintf('%.2f', $ingredientData['weight'])) }} kg
+                                    -{{ floatval(sprintf('%.3f', $ingredientData['weight'])) }} kg
                                 @endif
                             </td>
                             <td class="text-end">{{ number_format($ingredientData['amount'], 2) }}</td>

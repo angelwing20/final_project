@@ -23,7 +23,7 @@
                             <td class="fw-bold">{{ $addOnIngredient->ingredient_name }}</td>
                             <td>
                                 @if ($addOnIngredient->ingredient_unit_type === 'weight')
-                                    {{ floatval(sprintf('%.2f', $addOnIngredient->consumption)) }} kg
+                                    {{ floatval(sprintf('%.3f', $addOnIngredient->consumption)) }} kg
                                 @else
                                     {{ $addOnIngredient->consumption / $addOnIngredient->ingredient_weight_unit }}
                                     qty

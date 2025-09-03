@@ -79,7 +79,7 @@
 
                     <div>
                         @if ($ingredient->unit_type === 'weight')
-                            {{ floatval(sprintf('%.2f', $ingredient->stock)) }} kg
+                            {{ floatval(sprintf('%.3f', $ingredient->stock)) }} kg
                         @else
                             {{ $ingredient->stock / $ingredient->weight_unit }} qty
                         @endif
@@ -97,7 +97,7 @@
 
                     <div>
                         @if ($ingredient->unit_type === 'weight')
-                            {{ floatval(sprintf('%.2f', $ingredient->min_stock)) }} kg
+                            {{ floatval(sprintf('%.3f', $ingredient->min_stock)) }} kg
                         @else
                             {{ $ingredient->min_stock / $ingredient->weight_unit }} qty
                         @endif
@@ -116,7 +116,7 @@
                     <div>
                         RM {{ $ingredient->price }}
                         @if ($ingredient->unit_type === 'weight')
-                            / {{ floatval(sprintf('%.2f', $ingredient->weight_unit)) }} kg
+                            / {{ floatval(sprintf('%.3f', $ingredient->weight_unit)) }} kg
                         @endif
                     </div>
                 </div>
@@ -202,7 +202,7 @@
                                     <label for="weight_unit" class="form-label">Unit Per Weight (kg)<span
                                             class="text-danger">*</span></label>
                                     <input type="number" class="form-control" name="weight_unit" id="weight_unit"
-                                        step="0.01" min="0.01"
+                                        step="0.001" min="0.001"
                                         value="{{ old('weight_unit', $ingredient->weight_unit) }}"
                                         placeholder="Unit per weight (kg)" required>
                                 </div>
@@ -315,8 +315,8 @@
                     $('label[for="min_stock"]').html(
                         'Minimum Stock (kg)<span class="text-danger">*</span>');
                     minStockInput.attr({
-                        min: '0.01',
-                        step: '0.01',
+                        min: '0.001',
+                        step: '0.001',
                         placeholder: 'Minimum stock (kg)'
                     });
 

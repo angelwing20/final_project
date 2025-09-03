@@ -29,7 +29,7 @@ class IngredientAdminService extends Service
         DB::beginTransaction();
 
         try {
-            $min = (isset($data['unit_type']) && $data['unit_type'] === 'quantity') ? 1 : 0.01;
+            $min = (isset($data['unit_type']) && $data['unit_type'] === 'quantity') ? 1 : 0.001;
 
             $validator = Validator::make($data, [
                 'ingredient_category_id' => 'required|exists:ingredient_categories,id',
@@ -38,7 +38,7 @@ class IngredientAdminService extends Service
                 'unit_type' => 'required|in:weight,quantity',
                 'stock' => ['nullable', 'numeric', "min:$min"],
                 'min_stock' => ['required', 'numeric', "min:$min"],
-                'weight_unit' => 'required|numeric|min:0.01',
+                'weight_unit' => 'required|numeric|min:0.001',
                 'price' => 'required|numeric|min:0.01',
             ]);
 
@@ -111,14 +111,14 @@ class IngredientAdminService extends Service
                 throw new Exception();
             }
 
-            $min = $ingredient->unit_type === 'weight' ? 0.01 : 1;
+            $min = $ingredient->unit_type === 'weight' ? 0.001 : 1;
 
             $validator = Validator::make($data, [
                 'ingredient_category_id' => 'required|exists:ingredient_categories,id',
                 'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
                 'name' => 'required|string|max:255|unique:ingredients,name,' . $id,
                 'min_stock' => ['required', 'numeric', "min:$min"],
-                'weight_unit' => 'required|numeric|min:0.01',
+                'weight_unit' => 'required|numeric|min:0.001',
                 'price' => 'required|numeric|min:0.01',
             ]);
 
@@ -196,8 +196,8 @@ class IngredientAdminService extends Service
                     'ingredient_id' => 'required|exists:ingredients,id',
                     'quantity' => 'required|integer|min:1',
                     'weight' => $ingredient->unit_type === 'weight'
-                        ? 'required|numeric|min:0.01'
-                        : 'nullable|numeric|min:0.01',
+                        ? 'required|numeric|min:0.001'
+                        : 'nullable|numeric|min:0.001',
                 ];
 
                 $validator = Validator::make($refill, $rules);

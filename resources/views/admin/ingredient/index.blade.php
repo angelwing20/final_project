@@ -68,7 +68,7 @@
                                             <label class="form-label" for="refill-weight-0">Weight (kg)<span
                                                     class="text-danger">*</span></label>
                                             <input type="number" class="form-control" id="refill-weight-0"
-                                                name="refills[0][weight]" step="0.01" min="0.01" placeholder="Weight"
+                                                name="refills[0][weight]" step="0.001" min="0.001" placeholder="Weight"
                                                 required>
                                         </div>
                                     </div>
@@ -173,7 +173,7 @@
                                     <label for="weight_unit" class="form-label">Unit Per Weight (kg)<span
                                             class="text-danger">*</span></label>
                                     <input type="number" class="form-control" name="weight_unit" id="weight_unit"
-                                        step="0.01" min="0.01" value="{{ old('weight_unit') }}"
+                                        step="0.001" min="0.001" value="{{ old('weight_unit') }}"
                                         placeholder="Unit per weight (kg)" required>
                                 </div>
                             </div>
@@ -283,16 +283,16 @@
                 if (type === 'weight') {
                     $('label[for="stock"]').text('Current Stock (kg)');
                     stockInput.attr({
-                        min: '0.01',
-                        step: '0.01',
+                        min: '0.001',
+                        step: '0.001',
                         placeholder: 'Current stock (kg)'
                     });
 
                     $('label[for="min_stock"]').html(
                         'Minimum Stock (kg)<span class="text-danger">*</span>');
                     minStockInput.attr({
-                        min: '0.01',
-                        step: '0.01',
+                        min: '0.001',
+                        step: '0.001',
                         placeholder: 'Minimum stock (kg)'
                     });
 
@@ -358,7 +358,7 @@
                         <div class="col-6 weight-col">
                             <div class="form-group">
                                 <label class="form-label" for="refill-weight-${refillIndex}">Weight (kg)<span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" id="refill-weight-${refillIndex}" name="refills[${refillIndex}][weight]" step="0.01" min="0.01" placeholder="Weight" required>
+                                <input type="number" class="form-control" id="refill-weight-${refillIndex}" name="refills[${refillIndex}][weight]" step="0.001" min="0.001" placeholder="Weight" required>
                             </div>
                         </div>
                     </div>

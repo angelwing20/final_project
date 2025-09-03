@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('image')->nullable();
             $table->enum('unit_type', ['weight', 'quantity']);
-            $table->decimal('stock', 8, 2)->nullable()->default('0');
-            $table->decimal('min_stock', 8, 2);
-            $table->decimal('weight_unit', 8, 2);
+            $table->decimal('stock', 8, 3)->nullable()->default('0');
+            $table->decimal('min_stock', 8, 3);
+            $table->decimal('weight_unit', 8, 3);
             $table->decimal('price', 13, 2);
             $table->timestamps();
         });

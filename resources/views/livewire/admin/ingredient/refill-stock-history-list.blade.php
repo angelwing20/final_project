@@ -20,7 +20,7 @@
                         <td>{{ $refillStockHistory->staff_name }}</td>
                         <td>{{ $refillStockHistory->quantity }}</td>
                         @if ($unitType === 'weight')
-                            <td>{{ floatval(sprintf('%.2f', $refillStockHistory->weight)) }}</td>
+                            <td>{{ floatval(sprintf('%.3f', $refillStockHistory->weight)) }}</td>
                         @endif
                         <td>{{ $refillStockHistory->amount }}</td>
                     </tr>
