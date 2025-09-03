@@ -23,7 +23,7 @@ class FoodCategoryAdminService extends Service
 
         try {
             $validator = Validator::make($data, [
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:255|unique:food_categories,name',
             ]);
 
             if ($validator->fails()) {
@@ -63,7 +63,7 @@ class FoodCategoryAdminService extends Service
 
         try {
             $validator = Validator::make($data, [
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:255|unique:food_categories,name,' . $id,
             ]);
 
             if ($validator->fails()) {

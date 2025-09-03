@@ -26,7 +26,7 @@ class FoodAdminService extends Service
         try {
             $validator = Validator::make($data, [
                 'food_category_id' => 'required|exists:food_categories,id',
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:255|unique:food,name',
                 'price' => 'required|numeric|min:0.01',
                 'description' => 'nullable|string|max:16777215',
                 'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
@@ -85,7 +85,7 @@ class FoodAdminService extends Service
         try {
             $validator = Validator::make($data, [
                 'food_category_id' => 'required|exists:food_categories,id',
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:255|unique:food,name,' . $id,
                 'price' => 'required|numeric|min:0.01',
                 'description' => 'nullable|string|max:16777215',
                 'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',

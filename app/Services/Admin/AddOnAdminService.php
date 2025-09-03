@@ -26,7 +26,7 @@ class AddOnAdminService extends Service
         try {
             $validator = Validator::make($data, [
                 'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:255|unique:add_ons,name',
                 'price' => 'required|numeric|min:0.01',
             ]);
 
@@ -84,7 +84,7 @@ class AddOnAdminService extends Service
         try {
             $validator = Validator::make($data, [
                 'image' => 'nullable|mimes:jpg,jpeg,png,webp|max:512000',
-                'name' => 'required|string|max:255',
+                'name' => 'required|string|max:255|unique:add_ons,name,' . $id,
                 'price' => 'required|numeric|min:0.01',
             ]);
 
