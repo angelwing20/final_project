@@ -137,9 +137,9 @@ Do these once before daily operations:
 3. Choose the ingredient then Enter the **quantity/weight** received, then **Save**, then it will be refill click on the ingredient card to show the datetime and who refill it , quantity , quantity , weight amount.
 
 ### C. View Refill History
-![Refill History](Images/refillstockinput.png)
+![Refill History](Images/refill-dh.png)
 1. Sidebar → **Refill History**
-![Refill History](Images/refillstockinput.png)
+![Refill History](Images/r-input.png)
 2. Filter by **Start Date**, **End Date (optional)**, **Staff**, **Ingredient**
 3. Click **Apply** or **Reset**
 
