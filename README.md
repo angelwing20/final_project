@@ -114,13 +114,13 @@ Do these once before daily operations:
 ### A. Record Daily Sales
 <img width="1919" height="1030" alt="image" src="https://github.com/user-attachments/assets/69a687a1-527e-4701-8cb3-39583c0527ff" />
 1. Sidebar → **Daily Sales** → **Add New**
-<img width="1916" height="1034" alt="image" src="https://github.com/user-attachments/assets/3fd30589-1454-4379-bc29-832322e2a754" />
-2. For each **Food** and **Add-on**, enter the **quantity sold**
-3. Totals (quantity and amount) calculate automatically
+<img width="1916" height="1034" alt="image" src="https://github.com/user-attachments/assets/3fd30589-1454-4379-bc29-832322e2a754" /><br>
+2. For each **Food** and **Add-on**, enter the **quantity sold**<br>
+3. Totals (quantity and amount) calculate automatically<br>
 4. Review the **Ingredient Consumption Preview**:
    - See **Current Stock**, **Consumption**, **Remaining Stock**, **Cost (RM)**
    - Adjust if stock goes negative
-5. Click **Submit** to save the record
+5. Click **Submit** to save the record<br>
 <img width="1917" height="744" alt="image" src="https://github.com/user-attachments/assets/89f402a2-aea3-4a56-af50-d919cb7fea0a" />
 6. Daily sales Example after submit
 
