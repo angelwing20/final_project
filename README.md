@@ -20,7 +20,7 @@ By integrating automation and digital tracking, RIIS reduces paperwork, minimize
 
 - **Admin:**  
   - Monitor ingredient stock levels.  
-  - Access class schedules, student information (if extended for training use), and sales records.  
+  - Access account profile schedules,and sales records.  
 
 
 
@@ -156,6 +156,7 @@ Do these once before daily operations:
 1. Sidebar → **Staff**
 2. **Search/Filter** staff; use **Add** to create accounts
 3. Open **Staff Detail** to **Change Password** or **Deactivate**
+4. Able to 
 
 ### B. Your Account
 1. Sidebar → **Account → Profile**
