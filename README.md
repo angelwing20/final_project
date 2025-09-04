@@ -8,9 +8,9 @@ By integrating automation and digital tracking, RIIS reduces paperwork, minimize
 
 
 ### Group Members
-- [Chin Chun Teng]  
-- [Dennis Lim Wei Yao]  
-- [Wong Yih Jyi]  
+- Chin Chun Teng  
+- Dennis Lim Wei Yao  
+- Wong Yih Jyi  
 
 
 ## Scope
@@ -36,7 +36,7 @@ RIIS is a modern solution that bridges the gap between manual inventory tracking
 
 ---
 
-![Login Page](images/login.png)
+![Login Page]("C:\Users\ASUS\Pictures\Screenshots\final1.png")
 
 ## 1) Log In
 1. Open the login page.
