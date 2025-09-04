@@ -102,7 +102,9 @@ Do these once before daily operations:
 3. Add ingredients consumed by the add-on
 
 ### F. Add Staff
+<img width="1919" height="994" alt="image" src="https://github.com/user-attachments/assets/384619ef-f97f-4d44-8f49-d42435e21659" />
 1. Sidebar → **Staff**
+<img width="1917" height="1023" alt="image" src="https://github.com/user-attachments/assets/3c387a18-5522-431f-8166-b30d8d582be6" />
 2. Click **Add Staff**, fill in details, choose role (**Admin** or **Super Admin**), and **Save**
 
 ---
@@ -110,9 +112,10 @@ Do these once before daily operations:
 ## 4) Daily Operations (Admin / Super Admin)
 
 ### A. Record Daily Sales
+<img width="1919" height="1030" alt="image" src="https://github.com/user-attachments/assets/69a687a1-527e-4701-8cb3-39583c0527ff" />
 1. Sidebar → **Daily Sales** → **Add New**
-2. For each **Food** and **Add-on**, enter the **quantity sold**
 ![Daily Sales](Images/finaldailysales.png)
+2. For each **Food** and **Add-on**, enter the **quantity sold**
 3. Totals (quantity and amount) calculate automatically
 4. Review the **Ingredient Consumption Preview**:
    - See **Current Stock**, **Consumption**, **Remaining Stock**, **Cost (RM)**
