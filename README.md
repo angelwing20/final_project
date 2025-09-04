@@ -15,7 +15,7 @@ By integrating automation and digital tracking, RIIS reduces paperwork, minimize
 
 ## Scope
 - **Super Admin:**  
-  - Manage ingredient stock, categories, suppliers, menu, and purchase records.  
+  - Manage ingredient stock, categories, menu, and purchase records.  
   - Review inventory reports and handle user management.  
 
 - **Admin:**  
