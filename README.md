@@ -94,8 +94,11 @@ Do these once before daily operations:
 4. Click **Manage Ingredients** → **Add Ingredient**, select items, set **consumption per unit**, and **Save**
 
 ### E. Add Add-ons (Optional)
+<img width="1919" height="1032" alt="image" src="https://github.com/user-attachments/assets/95e05a0c-a799-41f1-ac23-a8e618cb4e9d" />
 1. Sidebar → **Menu → Add-ons**
+<img width="1919" height="1029" alt="image" src="https://github.com/user-attachments/assets/228b1448-7981-4ac3-93d4-2d191b9908f4" />
 2. Click **Add Add-on**, set **name/price**
+<img width="1917" height="851" alt="Add by clicking at the add ingredient" src="https://github.com/user-attachments/assets/a6ea2f75-2624-4602-bf6d-2403f865183b" />
 3. Add ingredients consumed by the add-on
 
 ### F. Add Staff
