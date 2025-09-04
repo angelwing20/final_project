@@ -65,6 +65,7 @@ Do these once before daily operations:
 ### A. Create Ingredient Categories
 1. Sidebar → **Ingredients → Categories**
 2. Click **Add Category**, name it, and **Save**
+3. Insert All the input
 
 ### B. Add Ingredients
 1. Sidebar → **Ingredients → Stock List**
