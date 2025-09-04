@@ -127,7 +127,7 @@ Do these once before daily operations:
 
 **To review past sales:**
 - Sidebar → **Daily Sales**
-<img width="498" height="343" alt="image" src="https://github.com/user-attachments/assets/bbab7d63-b2db-4567-80a2-ab03bf549d0d" />
+<img width="1916" height="1030" alt="image" src="https://github.com/user-attachments/assets/f430f05f-d9e9-42c4-a8c4-bf9536b01769" />
 - Filter by **Date** or **Staff**, click **Apply** (use **Reset** to clear)
 
 ### B. Refill Stock
@@ -141,7 +141,7 @@ Do these once before daily operations:
 ### C. View Refill History
 <img width="1916" height="1014" alt="image" src="https://github.com/user-attachments/assets/e9579c80-964a-4202-8ba6-b3d5d1320a03" />
 1. Sidebar → **Refill History**
-<img width="1919" height="1032" alt="image" src="https://github.com/user-attachments/assets/fc72abc3-70ba-48e0-8848-879fc1f23b86" />
+<img width="1919" height="1022" alt="image" src="https://github.com/user-attachments/assets/4cb5223f-bace-468b-8c40-bc0d8dcdb34e" />
 2. Filter by **Start Date**, **End Date (optional)**, **Staff**, **Ingredient**
 3. Click **Apply** or **Reset**
 
@@ -184,15 +184,15 @@ To **Edit** or **Delete** a category, you need to click on the **category card**
 1. Sidebar → **Staff**
 2. **Search/Filter** staff; use **Add** to create accounts
 <img width="1910" height="728" alt="image" src="https://github.com/user-attachments/assets/3fc10b75-c0d8-4ecd-9c19-3444499ed048" />
-<img width="500" height="606" alt="image" src="https://github.com/user-attachments/assets/c243d619-172f-4e27-8f39-34b1cc7506d1" />
-<img width="495" height="214" alt="image" src="https://github.com/user-attachments/assets/09fc6c34-ec79-40be-ba43-9e20d0f7ced0" />
+<img width="1919" height="1033" alt="image" src="https://github.com/user-attachments/assets/687aa2c5-073d-455a-8bd5-c19f7d08c6e9" />
+<img width="1919" height="720" alt="image" src="https://github.com/user-attachments/assets/d0f18af7-e658-4ac0-b6d7-4fbf6933d30e" />
 3. Open **Staff Detail** to **Change Password** or **Edit** the account user role
 
 ### B. Your Account
 1. Sidebar → **Account → Profile**
 <img width="1917" height="733" alt="image" src="https://github.com/user-attachments/assets/e6d52c4d-9545-43e3-bbcf-67cf168b7495" />
 <img width="1916" height="793" alt="image" src="https://github.com/user-attachments/assets/f477aa52-517f-465c-85c4-1afe57f1a7fa" />
-<img width="490" height="386" alt="image" src="https://github.com/user-attachments/assets/6e3c32f9-a493-484d-9d22-9db9b4978dc8" />
+<img width="1918" height="1030" alt="image" src="https://github.com/user-attachments/assets/12b841c6-1113-4c7f-8b4e-6a3f6e4cd85a" />
 2. Click **Edit Profile** to upload image, change **name/email/password**, then **Submit**
 
 ---
