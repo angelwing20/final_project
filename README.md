@@ -6,30 +6,12 @@ Traditionally, many businesses still rely on physical records or spreadsheets to
 
 By integrating automation and digital tracking, RIIS reduces paperwork, minimizes stock miscounts, provides timely low-stock alerts, and ensures centralized data access — all while saving valuable time during daily operations.
 
-## Project Overview
-- **Supervisor:** Miss Gevita A/P Chinnaiah  
-- **Tech Stack:** Laravel (PHP framework), MySQL, JavaScript, CSS, Bootstrap  
-- **Target Users:** Small to medium-sized restaurants and food businesses  
 
 ### Group Members
 - [Chin Chun Teng]  
 - [Dennis Lim Wei Yao]  
 - [Wong Yih Jyi]  
 
-
-### Main Features
-- Real-time stock monitoring and ingredient tracking  
-- Low-stock alerts and notifications  
-- Supplier and category management  
-- Purchase and refill history tracking  
-- Secure and centralized digital storage  
-- User-friendly dashboard for admins and super admins  
-
-## Objectives
-This project was developed with the following objectives:
-1. Reduce data errors and prevent data loss through secure digital storage.  
-2. Simplify and speed up stock checking, especially during busy hours.  
-3. Provide real-time low-stock alerts for timely restocking.  
 
 ## Scope
 - **Super Admin:**  
@@ -40,9 +22,7 @@ This project was developed with the following objectives:
   - Monitor ingredient stock levels.  
   - Access class schedules, student information (if extended for training use), and sales records.  
 
-## Limitations
-- Designed primarily for small to medium-sized businesses.  
-- May not efficiently handle large-scale, enterprise-level data.  
+
 
 ---
 
