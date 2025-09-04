@@ -43,7 +43,8 @@ RIIS is a modern solution that bridges the gap between manual inventory tracking
 2. Enter your **email** and **password**.
 3. Click **Login** to go to the **Dashboard**.  
 4. Forgot your password? Click **Forgot Password**, enter your email, and complete email verification to reset.
-
+5. Default password and email will be superadmin@gmail.com and 123456 for superadmin
+6. Default Admin email address and password : admin@gmail.com and 123456
 ---
 
 ## 2) Understand the Dashboard
