@@ -63,9 +63,11 @@ Use the left **sidebar** to navigate: Ingredients, Categories, Menu (Foods & Add
 Do these once before daily operations:
 
 ### A. Create Ingredient Categories
+<img width="1919" height="1024" alt="image" src="https://github.com/user-attachments/assets/f4cc687f-05ac-41ad-86d7-c5ea1ec12aac" />
 1. Sidebar → **Ingredients → Categories**
+<img width="1917" height="1027" alt="image" src="https://github.com/user-attachments/assets/e96c0d74-e524-48ab-9def-eac9479c8302" />
 2. Click **Add Category**, name it, and **Save**
-3. Insert All the input
+
 
 ### B. Add Ingredients
 1. Sidebar → **Ingredients → Stock List**
