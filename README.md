@@ -135,7 +135,7 @@ Do these once before daily operations:
 <img width="1918" height="336" alt="image" src="https://github.com/user-attachments/assets/b938488b-6375-4b25-9272-f16fe72068d7" />
 1. Sidebar → **Ingredients → Stock List**
 2. Click **Refill** next to an ingredient
-<img width="497" height="343" alt="image" src="https://github.com/user-attachments/assets/f0f00052-fc75-41bd-84e8-24bcf9abf77b" />
+<img width="1918" height="748" alt="image" src="https://github.com/user-attachments/assets/20a26874-dadd-4e6f-a2cb-bb2dc1fc5253" />
 3. Choose the ingredient then Enter the **quantity/weight** received, then **Save**, then it will be refill click on the ingredient card to show the datetime and who refill it , quantity , quantity , weight amount.
 
 ### C. View Refill History
