@@ -141,7 +141,7 @@ Do these once before daily operations:
 ### C. View Refill History
 <img width="1916" height="1014" alt="image" src="https://github.com/user-attachments/assets/e9579c80-964a-4202-8ba6-b3d5d1320a03" />
 1. Sidebar → **Refill History**
-<img width="1919" height="1022" alt="image" src="https://github.com/user-attachments/assets/4cb5223f-bace-468b-8c40-bc0d8dcdb34e" />
+<img width="1917" height="1027" alt="image" src="https://github.com/user-attachments/assets/9f56b34c-6310-4575-9188-778fecadd7c6" />
 2. Filter by **Start Date**, **End Date (optional)**, **Staff**, **Ingredient**
 3. Click **Apply** or **Reset**
 
