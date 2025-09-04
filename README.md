@@ -114,30 +114,34 @@ Do these once before daily operations:
 ### A. Record Daily Sales
 <img width="1919" height="1030" alt="image" src="https://github.com/user-attachments/assets/69a687a1-527e-4701-8cb3-39583c0527ff" />
 1. Sidebar → **Daily Sales** → **Add New**
-![Daily Sales](Images/finaldailysales.png)
+<img width="1916" height="1034" alt="image" src="https://github.com/user-attachments/assets/3fd30589-1454-4379-bc29-832322e2a754" />
 2. For each **Food** and **Add-on**, enter the **quantity sold**
 3. Totals (quantity and amount) calculate automatically
 4. Review the **Ingredient Consumption Preview**:
    - See **Current Stock**, **Consumption**, **Remaining Stock**, **Cost (RM)**
    - Adjust if stock goes negative
 5. Click **Submit** to save the record
+<img width="1917" height="744" alt="image" src="https://github.com/user-attachments/assets/89f402a2-aea3-4a56-af50-d919cb7fea0a" />
+6. Daily sales Example after submit
+
 
 **To review past sales:**
 - Sidebar → **Daily Sales**
+<img width="498" height="343" alt="image" src="https://github.com/user-attachments/assets/bbab7d63-b2db-4567-80a2-ab03bf549d0d" />
 - Filter by **Date** or **Staff**, click **Apply** (use **Reset** to clear)
 
 ### B. Refill Stock
 **Option 1 — from Stock List**
+<img width="1918" height="336" alt="image" src="https://github.com/user-attachments/assets/b938488b-6375-4b25-9272-f16fe72068d7" />
 1. Sidebar → **Ingredients → Stock List**
 2. Click **Refill** next to an ingredient
-3. Enter the **quantity/weight** received, then **Save**
-
-**Option 2 — from Ingredient Detail**
-1. Sidebar → **Ingredients → Stock List** → click an ingredient card
-2. On **Ingredient Detail**, add a **Refill** entry and **Save**
+<img width="497" height="343" alt="image" src="https://github.com/user-attachments/assets/f0f00052-fc75-41bd-84e8-24bcf9abf77b" />
+3. Choose the ingredient then Enter the **quantity/weight** received, then **Save**, then it will be refill click on the ingredient card to show the datetime and who refill it , quantity , quantity , weight amount.
 
 ### C. View Refill History
+<img width="1916" height="1014" alt="image" src="https://github.com/user-attachments/assets/e9579c80-964a-4202-8ba6-b3d5d1320a03" />
 1. Sidebar → **Refill History**
+<img width="1919" height="1032" alt="image" src="https://github.com/user-attachments/assets/fc72abc3-70ba-48e0-8848-879fc1f23b86" />
 2. Filter by **Start Date**, **End Date (optional)**, **Staff**, **Ingredient**
 3. Click **Apply** or **Reset**
 
@@ -151,14 +155,21 @@ Do these once before daily operations:
 
 ### A. Manage Ingredient Categories
 - Sidebar → **Ingredients → Categories**
-- **Search**, **Add**, **Edit/Delete** categories
+<img width="1910" height="719" alt="image" src="https://github.com/user-attachments/assets/23f93a42-c892-4024-b0db-7072e270a846" />
+- This page provides **Search** and **Add** functions.  
+To **Edit** or **Delete** a category, you need to click on the **category card** first.
 
 ### B. Manage Food Categories
+<img width="1918" height="738" alt="image" src="https://github.com/user-attachments/assets/35203897-a4b5-4b4d-9b17-e55b6d77f914" />
 - Sidebar → **Menu → Food Categories**
-- **Search**, open a category to see foods, **Add/Edit/Delete**
+- This page provides **Search** and **Add** functions.  
+To view foods in a category, click on the **category card**.  
+To **Edit** or **Delete** a category, you need to click on the **category card** first.
+
 
 ### C. Update Foods & Recipes
 - Sidebar → **Menu → Foods** → select a food
+<img width="1892" height="1016" alt="image" src="https://github.com/user-attachments/assets/60b7c122-306e-4337-b3db-cffbfbb2e544" />
 - On **Food Detail**, edit details or manage linked ingredients
 
 ### D. Manage Add-ons
@@ -172,11 +183,16 @@ Do these once before daily operations:
 ### A. Staff Management (Super Admin)
 1. Sidebar → **Staff**
 2. **Search/Filter** staff; use **Add** to create accounts
-3. Open **Staff Detail** to **Change Password** or **Deactivate**
-4. Able to 
+<img width="1910" height="728" alt="image" src="https://github.com/user-attachments/assets/3fc10b75-c0d8-4ecd-9c19-3444499ed048" />
+<img width="500" height="606" alt="image" src="https://github.com/user-attachments/assets/c243d619-172f-4e27-8f39-34b1cc7506d1" />
+<img width="495" height="214" alt="image" src="https://github.com/user-attachments/assets/09fc6c34-ec79-40be-ba43-9e20d0f7ced0" />
+3. Open **Staff Detail** to **Change Password** or **Edit** the account user role
 
 ### B. Your Account
 1. Sidebar → **Account → Profile**
+<img width="1917" height="733" alt="image" src="https://github.com/user-attachments/assets/e6d52c4d-9545-43e3-bbcf-67cf168b7495" />
+<img width="1916" height="793" alt="image" src="https://github.com/user-attachments/assets/f477aa52-517f-465c-85c4-1afe57f1a7fa" />
+<img width="490" height="386" alt="image" src="https://github.com/user-attachments/assets/6e3c32f9-a493-484d-9d22-9db9b4978dc8" />
 2. Click **Edit Profile** to upload image, change **name/email/password**, then **Submit**
 
 ---
