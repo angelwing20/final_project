@@ -58,43 +58,41 @@ The Dashboard shows your key stats and quick links:
 Use the left **sidebar** to navigate: Ingredients, Categories, Menu (Foods & Add-ons), Daily Sales, Refill History, and Staff.
 
 ---
-![Ingredient Category](Images/ingredientcategory.png)
 ## 3) First-Time Setup (Super Admin)
 Do these once before daily operations:
 
 ### A. Create Ingredient Categories
-<img width="1919" height="1024" alt="image" src="https://github.com/user-attachments/assets/f4cc687f-05ac-41ad-86d7-c5ea1ec12aac" />
+![Ingredient Category](Images/ingredientcategory.png)
 1. Sidebar → **Ingredients → Categories**
-<img width="1917" height="1027" alt="image" src="https://github.com/user-attachments/assets/e96c0d74-e524-48ab-9def-eac9479c8302" />
+![Add Ingredient Category](Images/addcategoryingredients.png)
 2. Click **Add Category**, name it, and **Save**
 
 
 ### B. Add Ingredients
-<img width="1918" height="1035" alt="image" src="https://github.com/user-attachments/assets/aa3b31fd-d01b-46f9-887f-660330db142e" />
+![Ingredient Category List](Images/ingredientlist.png)
 1. Sidebar → **Ingredients → Stock List**
 2. Click **Add Ingredient**
-<img width="1918" height="1027" alt="image" src="https://github.com/user-attachments/assets/b49486d7-c57e-457f-8830-f5f5269eb41b" />
+![Ingredient input](Images/addingredientinput.png)
 3. Fill in: **Category**, **Name**, **Unit Type** (weight/quantity), **Stock**, **Minimum Stock**, **Unit per Weight** (needed), **Price**
 4. **Save**  
 
 ### C. Create Food Categories
-<img width="1919" height="1030" alt="image" src="https://github.com/user-attachments/assets/4dfa6e27-0e5d-464e-b07f-d1f8ba9fb3a1" />
+![Food category](Images/foodcategory.png)
 1. Sidebar → **Menu → Food Categories**
-<img width="1919" height="1030" alt="image" src="https://github.com/user-attachments/assets/7040ffd0-f57b-4706-b07a-7219ffaa93ff" />
+![Food input](Images/addfoodcategory.png)
 2. Click **Add Category**, name it, and **Save**
 
 ### D. Add Foods (Menu Items) & Link Ingredients
-<img width="1913" height="1027" alt="image" src="https://github.com/user-attachments/assets/6f260c65-16b7-4109-8cec-091804eefa20" />
+![Food menu](Images/foodmenu.png)
 1. Sidebar → **Menu → Foods**
-<img width="1919" height="1026" alt="image" src="https://github.com/user-attachments/assets/6f5402b7-45d7-46f7-8b67-ca4e5949dee1" />
+![add Food input](Images/addfoodinput.png)
 2. Click **Add Food** and enter **Category**, **Name**, **Price**, **Description**
-<img width="1919" height="1026" alt="image" src="https://github.com/user-attachments/assets/d5071b4a-4691-4bf9-9b9f-2c073a132d69" />
+![Food detail](Images/fooddetail.png)
 3. Open the **Food Detail** page
-<img width="1626" height="338" alt="image" src="https://github.com/user-attachments/assets/f27fa356-70ae-4944-af65-a5cf5f90bf7a" />
 4. Click **Manage Ingredients** → **Add Ingredient**, select items, set **consumption per unit**, and **Save**
 
 ### E. Add Add-ons (Optional)
-<img width="1919" height="1032" alt="image" src="https://github.com/user-attachments/assets/95e05a0c-a799-41f1-ac23-a8e618cb4e9d" />
+![Food detail](Images/add add-on input.png)
 1. Sidebar → **Menu → Add-ons**
 <img width="1919" height="1029" alt="image" src="https://github.com/user-attachments/assets/228b1448-7981-4ac3-93d4-2d191b9908f4" />
 2. Click **Add Add-on**, set **name/price**
