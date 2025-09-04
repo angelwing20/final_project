@@ -36,7 +36,7 @@ RIIS is a modern solution that bridges the gap between manual inventory tracking
 
 ---
 
-![Login Page]("C:\Users\ASUS\Pictures\Screenshots\final1.png")
+![Login Page](Images/final1.png)
 
 ## 1) Log In
 1. Open the login page.
