@@ -11,6 +11,12 @@ By integrating automation and digital tracking, RIIS reduces paperwork, minimize
 - **Tech Stack:** Laravel (PHP framework), MySQL, JavaScript, CSS, Bootstrap  
 - **Target Users:** Small to medium-sized restaurants and food businesses  
 
+### Group Members
+- [Chin Chun Teng]  
+- [Dennis Lim Wei Yao]  
+- [Wong Yih Jyi]  
+
+
 ### Main Features
 - Real-time stock monitoring and ingredient tracking  
 - Low-stock alerts and notifications  
