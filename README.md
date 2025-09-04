@@ -15,12 +15,11 @@ By integrating automation and digital tracking, RIIS reduces paperwork, minimize
 
 ## Scope
 - **Super Admin:**  
-  - Manage ingredient stock, categories, menu, and purchase records.  
-  - Review inventory reports and handle user management.  
+  - The Super Admin has full control over the system, including the ability to manage all users such as staff and admins by adding, editing, or removing their accounts.
 
 - **Admin:**  
-  - Monitor ingredient stock levels.  
-  - Access account profile schedules,and sales records.  
+  - Check current ingredient status, Suggest restocking ingredient, Access basic inventory insights and upload daily sale.
+
 
 
 
