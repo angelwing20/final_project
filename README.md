@@ -58,7 +58,7 @@ The Dashboard shows your key stats and quick links:
 Use the left **sidebar** to navigate: Ingredients, Categories, Menu (Foods & Add-ons), Daily Sales, Refill History, and Staff.
 
 ---
-
+![Ingredient Category](Images/ingredientcategory.png)
 ## 3) First-Time Setup (Super Admin)
 Do these once before daily operations:
 
