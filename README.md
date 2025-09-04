@@ -36,6 +36,8 @@ RIIS is a modern solution that bridges the gap between manual inventory tracking
 
 ---
 
+![Login Page](images/login.png)
+
 ## 1) Log In
 1. Open the login page.
 2. Enter your **email** and **password**.
