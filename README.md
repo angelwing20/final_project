@@ -98,6 +98,7 @@ Do these once before daily operations:
 ### A. Record Daily Sales
 1. Sidebar → **Daily Sales** → **Add New**
 2. For each **Food** and **Add-on**, enter the **quantity sold**
+![Daily Sales](Images/finaldailysales.png)
 3. Totals (quantity and amount) calculate automatically
 4. Review the **Ingredient Consumption Preview**:
    - See **Current Stock**, **Consumption**, **Remaining Stock**, **Cost (RM)**
